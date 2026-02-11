@@ -29,43 +29,68 @@ public class TelaInicial extends JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(TelaInicial.class.getResource("/img/logoNoobstock.png")));
         setTitle("Tela Inicial");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         contentPane = new JPanel();
         contentPane.setBorder(null);
         setContentPane(contentPane);
-
         setResizable(false);
 
-        contentPane.setLayout(new MigLayout(
-                "fill, insets 0",
-                "[grow][center][grow]",
-                "[push][][40][]0[][push]"
-        ));
+        contentPane.setLayout(new MigLayout("fill, insets 0", "[grow][grow 0,center][grow]", "[push][][]20[][]15[][][]20[][][push][][][]"));
 
         JLabel lblLogo = new JLabel("NoobStock");
         lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblLogo, "cell 1 1, align center");
-        
-                JButton btnEntrar = new JButton("Entrar");
-                contentPane.add(btnEntrar, "cell 0 2");
-                btnEntrar.setFont(new Font("Tahoma", Font.PLAIN, 20));
-                btnEntrar.setPreferredSize(new java.awt.Dimension(190, 30));
 
-        JPanel painelBotoes = new JPanel(new MigLayout(
-                "insets 0, gap 0",
-                "[center]",
-                "[]10[]"
+        JLabel lblTitulo = new JLabel("Faça seu login");
+        lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 16));
+        contentPane.add(lblTitulo, "cell 1 2, align center");
+
+        JLabel lblSub = new JLabel("Digite as credenciais para entrar no aplicativo");
+        lblSub.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        lblSub.setForeground(java.awt.Color.GRAY);
+        contentPane.add(lblSub, "cell 1 3, align center");
+
+        JPanel painelForm = new JPanel(new MigLayout(
+                "insets 0, gapy 10",
+                "[][grow,fill]",
+                "[][]"
         ));
-        painelBotoes.setOpaque(false);
+        painelForm.setOpaque(false);
 
-        JButton btnCadastrar = new JButton("Cadastrar");
-        btnCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnCadastrar.setPreferredSize(new java.awt.Dimension(190, 30));
-        painelBotoes.add(btnCadastrar);
+        JLabel lblUsuario = new JLabel("Usuário:");
+        JTextField txtUsuario = new JTextField();
+        txtUsuario.setPreferredSize(new java.awt.Dimension(220, 28));
 
-        contentPane.add(painelBotoes, "cell 1 3, align center");
+        painelForm.add(lblUsuario);
+        painelForm.add(txtUsuario, "wrap");
+
+
+        JLabel lblSenha = new JLabel("Senha:");
+        JPasswordField txtSenha = new JPasswordField();
+        txtSenha.setPreferredSize(new java.awt.Dimension(220, 28));
+
+        painelForm.add(lblSenha);
+        painelForm.add(txtSenha, "alignx center");
+
+        contentPane.add(painelForm, "cell 1 4, align center");
+        
+        JButton btnEsquecerSenha = new JButton("Esqueci a senha");
+        contentPane.add(btnEsquecerSenha, "cell 1 6");
+
+        JButton btnEntrar = new JButton("Entrar");
+        btnEntrar.setPreferredSize(new java.awt.Dimension(190, 35));
+        btnEntrar.setBackground(java.awt.Color.BLACK);
+        btnEntrar.setForeground(java.awt.Color.WHITE);
+        btnEntrar.setFocusPainted(false);
+        contentPane.add(btnEntrar, "cell 1 7,alignx center");
+
+        JLabel lblRodape = new JLabel(
+            "Ao continuar, você concorda com os nossos Termos de Serviço e Política de Privacidade"
+        );
+        lblRodape.setFont(new Font("Tahoma", Font.PLAIN, 10));
+        lblRodape.setForeground(java.awt.Color.GRAY);
+        contentPane.add(lblRodape, "cell 1 13,alignx center");
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent e) {
