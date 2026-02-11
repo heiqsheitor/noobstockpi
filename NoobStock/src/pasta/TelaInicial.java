@@ -47,6 +47,11 @@ public class TelaInicial extends JFrame {
         JLabel lblLogo = new JLabel("NoobStock");
         lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
         contentPane.add(lblLogo, "cell 1 1, align center");
+        
+                JButton btnEntrar = new JButton("Entrar");
+                contentPane.add(btnEntrar, "cell 0 2");
+                btnEntrar.setFont(new Font("Tahoma", Font.PLAIN, 20));
+                btnEntrar.setPreferredSize(new java.awt.Dimension(190, 30));
 
         JPanel painelBotoes = new JPanel(new MigLayout(
                 "insets 0, gap 0",
@@ -54,11 +59,6 @@ public class TelaInicial extends JFrame {
                 "[]10[]"
         ));
         painelBotoes.setOpaque(false);
-
-        JButton btnEntrar = new JButton("Entrar");
-        btnEntrar.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnEntrar.setPreferredSize(new java.awt.Dimension(190, 30));
-        painelBotoes.add(btnEntrar, "wrap");
 
         JButton btnCadastrar = new JButton("Cadastrar");
         btnCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 20));
