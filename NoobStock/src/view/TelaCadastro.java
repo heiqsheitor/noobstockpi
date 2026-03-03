@@ -17,78 +17,74 @@ import java.awt.event.ActionEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JPasswordField;
 
-public class TelaLogin extends JPanel {
+public class TelaCadastro extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField tFUsuario;
-	private JTextField textField;
 	private JLabel lblLogo;
-	private JLabel lblFacaLogin;
+	private JLabel lblUsuario;
+	private JLabel lblFacaCadastro;
 	private JLabel lblDigiteCredenciais;
 	private BufferedImage  imagemOriginal;
+	private JTextField textField_1;
+	private JPasswordField passwordField;
+	private Container btnNewButton;
 
 	/**
 	 * Create the panel.
 	 * @throws IOException 
 	 */
-	public TelaLogin() throws IOException {
+	public TelaCadastro() throws IOException {
 		setToolTipText("");
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[grow][][][][grow][grow][]", "[grow 60][][grow 10][grow 30][grow 10][grow 10][grow 15][grow 15][grow][]"));
+		setLayout(new MigLayout("", "[grow][][][][grow][grow][]", "[grow 60][][][grow 10][grow 3][grow 3][grow 3][grow 50][][][][grow 10][][]"));
 		
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
-		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/logopng.png")));
+		lblLogo.setIcon(new ImageIcon(TelaCadastro.class.getResource("/img/logopng.png")));
         Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 
         lblLogo.setIcon(new ImageIcon(scaled));
 
 		//lblLogo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
-		add(lblLogo, "cell 4 0,alignx center,aligny top");
+		add(lblLogo, "cell 3 0 2 1,alignx center,aligny top");
 		
-		lblFacaLogin = new JLabel("Faça seu Login");
-		add(lblFacaLogin, "flowy,cell 4 2,alignx center,aligny bottom");
-		lblFacaLogin.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFacaCadastro = new JLabel("Abra uma conta");
+		add(lblFacaCadastro, "flowy,cell 3 1 2 1,alignx center,aligny bottom");
+		lblFacaCadastro.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
-		lblDigiteCredenciais = new JLabel("Digite suas credenciais para entrar no aplicativo");
-		add(lblDigiteCredenciais, "cell 4 3,alignx center,aligny top");
+		lblDigiteCredenciais = new JLabel("Digite suas credenciais e inscreva-se no aplicativo");
+		add(lblDigiteCredenciais, "cell 3 2 2 1,alignx center,aligny top");
 		
 		JLabel lblUsuario = new JLabel("Usuário:");
-		add(lblUsuario, "cell 3 4,growy");
+		add(lblUsuario, "cell 3 4,alignx left,growy");
 		
 		tFUsuario = new JTextField();
-		add(tFUsuario, "cell 4 4,growx,aligny center");
+		add(tFUsuario, "cell 4 4,grow");
 		tFUsuario.setColumns(10);
 		
-		JLabel lblSenha = new JLabel("Senha:");
-		add(lblSenha, "cell 3 5,aligny top");
+		JLabel lblNewLabel = new JLabel("Email:");
+		add(lblNewLabel, "cell 3 5,alignx left");
 		
-		textField = new JTextField();
-		add(textField, "flowx,cell 4 5,growx,aligny center");
-		textField.setColumns(10);
+		textField_1 = new JTextField();
+		add(textField_1, "cell 4 5,grow");
+		textField_1.setColumns(10);
 		
-		JButton btnEsqueciASenha = new JButton("Esqueci a senha");
-		add(btnEsqueciASenha, "cell 3 6 2 1,alignx center");
+		JLabel lblNewLabel_1 = new JLabel("Senha:");
+		add(lblNewLabel_1, "cell 3 6,alignx trailing");
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 255, 255));
-		add(panel, "cell 3 7 2 1,grow");
+		passwordField = new JPasswordField();
+		add(passwordField, "cell 4 6,grow");
 		
-		JButton btnEntrar = new JButton("Entrar");
-		panel.add(btnEntrar);
-		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		panel.add(btnCadastrar);
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		JButton btnNewButton = new JButton("Cadastrar");
+		add(btnNewButton, "cell 3 9 2 2,alignx center,growy");
 		
 		JLabel lblTermos = new JLabel("Ao continuar, você concorda com os nossos termos e Serviços e Política de Privacidade");
 		lblTermos.setForeground(new Color(192, 192, 192));
 		lblTermos.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		add(lblTermos, "cell 4 9,alignx center");
+		add(lblTermos, "cell 4 13,alignx center");
 		
 		
 		
@@ -100,18 +96,22 @@ public class TelaLogin extends JPanel {
 		int tamAjuste = 8;
 		//ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
 		tamAjuste = 25;
-		ajustarFonteContainer(largura, altura, lblFacaLogin, tamAjuste);
+		ajustarFonteContainer(largura, altura, lblFacaCadastro, tamAjuste);
 		tamAjuste = 50;
 		ajustarFonteContainer(largura, altura, lblDigiteCredenciais, tamAjuste);
+		tamAjuste = 45;
+		ajustarFonteContainer(largura, altura, lblUsuario, tamAjuste);
 		redimensionarImagem(largura, altura);
+		tamAjuste = 35;
+		ajustarFonteContainer(largura, altura, btnNewButton, tamAjuste);
 		
 		
 				
 		
 	}
 	private void redimensionarImagem(int largura, int altura) {
-		 largura /=4;
-	       altura /=4;
+		 largura /=8;
+	       altura /=8;
 System.out.println(largura);
 	        if (largura <= 0 || altura <= 0) return;
 

@@ -13,7 +13,9 @@ import javax.swing.border.EmptyBorder;
 public class TelaPrincipal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private TelaLogin contentPane;
+	private TelaLogin Login;
+	private TelaCadastro Cadastro;
+
 
 	/**
 	 * Launch the application.
@@ -37,10 +39,10 @@ public class TelaPrincipal extends JFrame {
 	 */
 	public TelaPrincipal() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 705, 408);
-		contentPane = new TelaLogin();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		setBounds(100, 100, 703, 407);
+		Cadastro = new TelaCadastro();
+		Cadastro.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(Cadastro);
 		
 		addComponentListener(new ComponentAdapter() {
             @Override
@@ -58,7 +60,7 @@ private void ajustarFonte() {
 		        int altura = getHeight();
 
 		      		        
-		        contentPane.ajustarFonte(largura, altura);
+		        Cadastro.ajustarFonte(largura, altura);
 		        repaint();
 		        revalidate();
 				
