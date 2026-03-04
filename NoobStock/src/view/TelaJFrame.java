@@ -43,13 +43,11 @@ public class TelaJFrame extends JFrame {
 		setTitle("NoobStock");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TelaJFrame.class.getResource("/img/logoNoobstock.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setResizable(false);
         
 		setBounds(100, 100, 703, 407);
-		Cadastro = new TelaCadastro();
-		Cadastro.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(Cadastro);
+		Login = new TelaLogin();
+		Login.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(Login);
 		
 		addComponentListener(new ComponentAdapter() {
             @Override
@@ -67,7 +65,7 @@ public class TelaJFrame extends JFrame {
 		        int altura = getHeight();
 
 		      		        
-		        Cadastro.ajustarFonte(largura, altura);
+		        Login.ajustarFonte(largura, altura);
 		        repaint();
 		        revalidate();
 				
