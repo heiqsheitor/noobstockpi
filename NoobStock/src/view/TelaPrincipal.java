@@ -15,6 +15,7 @@ public class TelaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private TelaLogin Login;
 	private TelaCadastro Cadastro;
+	private TelaIniGestor gestor;
 
 
 	/**
@@ -40,9 +41,9 @@ public class TelaPrincipal extends JFrame {
 	public TelaPrincipal() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 703, 407);
-		Cadastro = new TelaCadastro();
-		Cadastro.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(Cadastro);
+		gestor = new TelaIniGestor();
+		gestor.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(gestor);
 		
 		addComponentListener(new ComponentAdapter() {
             @Override
