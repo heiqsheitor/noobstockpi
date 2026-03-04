@@ -15,7 +15,7 @@ public class TelaJFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private TelaLogin Login;
-	private TelaCadastro Cadastro;
+	private TelaCadastro2 Cadastro;
 	private TelaRedefinirSenha RSenha;
 
 
@@ -43,11 +43,9 @@ public class TelaJFrame extends JFrame {
 		setTitle("NoobStock");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(TelaJFrame.class.getResource("/img/logoNoobstock.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setResizable(false);
         
 		setBounds(100, 100, 703, 407);
-		Cadastro = new TelaCadastro();
+		Cadastro = new TelaCadastro2();
 		Cadastro.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(Cadastro);
 		
