@@ -35,7 +35,7 @@ public class TelaLogin extends JPanel {
 	public TelaLogin() throws IOException {
 		setToolTipText("");
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[grow][][][][grow][grow][]", "[grow 60][][grow 10][grow 30][grow 10][grow 10][grow 15][grow 15][grow][]"));
+		setLayout(new MigLayout("", "[grow 30][grow 2][grow 5][grow 30]", "[grow 60][][grow 10][grow 30][grow 5][grow 5][grow 5][grow 15][grow 15][grow][]"));
 		
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
@@ -45,35 +45,35 @@ public class TelaLogin extends JPanel {
         lblLogo.setIcon(new ImageIcon(scaled));
 
 		//lblLogo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
-		add(lblLogo, "cell 4 0,alignx center,aligny top");
+		add(lblLogo, "cell 2 0,alignx center,aligny top");
 		
 		lblFacaLogin = new JLabel("Faça seu Login");
-		add(lblFacaLogin, "flowy,cell 4 2,alignx center,aligny bottom");
+		add(lblFacaLogin, "flowy,cell 2 2,alignx center,aligny bottom");
 		lblFacaLogin.setFont(new Font("Tahoma", Font.BOLD, 11));
 		
 		lblDigiteCredenciais = new JLabel("Digite suas credenciais para entrar no aplicativo");
-		add(lblDigiteCredenciais, "cell 4 3,alignx center,aligny top");
+		add(lblDigiteCredenciais, "cell 2 3,alignx center,aligny top");
 		
 		JLabel lblUsuario = new JLabel("Usuário:");
-		add(lblUsuario, "cell 3 4,growy");
+		add(lblUsuario, "cell 1 4,alignx right,growy");
 		
 		tFUsuario = new JTextField();
-		add(tFUsuario, "cell 4 4,growx,aligny center");
+		add(tFUsuario, "cell 2 4,grow");
 		tFUsuario.setColumns(10);
 		
 		JLabel lblSenha = new JLabel("Senha:");
-		add(lblSenha, "cell 3 5,aligny top");
+		add(lblSenha, "cell 1 6,alignx right,aligny top");
 		
 		textField = new JTextField();
-		add(textField, "flowx,cell 4 5,growx,aligny center");
+		add(textField, "flowx,cell 2 6,grow");
 		textField.setColumns(10);
 		
 		JButton btnEsqueciASenha = new JButton("Esqueci a senha");
-		add(btnEsqueciASenha, "cell 3 6 2 1,alignx center");
+		add(btnEsqueciASenha, "cell 2 7,alignx center,aligny bottom");
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		add(panel, "cell 3 7 2 1,grow");
+		add(panel, "cell 2 8,grow");
 		
 		JButton btnEntrar = new JButton("Entrar");
 		panel.add(btnEntrar);
@@ -88,7 +88,7 @@ public class TelaLogin extends JPanel {
 		JLabel lblTermos = new JLabel("Ao continuar, você concorda com os nossos termos e Serviços e Política de Privacidade");
 		lblTermos.setForeground(new Color(192, 192, 192));
 		lblTermos.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		add(lblTermos, "cell 4 9,alignx center");
+		add(lblTermos, "cell 2 10,alignx center");
 		
 		
 		
@@ -99,9 +99,9 @@ public class TelaLogin extends JPanel {
         // Calcula a escala com base na mudança de tamanho da janela
 		int tamAjuste = 8;
 		//ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
-		tamAjuste = 25;
+		tamAjuste = 45;
 		ajustarFonteContainer(largura, altura, lblFacaLogin, tamAjuste);
-		tamAjuste = 50;
+		tamAjuste = 70;
 		ajustarFonteContainer(largura, altura, lblDigiteCredenciais, tamAjuste);
 		redimensionarImagem(largura, altura);
 		

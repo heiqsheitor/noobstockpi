@@ -9,12 +9,14 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.Toolkit;
 
-public class TelaPrincipal extends JFrame {
+public class TelaJFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private TelaLogin Login;
 	private TelaCadastro Cadastro;
+	private TelaRedefinirSenha RSenha;
 
 
 	/**
@@ -24,7 +26,7 @@ public class TelaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaPrincipal frame = new TelaPrincipal();
+					TelaJFrame frame = new TelaJFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,8 +39,13 @@ public class TelaPrincipal extends JFrame {
 	 * Create the frame.
 	 * @throws IOException 
 	 */
-	public TelaPrincipal() throws IOException {
+	public TelaJFrame() throws IOException {
+		setTitle("NoobStock");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TelaJFrame.class.getResource("/img/logoNoobstock.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(false);
+        
 		setBounds(100, 100, 703, 407);
 		Cadastro = new TelaCadastro();
 		Cadastro.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -54,7 +61,7 @@ public class TelaPrincipal extends JFrame {
         });
 
 	}
-private void ajustarFonte() {
+	private void ajustarFonte() {
 				   // Pega tamanho atual da janela
 		        int largura = getWidth();
 		        int altura = getHeight();

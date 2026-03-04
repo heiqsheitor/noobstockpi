@@ -28,8 +28,8 @@ public class TelaCadastro extends JPanel {
 	private JLabel lblFacaCadastro;
 	private JLabel lblDigiteCredenciais;
 	private BufferedImage  imagemOriginal;
-	private JTextField textField_1;
-	private JPasswordField passwordField;
+	private JTextField tFEmail;
+	private JPasswordField pFSenhaNova;
 	private Container btnNewButton;
 
 	/**
@@ -65,21 +65,21 @@ public class TelaCadastro extends JPanel {
 		add(tFUsuario, "cell 4 4,grow");
 		tFUsuario.setColumns(10);
 		
-		JLabel lblNewLabel = new JLabel("Email:");
-		add(lblNewLabel, "cell 3 5,alignx left");
+		JLabel lblEmail = new JLabel("Email:");
+		add(lblEmail, "cell 3 5,alignx left");
 		
-		textField_1 = new JTextField();
-		add(textField_1, "cell 4 5,grow");
-		textField_1.setColumns(10);
+		tFEmail = new JTextField();
+		add(tFEmail, "cell 4 5,grow");
+		tFEmail.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Senha:");
-		add(lblNewLabel_1, "cell 3 6,alignx trailing");
+		JLabel lblSenha = new JLabel("Senha:");
+		add(lblSenha, "cell 3 6,alignx left");
 		
-		passwordField = new JPasswordField();
-		add(passwordField, "cell 4 6,grow");
+		pFSenhaNova = new JPasswordField();
+		add(pFSenhaNova, "cell 4 6,grow");
 		
-		JButton btnNewButton = new JButton("Cadastrar");
-		add(btnNewButton, "cell 3 9 2 2,alignx center,growy");
+		JButton btnCadastrar = new JButton("Cadastrar");
+		add(btnCadastrar, "cell 3 9 2 2,alignx center,growy");
 		
 		JLabel lblTermos = new JLabel("Ao continuar, você concorda com os nossos termos e Serviços e Política de Privacidade");
 		lblTermos.setForeground(new Color(192, 192, 192));
@@ -87,22 +87,20 @@ public class TelaCadastro extends JPanel {
 		add(lblTermos, "cell 4 13,alignx center");
 		
 		
-		
-
 	}
 
 	public void ajustarFonte(int largura, int altura) {
         // Calcula a escala com base na mudança de tamanho da janela
 		int tamAjuste = 8;
 		//ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
-		tamAjuste = 25;
+		tamAjuste = 45;
 		ajustarFonteContainer(largura, altura, lblFacaCadastro, tamAjuste);
-		tamAjuste = 50;
+		tamAjuste = 70;
 		ajustarFonteContainer(largura, altura, lblDigiteCredenciais, tamAjuste);
 		tamAjuste = 45;
-		ajustarFonteContainer(largura, altura, lblUsuario, tamAjuste);
+//		ajustarFonteContainer(largura, altura, lblUsuario, tamAjuste);
 		redimensionarImagem(largura, altura);
-		tamAjuste = 35;
+//		tamAjuste = 35;
 		ajustarFonteContainer(largura, altura, btnNewButton, tamAjuste);
 		
 		
@@ -110,10 +108,10 @@ public class TelaCadastro extends JPanel {
 		
 	}
 	private void redimensionarImagem(int largura, int altura) {
-		 largura /=8;
-	       altura /=8;
-System.out.println(largura);
-	        if (largura <= 0 || altura <= 0) return;
+		   largura /=4;
+	       altura /=4;
+	       System.out.println(largura);
+	       if (largura <= 0 || altura <= 0) return;
 
 	        // Escala a imagem mantendo a proporção
 	        Image scaled = imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
