@@ -40,10 +40,10 @@ public class TelaIniGestor extends JPanel {
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/image8.png")));
 		add(lblNewLabel, "cell 1 0,alignx left,aligny center");
-
-		JLabel lblNewLabel_1 = new JLabel("Descubra");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		add(lblNewLabel_1, "cell 1 1");
+		
+				JLabel lblNewLabel_1 = new JLabel("Descubra");
+				lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
+				add(lblNewLabel_1, "cell 0 1");
 
 		JLabel lblInicio = new JLabel("");
 		lblInicio.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/home.png")));
