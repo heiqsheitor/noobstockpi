@@ -15,7 +15,7 @@ public class TelaJFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private TelaLogin Login;
-	private TelaCadastro2 Cadastro;
+	private TelaCadastro Cadastro;
 	private TelaRedefinirSenha RSenha;
 
 
@@ -45,7 +45,7 @@ public class TelaJFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
 		setBounds(100, 100, 703, 407);
-		Cadastro = new TelaCadastro2();
+		Cadastro = new TelaCadastro();
 		Cadastro.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(Cadastro);
 		

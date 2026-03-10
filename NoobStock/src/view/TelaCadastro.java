@@ -111,6 +111,7 @@ public class TelaCadastro extends JPanel {
 	       lblLogo.setIcon(new ImageIcon(scaled));
 	}
 	
+	
 	private void ajustarFonteContainer(int largura, int altura, Container lblLabel, int tamAjuste) {
 		  int tamanhoFonte = Math.min(largura, altura) / tamAjuste;
 	        tamanhoFonte = Math.max(tamanhoFonte, 8);

@@ -91,15 +91,15 @@ public class TelaCadastro2 extends JPanel {
 	public void ajustarFonte(int largura, int altura) {
         // Calcula a escala com base na mudança de tamanho da janela
 		int tamAjuste = 8;
-		//ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
+		ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
 		tamAjuste = 45;
 		ajustarFonteContainer(largura, altura, lblFacaCadastro, tamAjuste);
 		tamAjuste = 70;
 		ajustarFonteContainer(largura, altura, lblDigiteCredenciais, tamAjuste);
 		tamAjuste = 45;
-//		ajustarFonteContainer(largura, altura, lblUsuario, tamAjuste);
+		ajustarFonteContainer(largura, altura, lblUsuario, tamAjuste);
 		redimensionarImagem(largura, altura);
-//		tamAjuste = 35;
+		tamAjuste = 35;
 		ajustarFonteContainer(largura, altura, btnNewButton, tamAjuste);
 		
 		
