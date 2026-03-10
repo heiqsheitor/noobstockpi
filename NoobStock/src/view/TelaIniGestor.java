@@ -50,12 +50,6 @@ public class TelaIniGestor extends JPanel {
 		add(lblNewLabel_2, "cell 0 2,alignx center");
 
 		JLabel lblNewLabel_3 = new JLabel("Inicio");
-		lblNewLabel_3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-			}
-		});
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(lblNewLabel_3, "cell 1 2,alignx left");
 
