@@ -78,6 +78,7 @@ public class TelaControleEstoque extends JPanel {
 				add(btnNewButton, "cell 5 2");
 				
 				JPanel panel = new JPanel();
+				panel.setBackground(new Color(255, 255, 255));
 				add(panel, "cell 6 2,grow");
 				
 				JLabel lblNewLabel_5 = new JLabel("");

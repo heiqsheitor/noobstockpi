@@ -34,16 +34,15 @@ public class TelaIniFun extends JPanel {
 	 */
 	public TelaIniFun() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][grow 10][][grow 3][][grow][]",
-				"[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
+		setLayout(new MigLayout("", "[][grow 10][][grow 3][][grow][]", "[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TelaIniFun.class.getResource("/img/image8.png")));
 		add(lblNewLabel, "cell 1 0,alignx left,aligny center");
 
 		JLabel lblNewLabel_1 = new JLabel("Descubra");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		add(lblNewLabel_1, "cell 1 1");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		add(lblNewLabel_1, "cell 0 1 2 1");
 
 		JLabel lblInicio = new JLabel("");
 		lblInicio.setIcon(new ImageIcon(TelaIniFun.class.getResource("/img/home.png")));

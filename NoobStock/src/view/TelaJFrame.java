@@ -14,10 +14,11 @@ import java.awt.Toolkit;
 public class TelaJFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private TelaLogin Login;
-	private TelaCadastro Cadastro;
+	private TelaLogin login;
+	private TelaCadastro cadastro;
 	private TelaRedefinirSenha RSenha;
 	private TelaIniGestor gestor;
+	private TelaEntradaSaida entsai;
 
 
 	/**
@@ -46,9 +47,9 @@ public class TelaJFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
 		setBounds(100, 100, 703, 407);
-		gestor = new TelaIniGestor();
-		gestor.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(gestor);
+		entsai = new TelaEntradaSaida();
+		entsai.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(entsai);
 		
 		addComponentListener(new ComponentAdapter() {
             @Override
