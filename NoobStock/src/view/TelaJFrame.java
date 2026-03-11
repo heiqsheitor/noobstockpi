@@ -18,6 +18,7 @@ public class TelaJFrame extends JFrame {
 	private TelaCadastro Cadastro;
 	private TelaRedefinirSenha RSenha;
 	private TelaIniGestor gestor;
+	private TelaControleEstoque Controle;
 
 
 	/**
@@ -46,9 +47,9 @@ public class TelaJFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
 		setBounds(100, 100, 703, 407);
-		gestor = new TelaIniGestor();
-		gestor.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(gestor);
+		Controle = new TelaControleEstoque();
+		Controle.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(Controle);
 		
 		addComponentListener(new ComponentAdapter() {
             @Override
