@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.swing.SwingConstants;
 
 public class TelaIniFun extends JPanel {
 
@@ -34,8 +35,7 @@ public class TelaIniFun extends JPanel {
 	 */
 	public TelaIniFun() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][grow 10][][grow 3][][grow][]",
-				"[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
+		setLayout(new MigLayout("", "[][grow 10][][][grow 3][][grow][]", "[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TelaIniFun.class.getResource("/img/image8.png")));
@@ -61,7 +61,7 @@ public class TelaIniFun extends JPanel {
 
 		JLabel lblNewLabel_11 = new JLabel("Início");
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblNewLabel_11, "cell 4 2");
+		add(lblNewLabel_11, "cell 5 2");
 
 		JLabel lblcontroleEstoq = new JLabel("");
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaIniFun.class.getResource("/img/caixa(1)1.png")));
@@ -70,10 +70,15 @@ public class TelaIniFun extends JPanel {
 		JLabel LControleEstoq = new JLabel("Controle de estoque");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LControleEstoq, "cell 1 3,alignx left");
+		
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setForeground(new Color(0, 0, 0));
+		add(separator, "cell 3 0 1 9, gapx 10 10, growy");
 
 		JLabel lblNewLabel_12 = new JLabel("Bem vindo(a), (Nome de usuário)");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblNewLabel_12, "cell 4 3");
+		add(lblNewLabel_12, "cell 5 3");
 
 		JLabel lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/LOGO1.png"));

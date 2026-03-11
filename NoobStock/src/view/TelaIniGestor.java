@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.swing.SwingConstants;
 
 public class TelaIniGestor extends JPanel {
 
@@ -34,8 +35,7 @@ public class TelaIniGestor extends JPanel {
 	 */
 	public TelaIniGestor() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][grow 10][][grow 3][][grow][]",
-				"[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
+		setLayout(new MigLayout("", "[][grow 10][][][grow 3][][grow][]", "[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/image8.png")));
@@ -61,7 +61,7 @@ public class TelaIniGestor extends JPanel {
 
 		JLabel lblNewLabel_11 = new JLabel("Início");
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblNewLabel_11, "cell 4 2");
+		add(lblNewLabel_11, "cell 5 2");
 
 		JLabel lblcontroleEstoq = new JLabel("");
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/caixa(1)1.png")));
@@ -73,7 +73,7 @@ public class TelaIniGestor extends JPanel {
 
 		JLabel lblNewLabel_12 = new JLabel("Bem vindo(a), (Nome de usuário)");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblNewLabel_12, "cell 4 3");
+		add(lblNewLabel_12, "cell 5 3");
 
 		JLabel lblEstatis = new JLabel("");
 		lblEstatis.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/grafico.png")));
@@ -82,6 +82,12 @@ public class TelaIniGestor extends JPanel {
 		JLabel LEstatis = new JLabel("Estatísticas");
 		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEstatis, "cell 1 4");
+		
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setBackground(new Color(255, 255, 255));
+		separator.setForeground(new Color(0, 0, 0));
+		add(separator, "cell 2 0 2 9, gapx 10 10, growy");
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/entradaesaida(1)1.png")));
