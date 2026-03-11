@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import view.TelaLogin;
 import view.TelaPerfil;
+import view.TelaRedefinirSenha;
 
 import java.awt.CardLayout;
 
@@ -18,6 +19,7 @@ public class Principal extends JFrame {
 	private JPanel contentPane;
 	private TelaLogin login;
 	private TelaPerfil perfil;
+	private TelaRedefinirSenha redfSenha;
 
 	/**
 	 * Launch the application.
@@ -42,9 +44,9 @@ public class Principal extends JFrame {
 	public Principal() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		perfil = new TelaPerfil();
-		perfil.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(perfil);
+		redfSenha = new TelaRedefinirSenha();
+		redfSenha.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(redfSenha);
 //		login.setLayout(new CardLayout(0, 0));
 
 	}

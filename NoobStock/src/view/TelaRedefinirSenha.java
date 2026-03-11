@@ -1,40 +1,68 @@
 package view;
 
 import javax.swing.JPanel;
+import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaRedefinirSenha extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private JPasswordField pFNovaSenha;
+	private JPasswordField pFConfirmarNovaSenha;
 
 	/**
 	 * Create the panel.
 	 */
 	public TelaRedefinirSenha() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(null);
+		setLayout(new MigLayout("", "[grow 80][grow 1][grow 1][grow 1][grow 80]", "[grow 5][grow 5][grow 20][grow 20][grow 5][grow 3][grow 2][grow 3][grow 20][grow 3][grow 50][grow]"));
 		
 		JLabel lblLogo = new JLabel("");
-		lblLogo.setBackground(new Color(255, 255, 255));
 		lblLogo.setIcon(new ImageIcon(TelaRedefinirSenha.class.getResource("/img/logopng.png")));
-		lblLogo.setBounds(468, 11, 518, 233);
-		add(lblLogo);
+		add(lblLogo, "cell 1 0 3 1,alignx center,growy");
 		
-		JLabel lblRedefinirSenha = new JLabel("Redefinição de senha");
-		lblRedefinirSenha.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblRedefinirSenha.setBounds(451, 271, 185, 14);
-		add(lblRedefinirSenha);
+		JLabel lblRedefinicaoSenha = new JLabel("Redefinição de Senha");
+		lblRedefinicaoSenha.setFont(new Font("Tahoma", Font.BOLD, 13));
+		add(lblRedefinicaoSenha, "cell 1 2 3 1,alignx center,aligny bottom");
 		
-		JLabel lblInstrucao = new JLabel("Crie uma senha nova para acessar sua conta");
-		lblInstrucao.setBounds(421, 295, 223, 14);
-		add(lblInstrucao);
+		JLabel lblAvisoCrieSenha = new JLabel("Crie uma senha nova para acessar sua conta");
+		lblAvisoCrieSenha.setForeground(new Color(128, 128, 128));
+		add(lblAvisoCrieSenha, "cell 1 3 3 1,alignx center,aligny top");
 		
-		JLabel lblNewLabel = new JLabel("Nova senha");
-		lblNewLabel.setBounds(138, 344, 69, 14);
-		add(lblNewLabel);
+		JLabel lblNovaSenha = new JLabel("Nova senha:");
+		add(lblNovaSenha, "cell 1 5,alignx trailing");
+		
+		pFNovaSenha = new JPasswordField();
+		add(pFNovaSenha, "cell 2 5,grow");
+		
+		JLabel lblConfirmarSenha = new JLabel("Confirmar senha nova:");
+		add(lblConfirmarSenha, "cell 1 7,alignx trailing");
+		
+		pFConfirmarNovaSenha = new JPasswordField();
+		add(pFConfirmarNovaSenha, "cell 2 7,grow");
+		
+		JButton btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnSalvar.setForeground(new Color(255, 255, 255));
+		btnSalvar.setBackground(new Color(0, 0, 0));
+		add(btnSalvar, "cell 2 9,grow");
+		
+		JLabel lblTermos = new JLabel("Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade");
+		lblTermos.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(lblTermos, "cell 2 11,alignx center,aligny bottom");
 
 	}
+
 }
