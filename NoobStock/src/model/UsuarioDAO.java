@@ -34,27 +34,47 @@ public class UsuarioDAO {
             System.err.println("Erro ao salvar o Usuário no banco de dados: " + e.getMessage());
         }
     }
-//    public Usuario autenticar(String email, String senha) {
-//        String sql = "SELECT * FROM usuário WHERE email = ? AND senha = ?";
-//        
-//        // ... (abre a conexão e prepara o statement) ...
-//        
-//        stmt.setString(1, email);
-//        stmt.setString(2, senha);
-//        
-//        ResultSet rs = stmt.executeQuery(); // Executa a busca
-//        
-//        if (rs.next()) {
-//            // Encontrou! Pega os dados do banco e monta o objeto Cliente
-//            Usuario UsuarioLogado = new Usuario(
-//                rs.getString("nome_completo"), 
-//                rs.getString("email"),
-//                rs.getString("senha")
-//            );
-//            return UsuarioLogado; // Devolve o cliente para o Controller
-//        }
-//        
-//        return null; // Não encontrou ninguém com essa senha/email
-//    }
+public Usuario autenticar(Usuario usuario) {
+        
+        // Comando SQL buscando a combinação exata no banco
+        String sql = "SELECT * FROM clientes WHERE email = ? AND senha = ?";
+        
+        // Começamos com o cliente nulo. Se a busca falhar, ele continua nulo.
+        Usuario usuarioLogado = null;
+
+        // Try-with-resources: Conecta e prepara o comando de forma segura
+        try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            // Substitui os '?' pelos dados que o Controller mandou
+            stmt.setString(1, usuario.getEmail());
+            stmt.setString(2, usuario.getSenha());
+
+            // O ResultSet é onde o Java guarda a "tabela" de resultados que o banco devolve
+            try (ResultSet rs = stmt.executeQuery()) {
+                
+                // rs.next() move o cursor para a primeira linha. Se for true, achou alguém!
+                if (rs.next()) {
+                    
+                    // Show de bola! Achou o usuário. Agora empacotamos os dados do banco no objeto
+                    usuarioLogado = new Usuario(
+                        rs.getString("nome_completo"),
+                        rs.getString("Senha"),
+                        rs.getString("email"), sql
+                    );
+                    
+                    // OBS: Se você criou o atributo 'senha' dentro da classe Cliente, 
+                    // não esqueça de adicionar ele no construtor aqui também!
+                }
+            }
+
+        } catch (SQLException e) {
+            // Se der algum pau na conexão ou no SQL, avisa aqui
+            System.err.println("Eita, deu ruim na hora de consultar o banco: " + e.getMessage());
+        }
+
+        // Devolve o resultado para o Controller (o objeto cheio ou null)
+        return usuarioLogado;
+    }
  
     }

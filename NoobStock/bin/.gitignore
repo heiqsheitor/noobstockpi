@@ -1,10 +1,2 @@
-/controller/
-/main/
-<<<<<<< HEAD
 /model/
-=======
-=======
->>>>>>> ae6848cc279ffe83c1dcaa62c5abab6518766fdf
-/img/
-/controller/
->>>>>>> branch 'master' of https://github.com/heiqsheitor/noobstockpi.git
+/view/

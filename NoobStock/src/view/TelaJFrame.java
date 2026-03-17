@@ -1,10 +1,14 @@
 package view;
 
+import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
+import java.security.PublicKey;
+import java.security.interfaces.DSAPublicKey;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +23,11 @@ public class TelaJFrame extends JFrame {
 	private TelaRedefinirSenha RSenha;
 	private TelaIniGestor gestor;
 	private TelaControleEstoque Controle;
+	
+	
+	public static final String LOGIN_PANEL = "Login";
+	public static final String CADASTRO_PANEL = "Cadastro";
+	
 
 
 	/**
@@ -51,6 +60,23 @@ public class TelaJFrame extends JFrame {
 		Controle.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(Controle);
 		
+		CardLayout cardLayout = new CardLayout();
+		
+		 JPanel contentPane = new JPanel(cardLayout);
+		 
+		 contentPane.setPreferredSize(new Dimension(816, 522));
+		 
+		 
+		 contentPane.add(Login, LOGIN_PANEL);
+		 contentPane.add(Cadastro, CADASTRO_PANEL);
+		 setContentPane(contentPane);
+		 
+		
+//		 public void mostrarTela(String panelName) {
+//		        cardLayout.addLayoutComponent(contentPane, panelName);
+//		    }
+		 
+//		 mostrarTela(LOGIN_PANEL);
 		addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
