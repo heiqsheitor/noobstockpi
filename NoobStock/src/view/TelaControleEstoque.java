@@ -41,7 +41,7 @@ public class TelaControleEstoque extends JPanel {
 				JLabel lblPerfil = new JLabel("");
 				lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
 				add(lblPerfil, "cell 1 0,alignx center,aligny center");
-						
+
 				JLabel lblNewLabel_1 = new JLabel("Descubra");
 				lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
 				add(lblNewLabel_1, "cell 0 1 2 1");
