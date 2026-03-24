@@ -78,6 +78,29 @@ public class TelaCadastro2 extends JPanel {
 		add(pFSenhaNova, "cell 4 6,grow");
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Pegar o que o usuário digitou
+		        String nome = tFUsuario.getText();
+		        String email = tFEmail.getText();
+		        String senha = new String(pFSenhaNova.getPassword());
+
+		        // Criar um objeto de Usuário com esses dados
+		        // (O primeiro parâmetro é o ID, passamos null porque o banco cria sozinho)
+		        model.Usuario novo = new model.Usuario(null, nome, email, senha);
+
+		        // Chamar o DAO para levar esses dados ao MySQL
+		        model.UsuarioDAO dao = new model.UsuarioDAO();
+		        dao.cadastrarUsuario(novo);
+
+		        // Aviso na tela que funcionou
+		        javax.swing.JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!");
+		        
+		        tFUsuario.setText("");
+		        tFEmail.setText("");
+		        pFSenhaNova.setText("");
+			}
+		});
 		add(btnCadastrar, "cell 3 9 2 2,alignx center,growy");
 		
 		JLabel lblTermos = new JLabel("Ao continuar, você concorda com os nossos termos e Serviços e Política de Privacidade");
@@ -128,5 +151,4 @@ public class TelaCadastro2 extends JPanel {
 	        lblLabel.setFont(lblLabel.getFont().deriveFont((float) tamanhoFonte));
 		
 	}
-
 }
