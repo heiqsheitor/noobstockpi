@@ -80,6 +80,34 @@ public class TelaAdicionarProduto extends JPanel {
 		JButton btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// Pegar o que o usuário digitou
+		        String nomeProduto = TFProduto.getText();
+		        String SKUProd = TFSKU.getText();
+		        String Qtd = TFQtd.getText();
+		        String Localizacao = TFLocalizacao.getText();
+		        String Fornecedor = TFFornecedor.getText();
+		        String Categoria = TFCategoria.getText();
+
+
+
+
+		        // Criar um objeto de Usuário com esses dados
+		        // (O primeiro parâmetro é o ID, passamos null porque o banco cria sozinho)
+		        model.Produto novo = new model.Produto(null, SKUProd, nomeProduto, Qtd, Localizacao, Fornecedor, Categoria);
+
+		        // Chamar o DAO para levar esses dados ao MySQL
+		        model.ProdutoDAO dao = new model.ProdutoDAO();
+		        dao.cadastrarProduto(novo);
+
+		        // Aviso na tela que funcionou
+		        javax.swing.JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!");
+		        
+		        TFProduto.setText("");
+		        TFSKU.setText("");
+		        TFQtd.setText("");
+		        TFLocalizacao.setText("");
+		        TFFornecedor.setText("");
+		        TFCategoria.setText("");
 			}
 		});
 		btnAdicionar.setBackground(Color.BLACK);
