@@ -2,7 +2,7 @@ package model;
 
 import java.util.Random;
 
-public class Item {
+public class Produto {
 	private String SKU;
 	private String nome;
 	private String Qtd;
@@ -10,7 +10,7 @@ public class Item {
 	private String Fornecedor;
 	private String Categoria;
 
-	public Item(String sKU, String nome, String qtd, String localização, String fornecedor, String categoria) {
+	public Produto(String sKU, String nome, String qtd, String localização, String fornecedor, String categoria) {
 		super();
 		SKU = sKU;
 		this.nome = nome;

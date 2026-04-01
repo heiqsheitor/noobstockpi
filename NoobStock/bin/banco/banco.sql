@@ -9,18 +9,6 @@ create table usuarios (
     data_criacao timestamp default current_timestamp
 );
 
-create table categoria (
-    idcategoria int primary key auto_increment,
-    nome varchar(45)
-);
-
-create table fornecedor (
-    idfornecedor int primary key auto_increment,
-    nome varchar(45),
-    cnpj varchar(45),
-    contato varchar(45)
-);
-
 create table movimentacao (
     idmovimentacao int primary key auto_increment,
     datahora datetime
@@ -34,10 +22,22 @@ create table produto (
     numeroserie int,
     qtdestoque int,
     localizacao varchar(45),
-    fornecedor_idfornecedor int,
-    categoria_idcategoria int,
-    foreign key (fornecedor_idfornecedor) references fornecedor(idfornecedor),
-    foreign key (categoria_idcategoria) references categoria(idcategoria)
+    fornecedor_nome int,
+    categoria_nome int,
+    foreign key (fornecedor_nome) references fornecedor(nome),
+    foreign key (categoria_nome) references categoria(nome)
+);
+
+create table fornecedor (
+    idfornecedor int primary key auto_increment,
+    nome varchar(45),
+    cnpj varchar(45),
+    contato varchar(45)
+);
+
+create table categoria (
+    idcategoria int primary key auto_increment,
+    nome varchar(45)
 );
 
 create table venda (
