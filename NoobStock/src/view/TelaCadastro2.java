@@ -152,6 +152,7 @@ public class TelaCadastro2 extends JPanel {
 		
 	}
 	
+
 	public String getNome() {
 		return this.tFUsuario.getText();
 	}
