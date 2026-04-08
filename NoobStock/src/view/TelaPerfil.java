@@ -8,6 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Font;
@@ -42,8 +43,7 @@ public class TelaPerfil extends JPanel {
 		
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[grow 15][][grow 40][grow][grow][grow][grow]", "[][][][][][][][][][][grow]"));
-		
-		// Barra Vertical
+
 		JSeparator separatorVer = new JSeparator();
 		separatorVer.setOrientation(SwingConstants.VERTICAL);
 		separatorVer.setForeground(Color.BLACK);
@@ -57,7 +57,6 @@ public class TelaPerfil extends JPanel {
 		lblEditarPerfil.setFont(new Font("Tahoma", Font.BOLD, 16));
 		add(lblEditarPerfil, "cell 2 0");
 
-		// Barra Horizontal
 		JSeparator separatorHor = new JSeparator();
 		separatorHor.setOrientation(SwingConstants.HORIZONTAL);
 		separatorHor.setForeground(Color.BLACK);
@@ -99,7 +98,6 @@ public class TelaPerfil extends JPanel {
 		});
 		add(lblControleEstoque, "cell 0 3");
 		
-		// --- CAMPOS DE FORMULÁRIO ---
 		JLabel lblPrimeiroNome = new JLabel("Primeiro Nome:");
 		add(lblPrimeiroNome, "cell 3 3,alignx right");
 		
@@ -114,7 +112,6 @@ public class TelaPerfil extends JPanel {
 		
 		JLabel lblEmail = new JLabel("Email:");
 		add(lblEmail, "cell 3 5,alignx trailing");
-		// ----------------------------
 
 		JLabel lblNewLabel_6 = new JLabel("");
 		lblNewLabel_6.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/grafico.png")));
@@ -179,20 +176,40 @@ public class TelaPerfil extends JPanel {
 		btnAtualizar.setBackground(new Color(0, 0, 0));
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String primeiroNome = tFPrimeiroNome.getText().trim();
+				String segundoNome = tFSegundoNome.getText().trim();
+				String email = tFEmail.getText().trim();
+				String senha = new String(pFSenha.getPassword());
 				
-			
+				if (primeiroNome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+					JOptionPane.showMessageDialog(null, 
+							"Por favor, preencha os campos obrigatórios (Nome, Email e Senha).", 
+							"Aviso", 
+							JOptionPane.WARNING_MESSAGE);
+					LimpaCampos();
+					return;
+				}
+				
+				JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
+				LimpaCampos();
 			}
+			
 		});
 		add(btnAtualizar, "cell 4 9,alignx right");
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBackground(new Color(255, 255, 255));
 		add(btnCancelar, "cell 5 9,width 100!,alignx left");
-		// ----------------------
-		
+
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/LOGO1.png")));
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(lblLogo, "cell 0 10, alignx center, aligny bottom");
+	}
+	private void LimpaCampos() {
+		tFPrimeiroNome.setText("");
+	    tFSegundoNome.setText("");
+	    tFEmail.setText("");
+	    pFSenha.setText("");
 	}
 }

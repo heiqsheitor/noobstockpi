@@ -151,4 +151,5 @@ public class TelaCadastro2 extends JPanel {
 	        lblLabel.setFont(lblLabel.getFont().deriveFont((float) tamanhoFonte));
 		
 	}
+	
 }
