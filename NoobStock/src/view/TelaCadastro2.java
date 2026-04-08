@@ -151,4 +151,16 @@ public class TelaCadastro2 extends JPanel {
 	        lblLabel.setFont(lblLabel.getFont().deriveFont((float) tamanhoFonte));
 		
 	}
+	
+	public String getNome() {
+		return this.tFUsuario.getText();
+	}
+	
+	public String getEmail() {
+		return this.tFEmail.getText();
+	}
+	
+	public String getSenha() {
+		return this.pFSenhaNova.getText();
+	}
 }

@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -74,7 +75,7 @@ public class TelaCadastro extends JPanel {
 		add(pfSenha, "cell 2 7 3 1,grow");
 		
 		btnCadastrar = new JButton("Cadastrar-se");
-		btnCadastrar.setForeground(new Color(255, 255, 255));
+		btnCadastrar.setForeground(new Color(0, 0, 0));
 		btnCadastrar.setBackground(new Color(0, 0, 0));
 		add(btnCadastrar, "cell 3 9,grow");
 		
@@ -121,5 +122,27 @@ public class TelaCadastro extends JPanel {
 	        // Aplica a nova fonte
 	        lblLabel.setFont(lblLabel.getFont().deriveFont((float) tamanhoFonte));
 		
+	}
+	
+	public String getNome() {
+		return this.tfUsuario.getText();
+	}
+	
+	public String getEmail() {
+		return this.tfEmail.getText();
+	}
+	
+	public String getSenha() {
+		return this.pfSenha.getText();
+	}
+	
+	public void Cadastrar(ActionListener actionListener) {
+		this.btnCadastrar.addActionListener(actionListener);
+	}
+	
+	public void limparFormulario(){
+		this.tfUsuario.setText("");
+		this.tfEmail.setText("");
+		this.pfSenha.setText("");
 	}
 }

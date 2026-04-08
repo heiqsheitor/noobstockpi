@@ -1,4 +1,4 @@
-package main;
+package view;
 
 import java.awt.EventQueue;
 import java.io.IOException;
@@ -22,6 +22,7 @@ public class Principal extends JFrame {
 	private TelaPerfil perfil;
 	private TelaRedefinirSenha redfSenha;
 	private TelaCadastro2 cadastro;
+	private CardLayout cardLayout;
 
 	/**
 	 * Launch the application.
@@ -51,5 +52,15 @@ public class Principal extends JFrame {
 		setContentPane(cadastro);
 //		login.setLayout(new CardLayout(0, 0));
 
+	}
+
+	public void adicionarTela(String nome, JPanel tela) {
+		this.contentPane.add(tela, nome);
+	}
+
+	public void mostrarTela(String nome) {
+		this.cardLayout.show(this.contentPane, nome);
+		this.pack();
+		
 	}
 }
