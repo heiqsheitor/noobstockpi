@@ -8,6 +8,11 @@ import java.awt.Color;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 import javax.swing.JTextField;
 
 public class TelaEntradaSaida extends JPanel {
@@ -20,7 +25,7 @@ public class TelaEntradaSaida extends JPanel {
 	 */
 	public TelaEntradaSaida() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[grow 0][grow 2][grow 0][grow 3][grow][grow 11][grow 11][grow 11][grow 11][grow 11][grow 11][grow 11]", "[::40px,grow 0][::35px,grow 1][::35px,grow 1][::35px,grow 1][::35px,grow 1][grow 1][grow 11][grow 11][grow 11][grow 11]"));
+		setLayout(new MigLayout("", "[grow 0][grow 2][grow 0][grow 2][grow 3][grow 2][grow 11][grow 2][grow 11][grow 2][grow 11][grow 4]", "[::40px,grow 0][::35px,grow 1][::35px,grow 1][::35px,grow 1][::35px,grow 1][grow 1][grow 11][grow 11][grow 11][grow 11]"));
 		
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaEntradaSaida.class.getResource("/img/image8.png")));
@@ -42,10 +47,32 @@ public class TelaEntradaSaida extends JPanel {
 		JLabel lblNewLabel = new JLabel("Início");
 		add(lblNewLabel, "cell 1 2");
 		
-		txtPesquisar = new JTextField();
-		txtPesquisar.setForeground(new Color(192, 192, 192));
-		txtPesquisar.setText("Buscar Itens...");
-		add(txtPesquisar, "cell 4 2 2 1,grow");
+		txtPesquisar = new JTextField(){
+		    @Override
+		    protected void paintComponent(Graphics g) {
+		        super.paintComponent(g);
+		        
+		        // Se o campo estiver vazio, desenha o texto de fundo
+		        if (getText().isEmpty()) {
+		            Graphics2D g2 = (Graphics2D) g.create();
+		            // Suaviza as bordas da fonte
+		            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		            
+		            // Define a cor e a fonte do placeholder
+		            g2.setColor(new Color(192, 192, 192));
+		            g2.setFont(getFont());
+		            
+		            // Calcula o alinhamento vertical para centralizar o texto
+		            FontMetrics fm = g2.getFontMetrics();
+		            int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+		            
+		            // Desenha o texto respeitando as margens internas (insets)
+		            g2.drawString("Buscar Itens...", getInsets().left, y);
+		            g2.dispose();
+		        }
+		    }
+		};
+		add(txtPesquisar, "cell 4 2 6 1,grow");
 		txtPesquisar.setColumns(10);
 		
 		JLabel lblControleEstoq = new JLabel("");
