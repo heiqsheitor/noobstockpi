@@ -33,9 +33,8 @@ public class UsuarioController {
 		}else {
 			JOptionPane.showMessageDialog(null, "Erro, Preencha todos os campos!");
 		}
-		
 	});
-	}
+}
 //	// Método que a View (Tela) vai chamar quando o usuário clicar em "Salvar"
 //        public void processarCadastro(String id_usuario,String nome,String email,String senha) {
 //        
