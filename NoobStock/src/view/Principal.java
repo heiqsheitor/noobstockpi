@@ -6,9 +6,9 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import view.TelaAdicionarProduto;
 import view.TelaCadastro2;
+import view.TelaEntradaSaida;
 import view.TelaLogin;
 import view.TelaPerfil;
 import view.TelaRedefinirSenha;
@@ -25,6 +25,7 @@ public class Principal extends JFrame {
 	private TelaCadastro2 cadastro;
 	private CardLayout cardLayout;
 	private TelaAdicionarProduto addProduto;
+	private TelaEntradaSaida entsai;
 
 	/**
 	 * Launch the application.
@@ -49,9 +50,9 @@ public class Principal extends JFrame {
 	public Principal() throws IOException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		perfil = new TelaPerfil();
-		perfil.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(perfil);
+		entsai = new TelaEntradaSaida();
+		entsai.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(entsai);
 //		login.setLayout(new CardLayout(0, 0));
 
 	}
