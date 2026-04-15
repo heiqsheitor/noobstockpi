@@ -27,10 +27,12 @@ public class TelaCadastro2 extends JPanel {
 	private JLabel lblUsuario;
 	private JLabel lblFacaCadastro;
 	private JLabel lblDigiteCredenciais;
-	private BufferedImage  imagemOriginal;
+	private BufferedImage imagemOriginal;
 	private JTextField tFEmail;
 	private JPasswordField pFSenhaNova;
-	private Container btnNewButton;
+	
+	// Correção: Transformando o botão em variável de instância
+	private JButton btnCadastrar;
 
 	/**
 	 * Create the panel.
@@ -45,9 +47,7 @@ public class TelaCadastro2 extends JPanel {
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
 		lblLogo.setIcon(new ImageIcon(TelaCadastro2.class.getResource("/img/logopng.png")));
         Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-
         lblLogo.setIcon(new ImageIcon(scaled));
-
 		add(lblLogo, "cell 3 0 2 1,alignx center,aligny top");
 		
 		lblFacaCadastro = new JLabel("Abra uma conta");
@@ -57,7 +57,8 @@ public class TelaCadastro2 extends JPanel {
 		lblDigiteCredenciais = new JLabel("Digite suas credenciais e inscreva-se no aplicativo");
 		add(lblDigiteCredenciais, "cell 3 2 2 1,alignx center,aligny top");
 		
-		JLabel lblUsuario = new JLabel("Usuário:");
+		// Correção: Inicializando a variável de instância existente
+		lblUsuario = new JLabel("Usuário:");
 		add(lblUsuario, "cell 3 4,alignx left,growy");
 		
 		tFUsuario = new JTextField();
@@ -77,7 +78,8 @@ public class TelaCadastro2 extends JPanel {
 		pFSenhaNova = new JPasswordField();
 		add(pFSenhaNova, "cell 4 6,grow");
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
+		// Correção: Usando a variável de instância
+		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Pegar o que o usuário digitou
@@ -86,7 +88,6 @@ public class TelaCadastro2 extends JPanel {
 		        String senha = new String(pFSenhaNova.getPassword());
 
 		        // Criar um objeto de Usuário com esses dados
-		        // (O primeiro parâmetro é o ID, passamos null porque o banco cria sozinho)
 		        model.Usuario novo = new model.Usuario(null, nome, email, senha);
 
 		        // Chamar o DAO para levar esses dados ao MySQL
@@ -103,65 +104,4 @@ public class TelaCadastro2 extends JPanel {
 		});
 		add(btnCadastrar, "cell 3 9 2 2,alignx center,growy");
 		
-		JLabel lblTermos = new JLabel("Ao continuar, você concorda com os nossos termos e Serviços e Política de Privacidade");
-		lblTermos.setForeground(new Color(192, 192, 192));
-		lblTermos.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		add(lblTermos, "cell 4 13,alignx center");
-		
-		
-	}
-
-	public void ajustarFonte(int largura, int altura) {
-        // Calcula a escala com base na mudança de tamanho da janela
-		int tamAjuste = 8;
-		ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
-		tamAjuste = 45;
-		ajustarFonteContainer(largura, altura, lblFacaCadastro, tamAjuste);
-		tamAjuste = 70;
-		ajustarFonteContainer(largura, altura, lblDigiteCredenciais, tamAjuste);
-		tamAjuste = 45;
-		ajustarFonteContainer(largura, altura, lblUsuario, tamAjuste);
-		redimensionarImagem(largura, altura);
-		tamAjuste = 35;
-		ajustarFonteContainer(largura, altura, btnNewButton, tamAjuste);
-		
-		
-				
-		
-	}
-	private void redimensionarImagem(int largura, int altura) {
-		   largura /=4;
-	       altura /=4;
-	       System.out.println(largura);
-	       if (largura <= 0 || altura <= 0) return;
-
-	        // Escala a imagem mantendo a proporção
-	        Image scaled = imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
-
-	        lblLogo.setIcon(new ImageIcon(scaled));
-	}
-
-	private void ajustarFonteContainer(int largura, int altura, Container lblLabel, int tamAjuste) {
-		  int tamanhoFonte = Math.min(largura, altura) / tamAjuste;
-	        tamanhoFonte = Math.max(tamanhoFonte, 8);
-	        tamanhoFonte = Math.min(tamanhoFonte, 72);
-	        
-	      
-	        // Aplica a nova fonte
-	        lblLabel.setFont(lblLabel.getFont().deriveFont((float) tamanhoFonte));
-		
-	}
-	
-
-	public String getNome() {
-		return this.tFUsuario.getText();
-	}
-	
-	public String getEmail() {
-		return this.tFEmail.getText();
-	}
-	
-	public String getSenha() {
-		return this.pFSenhaNova.getText();
-	}
-}
+		JLabel lblTermos = new JLabel("Ao continuar, você concorda com

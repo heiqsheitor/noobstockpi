@@ -15,6 +15,7 @@ public class TelaAdicionarProduto extends JPanel {
 	private JTextField TFLocalizacao;
 	private JTextField TFFornecedor;
 	private JTextField TFCategoria;
+	
 	public TelaAdicionarProduto() {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[grow 1][][][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][]"));
@@ -88,9 +89,6 @@ public class TelaAdicionarProduto extends JPanel {
 		        String Fornecedor = TFFornecedor.getText();
 		        String Categoria = TFCategoria.getText();
 
-
-
-
 		        // Criar um objeto de Usuário com esses dados
 		        // (O primeiro parâmetro é o ID, passamos null porque o banco cria sozinho)
 		        model.Produto novo = new model.Produto(null, SKUProd, nomeProduto, Qtd, Localizacao, Fornecedor, Categoria);
@@ -139,7 +137,5 @@ public class TelaAdicionarProduto extends JPanel {
 		TFCategoria = new JTextField();
 		add(TFCategoria, "cell 3 8,growx");
 		TFCategoria.setColumns(10);
-	}
-
-   
+	}   
 }

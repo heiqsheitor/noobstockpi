@@ -19,7 +19,7 @@ public class TelaJFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private TelaLogin login;
-	private TelaCadastro cadastro;
+	private TelaCadastro2 cadastro;
 	private TelaRedefinirSenha RSenha;
 	private TelaIniGestor gestor;
 	private TelaControleEstoque Controle;
