@@ -1,12 +1,14 @@
 package controller;
 
+import java.awt.event.ComponentAdapter;
+
 import javax.swing.JOptionPane;
 
 import model.Usuario;
 import model.UsuarioDAO;
 import view.TelaCadastro;
 
-public class UsuarioController {
+public class UsuarioController extends ComponentAdapter {
 	
 	private final TelaCadastro view;
 	private final UsuarioDAO model;

@@ -1,32 +1,58 @@
 package main;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
+import controller.LoginController;
+import controller.Navegador;
 import controller.ProdutoController;
 import model.ProdutoDAO;
 import model.Usuario;
 import model.UsuarioDAO;
+import view.Principal;
 import view.TelaAdicionarProduto;
+import view.TelaCadastro2;
+import view.TelaLogin;
 
 public class Main {
 
-public static void main(String[] args) {
-        
-        // 1. Instanciamos a tela, o DAO e o Controller (Isso você fez perfeitamente!)
-        TelaAdicionarProduto telaAdicionar = new TelaAdicionarProduto();
-        ProdutoDAO daoProduto = new ProdutoDAO();
-        ProdutoController controllerProduto = new ProdutoController(telaAdicionar, daoProduto);
-        
-        // 2. Como a tela é um JPanel, precisamos de um JFrame provisório para testá-la
-        JFrame janelaTeste = new JFrame("NoobStock - Teste Adicionar Produto");
-        janelaTeste.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        janelaTeste.setSize(800, 600); // Tamanho da janela
-        
-        // 3. Colocamos o seu painel dentro da janela e mandamos exibir
-        janelaTeste.setContentPane(telaAdicionar);
-        janelaTeste.setLocationRelativeTo(null); // Centraliza na tela
-        janelaTeste.setVisible(true); 
-    }
+	public static void main(String[] args) {
+
+		Principal principal = new Principal();
+		Navegador navegador = new Navegador(principal);
+
+		TelaLogin telalogin;
+		try {
+			telalogin = new TelaLogin();
+			UsuarioDAO usuarioDAO = new UsuarioDAO();
+			LoginController loginController = new LoginController(telalogin, usuarioDAO, null);
+			
+			TelaCadastro2 telaCadastro = new TelaCadastro2();
+			
+	
+			TelaAdicionarProduto telaAdicionar = new TelaAdicionarProduto();
+			ProdutoDAO daoProduto = new ProdutoDAO();
+			ProdutoController controllerProduto = new ProdutoController(telaAdicionar, daoProduto);
+	
+	
+			principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			principal.setSize(800, 600); // Tamanho da janela
+	
+			
+			principal.setContentPane(telalogin);
+			principal.setLocationRelativeTo(null); 
+			principal.setVisible(true);
+			
+			navegador.adicionarPainel("LOGIN", telalogin);
+			navegador.adicionarPainel("ADICIONAR_PRODUTOS", telaAdicionar);
+			navegador.adicionarPainel("CADASTRO", telaCadastro);
+			
+			navegador.navegarPara("LOGIN");
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
-
+}

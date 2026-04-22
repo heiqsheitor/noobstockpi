@@ -26,10 +26,11 @@ public class TelaLogin extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField tFUsuario;
-	private JTextField textField;
+	private JTextField TFSenha;
 	private JLabel lblLogo;
 	private JLabel lblFacaLogin;
 	private JLabel lblDigiteCredenciais;
+	private JButton btnEntrar, btnCadastrar, btnEsqueciASenha;
 	private BufferedImage imagemOriginal;
 
 	/**
@@ -70,11 +71,11 @@ public class TelaLogin extends JPanel {
 		JLabel lblSenha = new JLabel("Senha:");
 		add(lblSenha, "cell 1 6,alignx right,aligny top");
 
-		textField = new JTextField();
-		add(textField, "flowx,cell 2 6,grow");
-		textField.setColumns(10);
+		TFSenha = new JTextField();
+		add(TFSenha, "flowx,cell 2 6,grow");
+		TFSenha.setColumns(10);
 
-		JButton btnEsqueciASenha = new JButton("Esqueci a senha");
+		btnEsqueciASenha = new JButton("Esqueci a senha");
 		btnEsqueciASenha.setForeground(new Color(255, 255, 255));
 		btnEsqueciASenha.setBackground(new Color(0, 0, 0));
 		add(btnEsqueciASenha, "cell 2 7,alignx center,aligny bottom");
@@ -83,12 +84,12 @@ public class TelaLogin extends JPanel {
 		panel.setBackground(new Color(255, 255, 255));
 		add(panel, "cell 2 8,grow");
 
-		JButton btnEntrar = new JButton("Entrar");
+		btnEntrar = new JButton("Entrar");
 		btnEntrar.setBackground(new Color(0, 0, 0));
 		btnEntrar.setForeground(new Color(255, 255, 255));
 		panel.add(btnEntrar);
 
-		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setForeground(new Color(255, 255, 255));
 		btnCadastrar.setBackground(new Color(0, 0, 0));
 		panel.add(btnCadastrar);
@@ -102,6 +103,30 @@ public class TelaLogin extends JPanel {
 		lblTermos.setForeground(new Color(192, 192, 192));
 		lblTermos.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(lblTermos, "cell 2 10,alignx center");
+	}
+
+	public String getEmail() {
+		return tFUsuario.getText();
+	}
+
+	public String getSenha() {
+		return TFSenha.getText();
+	}
+
+	public void mostrarMensagem(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+
+	public void adicionarListenerLogin(ActionListener listener) {
+		btnEntrar.addActionListener(listener);
+	}
+
+	public void adicionarListenerCadastro(ActionListener Cadastro) {
+		btnCadastrar.addActionListener(Cadastro);
+	}
+	
+	public void adicionarListenerEsqueciSenha(ActionListener EsqueciSenha) {
+		btnCadastrar.addActionListener(EsqueciSenha);
 	}
 
 	public void ajustarFonte(int largura, int altura) {
