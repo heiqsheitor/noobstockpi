@@ -1,68 +1,112 @@
 package view;
 
-import java.awt.EventQueue;
-import java.io.IOException;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 public class Principal extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private TelaLogin login;
-	private TelaPerfil perfil;
-	private TelaRedefinirSenha redfSenha;
-	private TelaCadastro2 cadastro;
-	private CardLayout cardLayout;
-	private TelaAdicionarProduto addProduto;
-	private TelaEntradaSaida entsai;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Principal frame = new Principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private JPanel contentPane;
+    private CardLayout cardLayout;
 
-	/**
-	 * Create the frame.
-	 */
-	public Principal() throws IOException {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		
-		// Correção: Inicializando o CardLayout e o contentPane principal
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		cardLayout = new CardLayout();
-		contentPane.setLayout(cardLayout);
-		setContentPane(contentPane);
+    // Telas
+    private TelaLogin login;
+    private TelaCadastro cadastro;
+    private TelaPerfil perfil;
+    private TelaRedefinirSenha redefinirSenha;
+    private TelaControleEstoque controle;
 
-		// Inicializando e adicionando a tela inicial ao gerenciador
-		entsai = new TelaEntradaSaida();
-		adicionarTela("EntradaSaida", entsai);
-		
-		mostrarTela("EntradaSaida");
-	}
+    // Constantes de navegação
+    public static final String LOGIN = "LOGIN";
+    public static final String CADASTRO = "CADASTRO";
+    public static final String PERFIL = "PERFIL";
+    public static final String ESTOQUE = "ESTOQUE";
+    public static final String REDEFINIR = "REDEFINIR";
 
-	public void adicionarTela(String nome, JPanel tela) {
-		this.contentPane.add(tela, nome);
-	}
+    public Principal() {
+        setTitle("NoobStock");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(
+                Principal.class.getResource("/img/logoNoobstock.png")));
 
-	public void mostrarTela(String nome) {
-		this.cardLayout.show(this.contentPane, nome);
-		this.pack();
-	}
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 800, 600);
+
+        // CardLayout
+        cardLayout = new CardLayout();
+        contentPane = new JPanel(cardLayout);
+        contentPane.setPreferredSize(new Dimension(816, 522));
+
+        setContentPane(contentPane);
+
+        // Inicializa telas
+        try {
+			login = new TelaLogin();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			cadastro = new TelaCadastro();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        perfil = new TelaPerfil();
+        redefinirSenha = new TelaRedefinirSenha();
+        try {
+			controle = new TelaControleEstoque();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        // Adiciona telas
+        contentPane.add(login, LOGIN);
+        contentPane.add(cadastro, CADASTRO);
+        contentPane.add(perfil, PERFIL);
+        contentPane.add(redefinirSenha, REDEFINIR);
+        contentPane.add(controle, ESTOQUE);
+
+        // Responsividade (da TelaJFrame)
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                ajustarFonte();
+            }
+        });
+    }
+
+    // Navegação
+    public void mostrarTela(String nome) {
+        cardLayout.show(contentPane, nome);
+    }
+
+    // Responsividade
+    private void ajustarFonte() {
+        int largura = getWidth();
+        int altura = getHeight();
+
+        if (controle != null) {
+            controle.ajustarFonte(largura, altura);
+        }
+
+        repaint();
+        revalidate();
+    }
+
+    // Getters (IMPORTANTE pro controller)
+    public TelaLogin getLogin() { 
+    	return login; 
+    	}
+    public TelaCadastro getCadastro() { return cadastro; }
+    public TelaPerfil getPerfil() { return perfil; }
+    public TelaControleEstoque getControle() { return controle; }
 }
