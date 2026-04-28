@@ -37,7 +37,6 @@ public class TelaPerfil extends JPanel {
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
 	
-	
 	/**
 	 * Create the panel.
 	 */
@@ -47,109 +46,96 @@ public class TelaPerfil extends JPanel {
 		painelEsquerdo.setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 		
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[grow 15][][grow 40][grow][grow][grow][grow]", "[][][][][][][][][][][grow]"));
-
-		JSeparator separatorVer = new JSeparator();
-		separatorVer.setOrientation(SwingConstants.VERTICAL);
-		separatorVer.setForeground(Color.BLACK);
-		add(separatorVer, "cell 1 0 1 11, gapx 10 10, growy");
-
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
-		add(lblNewLabel, "cell 0 0, alignx center");
+		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][][][][][][grow]"));
+		
+		JLabel lblPerfil = new JLabel("");
+		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
+		add(lblPerfil, "cell 0 0 2 1,alignx center");
 		
 		JLabel lblEditarPerfil = new JLabel("Editar Perfil");
 		lblEditarPerfil.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblEditarPerfil, "cell 2 0");
+		add(lblEditarPerfil, "cell 4 0,aligny bottom");
+		
+		JLabel lblNewLabel_1 = new JLabel("Descubra");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		add(lblNewLabel_1, "cell 0 1 2 1");
 
 		JSeparator separatorHor = new JSeparator();
 		separatorHor.setOrientation(SwingConstants.HORIZONTAL);
 		separatorHor.setForeground(Color.BLACK);
-		add(separatorHor, "cell 2 1 5 1,growx,gapy 5 10");
+		add(separatorHor, "cell 3 1 6 1,growx,gapy 5 10");
 		
-		JLabel lblNewLabel_1 = new JLabel("Descubra");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		add(lblNewLabel_1, "cell 0 1, alignx left");
+		JSeparator separatorVer = new JSeparator();
+		separatorVer.setOrientation(SwingConstants.VERTICAL);
+		separatorVer.setForeground(Color.BLACK);
+		add(separatorVer, "cell 2 0 1 11,gapx 2 2,growy");
+		
+		JLabel LInicio = new JLabel("Inicio");
+		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LInicio, "cell 1 2,alignx left,aligny center");
 		
 		JLabel lblInfoBasicas = new JLabel("Informações Básicas");
 		lblInfoBasicas.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblInfoBasicas, "cell 2 2, gaptop 10"); 
+		add(lblInfoBasicas, "cell 4 2,gapy 10"); 
 		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/home.png")));
-		add(lblNewLabel_2, "flowx, cell 0 2");
+		add(lblNewLabel_2, "flowx,cell 0 2,alignx center");
 		
-		JLabel lblInicio = new JLabel("Inicio");
-		lblInicio.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		add(lblInicio, "cell 0 2,aligny center");
+		JLabel LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 		
 		JLabel lblIconAvatar = new JLabel("");
 		lblIconAvatar.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/icone avatar.png")));
-		add(lblIconAvatar, "cell 2 3 1 5,growx,aligny top");
+		add(lblIconAvatar, "cell 4 3 1 5,growx,aligny top");
 		
 		JLabel lblNewLabel_4 = new JLabel("");
 		lblNewLabel_4.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/caixa(1)1.png")));
 		add(lblNewLabel_4, "flowx, cell 0 3, alignx left");
 		
-		JLabel lblControleEstoque = new JLabel("Controle de Estoque");
-		lblControleEstoque.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		add(lblControleEstoque, "cell 0 3");
-		
 		JLabel lblPrimeiroNome = new JLabel("Primeiro Nome:");
-		add(lblPrimeiroNome, "cell 3 3,alignx right");
+		add(lblPrimeiroNome, "cell 5 3,alignx right");
 		
 		tFPrimeiroNome = new JTextField();
-		add(tFPrimeiroNome, "cell 4 3 2 1,grow");
+		add(tFPrimeiroNome, "cell 6 3 2 1,grow");
+		
+		JLabel LEstatis = new JLabel("Estatísticas");
+		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LEstatis, "cell 1 4");
 		
 		JLabel lblSegundoNome = new JLabel("Segundo Nome:");
-		add(lblSegundoNome, "cell 3 4,alignx trailing");
+		add(lblSegundoNome, "cell 5 4,alignx trailing");
 		
 		tFSegundoNome = new JTextField();
-		add(tFSegundoNome, "cell 4 4 2 1,grow");
+		add(tFSegundoNome, "cell 6 4 2 1,grow");
+		
+		JLabel lblEntraSai = new JLabel("");
+		lblEntraSai.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/entradaesaida(1)1.png")));
+		add(lblEntraSai, "cell 0 5,alignx center");
+		
+		JLabel LEntraSai = new JLabel("Entrada e saída");
+		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LEntraSai, "cell 1 5");
 		
 		JLabel lblEmail = new JLabel("Email:");
-		add(lblEmail, "cell 3 5,alignx trailing");
+		add(lblEmail, "cell 5 5,alignx trailing");
 
 		JLabel lblNewLabel_6 = new JLabel("");
 		lblNewLabel_6.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/grafico.png")));
-		add(lblNewLabel_6, "flowx, cell 0 4");
-		
-		JLabel lblEstatisticas = new JLabel("Estatísticas");
-		lblEstatisticas.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		add(lblEstatisticas, "cell 0 4");
-		
-		JLabel lblEntradaSaida = new JLabel("Entrada e Saída");
-		lblEntradaSaida.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
-		lblEntradaSaida.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/entradaesaida(1)1.png")));
-		add(lblEntradaSaida, "cell 0 5");
+		add(lblNewLabel_6, "flowx,cell 0 4,alignx center");
 		
 		tFEmail = new JTextField();
-		add(tFEmail, "cell 4 5 2 1,grow");
+		add(tFEmail, "cell 6 5 2 1,grow");
 		
 		JLabel lblSenha = new JLabel("Senha:");
-		add(lblSenha, "cell 3 6,alignx trailing");
+		add(lblSenha, "cell 5 6,alignx trailing");
 		
 		pFSenha = new JPasswordField();
-		add(pFSenha, "cell 4 6 2 1,grow");
+		add(pFSenha, "cell 6 6 2 1,grow");
 		
 		JLabel lblAvatar = new JLabel("Avatar");
-		add(lblAvatar, "cell 2 8,growx"); 
+		add(lblAvatar, "cell 4 8,growx"); 
 
 		btnImportarAvatar = new JButton("Importar Arquivo");
 		btnImportarAvatar.setBackground(new Color(255, 255, 255));
@@ -173,8 +159,8 @@ public class TelaPerfil extends JPanel {
 			}
 		});
 
-		add(btnImportarAvatar, "flowx,cell 2 9,growx"); 
-		add(lblStatusArquivo, "cell 2 9,growx,gapx 10");
+		add(btnImportarAvatar, "flowx,cell 4 9,growx"); 
+		add(lblStatusArquivo, "cell 4 9,growx,gapx 10");
 
 		btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.setForeground(new Color(255, 255, 255));
@@ -200,7 +186,7 @@ public class TelaPerfil extends JPanel {
 			}
 			
 		});
-		add(btnAtualizar, "cell 4 9,alignx right");
+		add(btnAtualizar, "cell 6 9,alignx right");
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
@@ -209,18 +195,18 @@ public class TelaPerfil extends JPanel {
 			}
 		});
 		btnCancelar.setBackground(new Color(255, 255, 255));
-		add(btnCancelar, "flowx,cell 5 9,width 100!,alignx left");
+		add(btnCancelar, "flowx,cell 7 9,width 100!,alignx left");
 
 		JLabel lblLogo = new JLabel("");
 
 		ImageIcon icon = new ImageIcon(TelaPerfil.class.getResource("/img/logopng.png"));
 		Image img = icon.getImage();
 
-		Image imgRedimensionada = img.getScaledInstance(100, 50, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = img.getScaledInstance(70, 35, Image.SCALE_SMOOTH);
 
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblLogo, "cell 0 9 1 2,alignx center,aligny bottom");
+		add(lblLogo, "cell 0 10 2 1,alignx center,aligny bottom");
 
 		btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {
@@ -228,7 +214,7 @@ public class TelaPerfil extends JPanel {
 				
 			}
 		});
-		add(btnDeslogar, "cell 5 9,alignx right,aligny bottom");
+		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
 	}
 	
 	
