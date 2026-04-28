@@ -1,58 +1,44 @@
 package main;
 
 import java.io.IOException;
-
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import controller.LoginController;
-import controller.Navegador;
-import controller.ProdutoController;
-import model.ProdutoDAO;
-import model.Usuario;
+import controller.PerfilController;
 import model.UsuarioDAO;
-import view.Principal;
-import view.TelaAdicionarProduto;
-import view.TelaCadastro;
 import view.TelaLogin;
+import view.TelaPerfil;
 
 public class Main {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		Principal principal = new Principal();
-		Navegador navegador = new Navegador(principal);
+        SwingUtilities.invokeLater(() -> {
+            try {
+                JFrame frame = new JFrame("Sistema");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 600);
+                frame.setLocationRelativeTo(null);
 
-		TelaLogin telalogin;
-		try {
-			telalogin = new TelaLogin();
-			UsuarioDAO usuarioDAO = new UsuarioDAO();
-			LoginController loginController = new LoginController(telalogin, usuarioDAO, null);
-			
-			TelaCadastro telaCadastro = new TelaCadastro();
-			
-	
-			TelaAdicionarProduto telaAdicionar = new TelaAdicionarProduto();
-			ProdutoDAO daoProduto = new ProdutoDAO();
-			ProdutoController controllerProduto = new ProdutoController(telaAdicionar, daoProduto);
-	
-	
-			principal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			principal.setSize(800, 600); // Tamanho da janela
-	
-			
-			principal.setContentPane(telalogin);
-			principal.setLocationRelativeTo(null); 
-			principal.setVisible(true);
-			
-			navegador.adicionarPainel("LOGIN", telalogin);
-			navegador.adicionarPainel("ADICIONAR_PRODUTOS", telaAdicionar);
-			navegador.adicionarPainel("CADASTRO", telaCadastro);
-			
-			navegador.navegarPara("LOGIN");
-		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+                // DAO
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+                // Telas
+                TelaLogin telaLogin = new TelaLogin();
+                TelaPerfil telaPerfil = new TelaPerfil();
+
+                // Controllers
+                LoginController loginController = new LoginController(telaLogin, usuarioDAO, null);
+                PerfilController perfilController = new PerfilController(telaPerfil, usuarioDAO);
+
+                // Tela inicial
+                frame.setContentPane(telaLogin);
+                frame.setVisible(true);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

@@ -21,17 +21,18 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JPasswordField;
 
 public class TelaLogin extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JTextField tFUsuario;
-	private JTextField TFSenha;
 	private JLabel lblLogo;
 	private JLabel lblFacaLogin;
 	private JLabel lblDigiteCredenciais;
 	private JButton btnEntrar, btnCadastrar, btnEsqueciASenha;
 	private BufferedImage imagemOriginal;
+	private JPasswordField pFSenha;
 
 	/**
 	 * Create the panel.
@@ -41,8 +42,7 @@ public class TelaLogin extends JPanel {
 	public TelaLogin() throws IOException {
 		setToolTipText("");
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[grow 30][grow 0][grow 5][grow 30]",
-				"[grow 60][][grow 10][grow 30][grow 5][grow 5][grow 5][grow 15][grow 15][grow][]"));
+		setLayout(new MigLayout("", "[grow 30][grow 0][grow][grow 30]", "[grow 60][][grow 10][grow 30][grow 5][grow 5][grow 5][grow 15][grow 15][grow][]"));
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
@@ -65,15 +65,14 @@ public class TelaLogin extends JPanel {
 		add(lblUsuario, "cell 1 4,alignx right,growy");
 
 		tFUsuario = new JTextField();
-		add(tFUsuario, "cell 2 4,grow");
+		add(tFUsuario, "cell 2 4,growx");
 		tFUsuario.setColumns(10);
 
 		JLabel lblSenha = new JLabel("Senha:");
-		add(lblSenha, "cell 1 6,alignx right,aligny top");
-
-		TFSenha = new JTextField();
-		add(TFSenha, "flowx,cell 2 6,grow");
-		TFSenha.setColumns(10);
+		add(lblSenha, "cell 1 6,alignx trailing,aligny top");
+		
+		pFSenha = new JPasswordField();
+		add(pFSenha, "cell 2 6,growx,aligny top");
 
 		btnEsqueciASenha = new JButton("Esqueci a senha");
 		btnEsqueciASenha.setForeground(new Color(255, 255, 255));
@@ -97,12 +96,6 @@ public class TelaLogin extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-
-		JLabel lblTermos = new JLabel(
-				"Ao continuar, você concorda com os nossos termos e Serviços e Política de Privacidade");
-		lblTermos.setForeground(new Color(192, 192, 192));
-		lblTermos.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		add(lblTermos, "cell 2 10,alignx center");
 	}
 
 	public String getEmail() {
@@ -110,7 +103,7 @@ public class TelaLogin extends JPanel {
 	}
 
 	public String getSenha() {
-		return TFSenha.getText();
+		return pFSenha.getText();
 	}
 
 	public void mostrarMensagem(String msg) {
@@ -126,7 +119,7 @@ public class TelaLogin extends JPanel {
 	}
 	
 	public void adicionarListenerEsqueciSenha(ActionListener EsqueciSenha) {
-		btnCadastrar.addActionListener(EsqueciSenha);
+		btnEsqueciASenha.addActionListener(EsqueciSenha);
 	}
 
 	public void ajustarFonte(int largura, int altura) {

@@ -32,7 +32,12 @@ public class TelaPerfil extends JPanel {
 	private JTextField tFSegundoNome;
 	private JTextField tFEmail;
 	private JPasswordField pFSenha;
-
+	private JButton btnDeslogar;
+	private JButton btnAtualizar;
+	private JButton btnCancelar;
+	private JButton btnImportarAvatar;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -145,8 +150,8 @@ public class TelaPerfil extends JPanel {
 		
 		JLabel lblAvatar = new JLabel("Avatar");
 		add(lblAvatar, "cell 2 8,growx"); 
-		
-		JButton btnImportarAvatar = new JButton("Importar Arquivo");
+
+		btnImportarAvatar = new JButton("Importar Arquivo");
 		btnImportarAvatar.setBackground(new Color(255, 255, 255));
 		JLabel lblStatusArquivo = new JLabel("Nenhum arquivo selecionado");
 		lblStatusArquivo.setForeground(Color.GRAY);
@@ -170,8 +175,8 @@ public class TelaPerfil extends JPanel {
 
 		add(btnImportarAvatar, "flowx,cell 2 9,growx"); 
 		add(lblStatusArquivo, "cell 2 9,growx,gapx 10");
-		
-		JButton btnAtualizar = new JButton("Atualizar");
+
+		btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.setForeground(new Color(255, 255, 255));
 		btnAtualizar.setBackground(new Color(0, 0, 0));
 		btnAtualizar.addActionListener(new ActionListener() {
@@ -197,15 +202,33 @@ public class TelaPerfil extends JPanel {
 		});
 		add(btnAtualizar, "cell 4 9,alignx right");
 		
-		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnCancelar.setBackground(new Color(255, 255, 255));
-		add(btnCancelar, "cell 5 9,width 100!,alignx left");
+		add(btnCancelar, "flowx,cell 5 9,width 100!,alignx left");
 
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/LOGO1.png")));
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(lblLogo, "cell 0 10, alignx center, aligny bottom");
+
+		btnDeslogar = new JButton("Deslogar");
+		btnDeslogar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		add(btnDeslogar, "cell 5 9,alignx right,aligny bottom");
 	}
+	
+	public void adicionarDeslogar(ActionListener listener) {
+		btnDeslogar.addActionListener(listener);
+	}
+	
 	private void LimpaCampos() {
 		tFPrimeiroNome.setText("");
 	    tFSegundoNome.setText("");

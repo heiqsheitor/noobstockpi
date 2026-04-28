@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.swing.SwingConstants;
 
-public class TelaIniGestor extends JPanel {
+public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private TelaLogin login;
@@ -33,12 +33,12 @@ public class TelaIniGestor extends JPanel {
 	 * Create the panel.
 	 * @throws IOException 
 	 */
-	public TelaIniGestor() throws IOException {
+	public TelaDeInicio() throws IOException {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[][grow 10][][][grow 3][][grow][]", "[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/image8.png")));
+		lblNewLabel.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
 		add(lblNewLabel, "cell 1 0,alignx left,aligny center");
 		
 				JLabel lblNewLabel_1 = new JLabel("Descubra");
@@ -46,7 +46,7 @@ public class TelaIniGestor extends JPanel {
 				add(lblNewLabel_1, "cell 0 1");
 
 		JLabel lblInicio = new JLabel("");
-		lblInicio.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/home.png")));
+		lblInicio.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/home.png")));
 		add(lblInicio, "cell 0 2,alignx center");
 
 		JLabel LInicio = new JLabel("Inicio");
@@ -64,7 +64,7 @@ public class TelaIniGestor extends JPanel {
 		add(lblNewLabel_11, "cell 5 2");
 
 		JLabel lblcontroleEstoq = new JLabel("");
-		lblcontroleEstoq.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/caixa(1)1.png")));
+		lblcontroleEstoq.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/caixa(1)1.png")));
 		add(lblcontroleEstoq, "cell 0 3,alignx center");
 
 		JLabel LControleEstoq = new JLabel("Controle de estoque");
@@ -76,7 +76,7 @@ public class TelaIniGestor extends JPanel {
 		add(lblNewLabel_12, "cell 5 3");
 
 		JLabel lblEstatis = new JLabel("");
-		lblEstatis.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/grafico.png")));
+		lblEstatis.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/grafico.png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
 		JLabel LEstatis = new JLabel("Estatísticas");
@@ -90,7 +90,7 @@ public class TelaIniGestor extends JPanel {
 		add(separator, "cell 2 0 2 9, gapx 10 10, growy");
 
 		JLabel lblEntraSai = new JLabel("");
-		lblEntraSai.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/entradaesaida(1)1.png")));
+		lblEntraSai.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
 		JLabel LEntraSai = new JLabel("Entrada e saída");
@@ -102,7 +102,7 @@ public class TelaIniGestor extends JPanel {
 		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/LOGO1.png")));
         Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblLogo.setIcon(new ImageIcon(TelaIniGestor.class.getResource("/img/LOGO1.png")));
+		lblLogo.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/LOGO1.png")));
 		add(lblLogo, "cell 0 8,growx");
 
 	}

@@ -19,7 +19,7 @@ public class TelaJFrame extends JFrame {
     private TelaLogin login;
     private TelaCadastro cadastro;
     private TelaRedefinirSenha RSenha;
-    private TelaIniGestor gestor;
+    private TelaDeInicio gestor;
     private TelaControleEstoque Controle;
     private TelaEntradaSaida entsai;
 
@@ -65,7 +65,7 @@ public class TelaJFrame extends JFrame {
         login = new TelaLogin(); 
         cadastro = new TelaCadastro();
         Controle = new TelaControleEstoque();
-        gestor = new TelaIniGestor(); // Inicializando para não dar erro no ajustarFonte()
+        gestor = new TelaDeInicio(); // Inicializando para não dar erro no ajustarFonte()
 
         // 3. ADICIONANDO AS TELAS AO PAINEL PRINCIPAL (Respeitando letras minúsculas/maiúsculas)
         painelPrincipal.add(login, LOGIN_PANEL);
