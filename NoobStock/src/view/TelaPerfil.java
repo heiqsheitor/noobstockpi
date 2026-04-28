@@ -212,9 +212,15 @@ public class TelaPerfil extends JPanel {
 		add(btnCancelar, "flowx,cell 5 9,width 100!,alignx left");
 
 		JLabel lblLogo = new JLabel("");
-		lblLogo.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/LOGO1.png")));
+
+		ImageIcon icon = new ImageIcon(TelaPerfil.class.getResource("/img/logopng.png"));
+		Image img = icon.getImage();
+
+		Image imgRedimensionada = img.getScaledInstance(100, 50, Image.SCALE_SMOOTH);
+
+		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblLogo, "cell 0 10, alignx center, aligny bottom");
+		add(lblLogo, "cell 0 9 1 2,alignx center,aligny bottom");
 
 		btnDeslogar = new JButton("Deslogar");
 		btnDeslogar.addActionListener(new ActionListener() {
@@ -224,6 +230,7 @@ public class TelaPerfil extends JPanel {
 		});
 		add(btnDeslogar, "cell 5 9,alignx right,aligny bottom");
 	}
+	
 	
 	public void adicionarDeslogar(ActionListener listener) {
 		btnDeslogar.addActionListener(listener);
