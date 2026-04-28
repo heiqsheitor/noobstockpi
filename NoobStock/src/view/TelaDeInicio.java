@@ -3,30 +3,22 @@ package view;
 import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JSeparator;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Component;
-
-import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.JInternalFrame;
-import java.awt.Panel;
-import javax.swing.JSplitPane;
-import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import javax.swing.SwingConstants;
+import javax.imageio.ImageIO;
 
 public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private TelaLogin login;
 	private BufferedImage imagemOriginal;
 
 	/**
@@ -98,27 +90,17 @@ public class TelaDeInicio extends JPanel {
 		add(LEntraSai, "cell 1 5");
 
 		JLabel lblLogo = new JLabel("");
-		imagemOriginal = ImageIO.read(getClass().getResource("/img/LOGO1.png"));
-		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/LOGO1.png")));
-        Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblLogo.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/LOGO1.png")));
-		add(lblLogo, "cell 0 8,growx");
-
+		// CORREÇÃO: Alterado de LOGO1.png para logopng.png
+		URL logoUrl = getClass().getResource("/img/logopng.png");
+		if (logoUrl != null) {
+			imagemOriginal = ImageIO.read(logoUrl);
+			lblLogo.setIcon(new ImageIcon(logoUrl));
+			lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+			add(lblLogo, "cell 0 8,growx");
+		}
 	}
-	private void redimensionarImagem(int largura, int altura) {
-		 largura /=4;
-	       altura /=4;
-System.out.println(largura);
-	        if (largura <= 0 || altura <= 0) return;
 
-	        // Escala a imagem mantendo a proporção
-	        Image scaled = imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
-
-	     
-
-}
 	public void ajustarFonte(int largura, int altura) {
-		// TODO Auto-generated method stub
-		
-	}}
+		// Implementação opcional
+	}
+}

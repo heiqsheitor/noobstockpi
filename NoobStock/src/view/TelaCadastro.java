@@ -51,10 +51,11 @@ public class TelaCadastro extends JPanel {
 		lblAbraConta.setFont(new Font("Tahoma", Font.BOLD, 15));
 		add(lblAbraConta, "cell 1 1 4 1,alignx center,aligny bottom");
 		
-		JLabel lblDigiteCredenciais = new JLabel("Digite as credenciais e inscreva-se neste aplicativo");
+		// CORREÇÃO: Atribuir às variáveis de instância em vez de criar variáveis locais
+		lblDigiteCredenciais = new JLabel("Digite as credenciais e inscreva-se neste aplicativo");
 		add(lblDigiteCredenciais, "cell 1 2 4 1,alignx center,aligny top");
 		
-		JLabel lblUsuario = new JLabel("Usuário:");
+		lblUsuario = new JLabel("Usuário:");
 		add(lblUsuario, "cell 1 3,alignx right,aligny center");
 		
 		tfUsuario = new JTextField();
@@ -102,7 +103,6 @@ public class TelaCadastro extends JPanel {
 	private void redimensionarImagem(int largura, int altura) {
 		   largura /=4;
 	       altura /=4;
-	       System.out.println(largura);
 	       if (largura <= 0 || altura <= 0) return;
 
 	        // Escala a imagem mantendo a proporção
@@ -114,6 +114,7 @@ public class TelaCadastro extends JPanel {
 	
 	
 	private void ajustarFonteContainer(int largura, int altura, Container lblLabel, int tamAjuste) {
+		  if (lblLabel == null) return;
 		  int tamanhoFonte = Math.min(largura, altura) / tamAjuste;
 	        tamanhoFonte = Math.max(tamanhoFonte, 8);
 	        tamanhoFonte = Math.min(tamanhoFonte, 72);
@@ -133,7 +134,7 @@ public class TelaCadastro extends JPanel {
 	}
 	
 	public String getSenha() {
-		return this.pfSenha.getText();
+		return new String(this.pfSenha.getPassword());
 	}
 	
 	public void Cadastrar(ActionListener actionListener) {

@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,8 +34,12 @@ public class Principal extends JFrame {
 
     public Principal() {
         setTitle("NoobStock");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(
-                Principal.class.getResource("/img/logoNoobstock.png")));
+        
+        // CORREÇÃO: Alterado de logoNoobstock.png para logopng.png que existe
+        URL iconUrl = Principal.class.getResource("/img/logopng.png");
+        if (iconUrl != null) {
+            setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
+        }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 600);
@@ -50,13 +55,11 @@ public class Principal extends JFrame {
         try {
 			login = new TelaLogin();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         try {
 			cadastro = new TelaCadastro();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         perfil = new TelaPerfil();
@@ -64,18 +67,17 @@ public class Principal extends JFrame {
         try {
 			controle = new TelaControleEstoque();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
         // Adiciona telas
-        contentPane.add(login, LOGIN);
-        contentPane.add(cadastro, CADASTRO);
-        contentPane.add(perfil, PERFIL);
-        contentPane.add(redefinirSenha, REDEFINIR);
-        contentPane.add(controle, ESTOQUE);
+        if (login != null) contentPane.add(login, LOGIN);
+        if (cadastro != null) contentPane.add(cadastro, CADASTRO);
+        if (perfil != null) contentPane.add(perfil, PERFIL);
+        if (redefinirSenha != null) contentPane.add(redefinirSenha, REDEFINIR);
+        if (controle != null) contentPane.add(controle, ESTOQUE);
 
-        // Responsividade (da TelaJFrame)
+        // Responsividade
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -102,10 +104,8 @@ public class Principal extends JFrame {
         revalidate();
     }
 
-    // Getters (IMPORTANTE pro controller)
-    public TelaLogin getLogin() { 
-    	return login; 
-    	}
+    // Getters
+    public TelaLogin getLogin() { return login; }
     public TelaCadastro getCadastro() { return cadastro; }
     public TelaPerfil getPerfil() { return perfil; }
     public TelaControleEstoque getControle() { return controle; }

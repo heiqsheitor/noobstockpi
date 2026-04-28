@@ -1,62 +1,69 @@
-create database db_noobstock;
-use db_noobstock;
+CREATE DATABASE IF NOT EXISTS db_noobstock;
+USE db_noobstock;
 
-create table usuarios (
-	id_usuario int primary key auto_increment,
-	nome_usuario varchar(50) not null unique,
-    email varchar(50) unique,
-    senha varchar(100) not null,
-    data_criacao timestamp default current_timestamp
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome_usuario VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(50) UNIQUE,
+    senha VARCHAR(100) NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table movimentacao (
-    idmovimentacao int primary key auto_increment,
-    datahora datetime
+CREATE TABLE IF NOT EXISTS fornecedor (
+    idfornecedor INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL,
+    cnpj VARCHAR(45),
+    contato VARCHAR(45)
 );
 
-create table produto (
-    idproduto int primary key auto_increment,
-    nome varchar(45),
-    preco double,
-    descricao varchar(45),
-    numeroserie int,
-    qtdestoque int,
-    localizacao varchar(45),
-    fornecedor_nome int,
-    categoria_nome int,
-    foreign key (fornecedor_nome) references fornecedor(nome),
-    foreign key (categoria_nome) references categoria(nome)
+CREATE TABLE IF NOT EXISTS categoria (
+    idcategoria INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL
 );
 
-create table fornecedor (
-    idfornecedor int primary key auto_increment,
-    nome varchar(45),
-    cnpj varchar(45),
-    contato varchar(45)
+CREATE TABLE IF NOT EXISTS produto (
+    idproduto INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(45) NOT NULL,
+    SKU VARCHAR(45),
+    numeroserie VARCHAR(45),
+    qtdestoque INT DEFAULT 0,
+    estoque_minimo INT DEFAULT 0,
+    localizacao VARCHAR(45),
+    fornecedor_id INT,
+    categoria_id INT,  
+    preco DOUBLE,
+    descricao VARCHAR(45),
+    FOREIGN KEY (fornecedor_id) REFERENCES fornecedor(idfornecedor),
+    FOREIGN KEY (categoria_id) REFERENCES categoria(idcategoria)
 );
 
-create table categoria (
-    idcategoria int primary key auto_increment,
-    nome varchar(45)
+CREATE TABLE IF NOT EXISTS movimentacao (
+    idmovimentacao INT PRIMARY KEY AUTO_INCREMENT,
+    produto_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    tipo ENUM('entrada', 'saida', 'ajuste') NOT NULL,
+    quantidade INT NOT NULL,
+    motivo VARCHAR(255),
+    datahora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (produto_id) REFERENCES produto(idproduto),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id_usuario)
 );
 
-create table venda (
-    idvenda int primary key auto_increment,
-    datavenda datetime,
-    status enum('pendente', 'concluida', 'cancelada'),
-    usuario_idusuario int,
-    valortotal double,
-    movimentacao_idmovimentacao int,
-    foreign key (usuario_idusuario) references usuarios(id_usuario),
-    foreign key (movimentacao_idmovimentacao) references movimentacao(idmovimentacao)
+CREATE TABLE IF NOT EXISTS venda (
+    idvenda INT PRIMARY KEY AUTO_INCREMENT,
+    datavenda DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('pendente', 'concluida', 'cancelada') DEFAULT 'pendente',
+    usuario_idusuario INT,
+    valortotal DOUBLE,
+    FOREIGN KEY (usuario_idusuario) REFERENCES usuarios(id_usuario)
 );
 
-create table itemvenda (
-    venda_idvenda int,
-    produto_idproduto int,
-    qtdvendida int,
-    precounitario double,
-    primary key (venda_idvenda, produto_idproduto),
-    foreign key (venda_idvenda) references venda(idvenda),
-    foreign key (produto_idproduto) references produto(idproduto)
+CREATE TABLE IF NOT EXISTS itemvenda (
+    venda_idvenda INT,
+    produto_idproduto INT,
+    qtdvendida INT,
+    precounitario DOUBLE,
+    PRIMARY KEY (venda_idvenda, produto_idproduto),
+    FOREIGN KEY (venda_idvenda) REFERENCES venda(idvenda),
+    FOREIGN KEY (produto_idproduto) REFERENCES produto(idproduto)
 );

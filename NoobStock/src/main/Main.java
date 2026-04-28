@@ -1,14 +1,11 @@
 package main;
 
-import java.io.IOException;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
 import controller.LoginController;
-import controller.PerfilController;
+import controller.UsuarioController;
+import controller.Navegador;
 import model.UsuarioDAO;
-import view.TelaLogin;
-import view.TelaPerfil;
+import view.Principal;
 
 public class Main {
 
@@ -16,27 +13,24 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
             try {
-                JFrame frame = new JFrame("Sistema");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(800, 600);
-                frame.setLocationRelativeTo(null);
-
+                // Instancia a janela principal que contém o CardLayout e todas as telas
+                Principal principal = new Principal();
+                
                 // DAO
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
+                
+                // Navegador utilitário
+                Navegador navegador = new Navegador(principal);
 
-                // Telas
-                TelaLogin telaLogin = new TelaLogin();
-                TelaPerfil telaPerfil = new TelaPerfil();
+                // Inicializa os Controllers passando as views contidas em Principal
+                new LoginController(principal.getLogin(), usuarioDAO, navegador);
+                new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
+                
+                // Exibe a janela principal (que começa na TelaLogin por padrão)
+                principal.setVisible(true);
+                principal.setLocationRelativeTo(null);
 
-                // Controllers
-                LoginController loginController = new LoginController(telaLogin, usuarioDAO, null);
-                PerfilController perfilController = new PerfilController(telaPerfil, usuarioDAO);
-
-                // Tela inicial
-                frame.setContentPane(telaLogin);
-                frame.setVisible(true);
-
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

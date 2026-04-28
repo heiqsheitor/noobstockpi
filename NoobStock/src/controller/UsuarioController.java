@@ -28,24 +28,15 @@ public class UsuarioController extends ComponentAdapter {
 				this.model.cadastrarUsuario(u);
 
 				this.view.limparFormulario();
-				JOptionPane.showMessageDialog(null, "Candidato salvo");
-				this.navegador.navegarPara("INIGESTOR");
+				JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+				
+				// CORREÇÃO: Usar a chave de navegação correta definida em Principal.java
+				if (this.navegador != null) {
+					this.navegador.navegarPara("LOGIN");
+				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Erro, Preencha todos os campos!");
 			}
 		});
 	}
-//	// Método que a View (Tela) vai chamar quando o usuário clicar em "Salvar"
-//        public void processarCadastro(String id_usuario,String nome,String email,String senha) {
-//        
-//        // 1. O Controller empacota os dados soltos da tela no Modelo (Cliente)
-//        Usuario UsuarioEmpacotado = new Usuario(id_usuario, nome, email, senha);
-//
-//        // 2. O Controller chama o DAO e passa o pacote (AQUI ESTÁ O PARÂMETRO!)
-//        UsuarioDAO dao = new UsuarioDAO();
-//        dao.cadastrarUsuario(UsuarioEmpacotado); 
-//        
-//        // 3. Avisar a View que a operação terminou
-//        System.out.println("Cadastro processado pelo Controller com sucesso!");
-	// }
 }

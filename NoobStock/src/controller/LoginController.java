@@ -36,12 +36,17 @@ public class LoginController extends ComponentAdapter {
 		}
 
 		try {
-			Usuario usuario = model.autenticar(null);
+			// CORREÇÃO: Criar um objeto Usuario com as credenciais para autenticar
+			Usuario credenciais = new Usuario(null, null, email, senha);
+			Usuario usuario = model.autenticar(credenciais);
 
 			if (usuario != null) {
 				view.mostrarMensagem("Login realizado com sucesso!");
-
-				navegador.navegarPara("INICIO"); // ou tela principal
+				// CORREÇÃO: Usar a constante correta de navegação (ESTOQUE ou INICIO se existisse)
+				// Como "INICIO" não existe em Principal.java, vamos usar ESTOQUE que é a tela principal do sistema
+				if (navegador != null) {
+					navegador.navegarPara("ESTOQUE"); 
+				}
 			} else {
 				view.mostrarMensagem("Email ou senha inválidos!");
 			}
@@ -52,11 +57,15 @@ public class LoginController extends ComponentAdapter {
 		}
 	}
 	private void irParaCadastro() {
-        navegador.navegarPara("CADASTRO");
+		if (navegador != null) {
+			navegador.navegarPara("CADASTRO");
+		}
     }
 
     private void irParaRecuperacao() {
-        navegador.navegarPara("RECUPERAR_SENHA");
+		if (navegador != null) {
+			navegador.navegarPara("REDEFINIR");
+		}
     }
 
 }

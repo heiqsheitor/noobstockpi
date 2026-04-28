@@ -20,19 +20,31 @@ public class ProdutoDAO {
 
     // ── CADASTRAR ─────────────────────────────────────────────────────────────
     public boolean cadastrarProduto(Produto produto) {
-    	String sql = "INSERT INTO produto (nome, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
-    	           + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    	String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
+    	           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = conectar();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, produto.getNome());
             stmt.setString(2, produto.getSKU());
-            stmt.setInt   (3, Integer.parseInt(produto.getQtd()));
-            stmt.setInt   (4, produto.getEstoqueMinimo());
-            stmt.setString(5, produto.getLocalização());
-            stmt.setString(6, produto.getFornecedor());
-            stmt.setString(7, produto.getCategoria());
+            stmt.setString(3, produto.getSKU()); // Usando SKU como número de série se não houver campo específico
+            stmt.setInt   (4, Integer.parseInt(produto.getQtd()));
+            stmt.setInt   (5, produto.getEstoqueMinimo());
+            stmt.setString(6, produto.getLocalização());
+            
+            // Tratamento para IDs que podem vir como String no modelo
+            try {
+                stmt.setInt(7, Integer.parseInt(produto.getFornecedor()));
+            } catch (Exception e) {
+                stmt.setNull(7, java.sql.Types.INTEGER);
+            }
+            
+            try {
+                stmt.setInt(8, Integer.parseInt(produto.getCategoria()));
+            } catch (Exception e) {
+                stmt.setNull(8, java.sql.Types.INTEGER);
+            }
 
             stmt.executeUpdate();
             System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
