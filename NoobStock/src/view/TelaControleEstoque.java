@@ -3,7 +3,11 @@ package view;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -31,135 +35,143 @@ public class TelaControleEstoque extends JPanel {
 	private TelaLogin login;
 	private BufferedImage imagemOriginal;
 	private JTable table;
-	private JTextField textField;
-	
-	
-	    public TelaControleEstoque() throws IOException {
+	private JTextField txtPesquisar;
+
+	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][][][][grow 1][grow 1][][][][][]", "[][grow 1][][grow 1][grow 1][grow 1][grow][][]"));
-				
-				JLabel lblPerfil = new JLabel("");
-				lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
-				add(lblPerfil, "cell 1 0,alignx center,aligny center");
+		setLayout(new MigLayout("", "[40px:n:40px,grow 0][135px:n:135px,grow 0][][][grow 7][grow 5][grow 5][][][grow 1]", "[40px:n:40px,grow 0][35px:n:35px][35px:n:35px][35px:n:35px][35px:n:35px][grow 1][grow][]"));
 
-				JLabel lblNewLabel_1 = new JLabel("Descubra");
-				lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
-				add(lblNewLabel_1, "cell 0 1 2 1");
-				
-				JLabel lblNewLabel_2 = new JLabel("Controle de Estoque");
-				lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
-				add(lblNewLabel_2, "cell 4 1");
-				
-						JLabel lblInicio = new JLabel("");
-						lblInicio.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/home.png")));
-						add(lblInicio, "cell 0 2,alignx center");
-				
-				textField = new JTextField();
-				add(textField, "cell 3 2 2 1,growx");
-				textField.setColumns(10);
-				
-				JPanel panel_1 = new JPanel();
-				add(panel_1, "cell 6 2,grow");
-				
-				
-				
-				JLabel lblNewLabel_3 = new JLabel("");
-				panel_1.add(lblNewLabel_3);
-				lblNewLabel_3.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/filter (1).png")));
-				
-				JLabel lblNewLabel_4 = new JLabel("Filtrar");
-				panel_1.add(lblNewLabel_4);
-				lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				lblNewLabel_4.setForeground(new Color(128, 128, 128));
-				
-				JButton btnNewButton = new JButton("Adicionar");
-				add(btnNewButton, "cell 7 2,alignx center,growy");
-				
-				JPanel panel = new JPanel();
-				panel.setBackground(new Color(255, 255, 255));
-				add(panel, "cell 6 2,grow");
-				
-				JLabel lblNewLabel_5 = new JLabel("");
-				lblNewLabel_5.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/grid.png")));
-				panel.add(lblNewLabel_5);
-				
-				JLabel lblNewLabel_6 = new JLabel("");
-				lblNewLabel_6.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/calendar.png")));
-				panel.add(lblNewLabel_6);
-				
-				JSeparator separator = new JSeparator();
-				add(separator, "cell 2 0 1 9,gapx 10 10,growy");
-				separator.setOrientation(SwingConstants.VERTICAL);
-				separator.setForeground(Color.BLACK);
-				
-						JLabel lblcontroleEstoq = new JLabel("");
-						lblcontroleEstoq.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/caixa(1)1.png")));
-						add(lblcontroleEstoq, "cell 0 3,alignx left");
-				
-						JLabel lblEstatis = new JLabel("");
-						lblEstatis.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/grafico.png")));
-						add(lblEstatis, "cell 0 4,alignx center");
-		        imagemOriginal = ImageIO.read(getClass().getResource("/img/LOGO1.png"));
-                Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);  
-                
-                String[] columnNames = {"ID",  "Produto", "SKU", "Disponibilidade", "Quantidade"};
-                Object[][] data = {
-                {"0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30"},
-                };
-				
-				table = new JTable(data, columnNames);
-				table.setModel(new DefaultTableModel(
-					new Object[][] {
-						{"0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30"},
-					},
-					new String[] {
-						"ID", "Produto", "SKU", "Disponibilidade", "Quantidade"
-					}
-				) {
-					Class[] columnTypes = new Class[] {
-						String.class, Object.class, Object.class, Object.class, Object.class
-					};
-					public Class getColumnClass(int columnIndex) {
-						return columnTypes[columnIndex];
-					}
-				});
-				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				add(table, "cell 3 3 2 4,grow");
-				
-						JLabel lblEntraSai = new JLabel("");
-						lblEntraSai.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/entradaesaida(1)1.png")));
-						add(lblEntraSai, "cell 0 5,alignx center");
+		JLabel lblPerfil = new JLabel("");
+		lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
+		add(lblPerfil, "cell 0 0 2 1,alignx center,aligny center");
+
+		JLabel lblNewLabel_1 = new JLabel("Descubra");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		add(lblNewLabel_1, "cell 0 1 2 1");
+
+		JLabel lblNewLabel_2 = new JLabel("Controle de Estoque");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
+		add(lblNewLabel_2, "cell 4 1 2 1");
+
+		JLabel lblInicio = new JLabel("");
+		lblInicio.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/home.png")));
+		add(lblInicio, "cell 0 2,alignx center");
+
+		txtPesquisar = new JTextField(){
+		    @Override
+		    protected void paintComponent(Graphics g) {
+		        super.paintComponent(g);
+		        
+		        if (getText().isEmpty()) {
+		            Graphics2D g2 = (Graphics2D) g.create();
+		            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		            
+		            g2.setColor(new Color(192, 192, 192));
+		            g2.setFont(getFont());
+		            
+		            FontMetrics fm = g2.getFontMetrics();
+		            int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+		            
+		            g2.drawString("Buscar Itens...", getInsets().left, y);
+		            g2.dispose();
+		        }
+		    }
+		};
+		add(txtPesquisar, "cell 4 2 3 1,grow");
+		txtPesquisar.setColumns(10);
+
+		JLabel lblNewLabel_3 = new JLabel("");
+		panel_1.add(lblNewLabel_3);
+		lblNewLabel_3.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/filter (1).png")));
+
+		JLabel lblNewLabel_4 = new JLabel("Filtrar");
+		panel_1.add(lblNewLabel_4);
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_4.setForeground(new Color(128, 128, 128));
+
+		JButton btnNewButton = new JButton("Adicionar");
+		add(btnNewButton, "cell 8 2,alignx center,growy");
+
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
+		add(panel, "cell 7 2,grow");
+
+		JLabel lblNewLabel_6 = new JLabel("");
+		lblNewLabel_6.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/calendar.png")));
+		panel.add(lblNewLabel_6);
+
+		JSeparator separator = new JSeparator();
+		add(separator, "cell 2 0 1 9,gapx 2 2,growy");
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setForeground(Color.BLACK);
+
+		JLabel lblcontroleEstoq = new JLabel("");
+		lblcontroleEstoq.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/caixa(1)1.png")));
+		add(lblcontroleEstoq, "cell 0 3,alignx left");
 		
-				JLabel lblLogo = new JLabel("");
-				lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/LOGO1.png")));
-				lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-				lblLogo.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/LOGO1.png")));
-				add(lblLogo, "cell 1 8,growx");
-				
-						JLabel LInicio = new JLabel("Inicio");
-						LInicio.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
+		JLabel lblNewLabel = new JLabel("");
+		add(lblNewLabel, "flowx,cell 4 3");
+		
+		table = new JTable(data, columnNames);
+		table.setModel(
+					new DefaultTableModel(new Object[][] { { "0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30" }, },
+								new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" }) {
+							Class[] columnTypes = new Class[] { String.class, Object.class, Object.class, Object.class,
+									Object.class };
 
+							public Class getColumnClass(int columnIndex) {
+								return columnTypes[columnIndex];
 							}
 						});
-						LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
-						add(LInicio, "cell 1 2,alignx left");
-						
-								JLabel LControleEstoq = new JLabel("Controle de estoque");
-								LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
-								add(LControleEstoq, "cell 1 3,alignx left");
-								
-										JLabel LEstatis = new JLabel("Estatísticas");
-										LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
-										add(LEstatis, "cell 1 4");
-										
-												JLabel LEntraSai = new JLabel("Entrada e saída");
-												LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
-												add(LEntraSai, "cell 1 5");
-				
-												
-												
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		add(table, "cell 4 4 5 3,grow");
+
+		JLabel lblEstatis = new JLabel("");
+		lblEstatis.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/grafico.png")));
+		add(lblEstatis, "cell 0 4,alignx center");
+
+		imagemOriginal = ImageIO.read(getClass().getResource("/img/LOGO1.png"));
+		Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+
+		String[] columnNames = { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" };
+		Object[][] data = { { "0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30" }, };
+
+		JLabel lblEntraSai = new JLabel("");
+		lblEntraSai.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/entradaesaida(1)1.png")));
+		add(lblEntraSai, "cell 0 5,alignx center");
+
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/LOGO1.png")));
+		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblLogo.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/LOGO1.png")));
+		add(lblLogo, "cell 1 7,growx");
+
+		JLabel LInicio = new JLabel("Inicio");
+		LInicio.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+			}
+		});
+		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LInicio, "cell 1 2,alignx left");
+
+		JLabel LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LControleEstoq, "cell 1 3,alignx left");
+
+		JLabel LEstatis = new JLabel("Estatísticas");
+		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LEstatis, "cell 1 4");
+
+		JLabel LEntraSai = new JLabel("Entrada e saída");
+		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LEntraSai, "cell 1 5");
+		
+		JLabel lblNewLabel_5 = new JLabel("New label");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
 
 	}
 
