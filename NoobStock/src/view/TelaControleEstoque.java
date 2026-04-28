@@ -39,7 +39,7 @@ public class TelaControleEstoque extends JPanel {
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n:40px,grow 0][135px:n:135px,grow 0][][][grow 7][grow 5][grow 5][][][grow 1]", "[40px:n:40px,grow 0][35px:n:35px][35px:n:35px][35px:n:35px][35px:n:35px][grow 1][grow][]"));
+		setLayout(new MigLayout("", "[40px:n:40px,grow 0][135px:n:135px,grow 0][][][grow 12][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n:40px,grow 0][35px:n:35px][35px:n:35px][35px:n:35px][35px:n:35px][grow 1][grow][]"));
 
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
@@ -90,7 +90,7 @@ public class TelaControleEstoque extends JPanel {
 		lblNewLabel_4.setForeground(new Color(128, 128, 128));
 
 		JButton btnNewButton = new JButton("Adicionar");
-		add(btnNewButton, "cell 8 2,alignx center,growy");
+		add(btnNewButton, "cell 8 2,grow");
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
@@ -111,6 +111,22 @@ public class TelaControleEstoque extends JPanel {
 		
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
+		
+		JLabel lblNewLabel_7 = new JLabel("SKU");
+		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 14));
+		add(lblNewLabel_7, "cell 5 3,alignx center,aligny center");
+		
+		JLabel lblNewLabel_7_1 = new JLabel("Disponibilidade");
+		lblNewLabel_7_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		add(lblNewLabel_7_1, "cell 6 3,alignx center,aligny center");
+		
+		JLabel lblNewLabel_7_1_1 = new JLabel("Quantidade");
+		lblNewLabel_7_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		add(lblNewLabel_7_1_1, "cell 7 3,alignx center,aligny center");
+		
+		JLabel lblNewLabel_7_1_1_1 = new JLabel("Data");
+		lblNewLabel_7_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		add(lblNewLabel_7_1_1_1, "cell 8 3,alignx center,aligny center");
 		
 		table = new JTable(data, columnNames);
 		table.setModel(
@@ -168,8 +184,8 @@ public class TelaControleEstoque extends JPanel {
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5");
 		
-		JLabel lblNewLabel_5 = new JLabel("New label");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 15));
+		JLabel lblNewLabel_5 = new JLabel("Produto");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
 
