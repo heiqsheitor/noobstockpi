@@ -24,6 +24,7 @@ public class Principal extends JFrame {
     private TelaPerfil perfil;
     private TelaRedefinirSenha redefinirSenha;
     private TelaControleEstoque controle;
+    private TelaDeInicio inicio; // Adicionada Tela de Início
 
     // Constantes de navegação
     public static final String LOGIN = "LOGIN";
@@ -31,11 +32,11 @@ public class Principal extends JFrame {
     public static final String PERFIL = "PERFIL";
     public static final String ESTOQUE = "ESTOQUE";
     public static final String REDEFINIR = "REDEFINIR";
+    public static final String INICIO = "INICIO"; // Adicionada constante INICIO
 
     public Principal() {
         setTitle("NoobStock");
         
-        // CORREÇÃO: Alterado de logoNoobstock.png para logopng.png que existe
         URL iconUrl = Principal.class.getResource("/img/logopng.png");
         if (iconUrl != null) {
             setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
@@ -69,6 +70,11 @@ public class Principal extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+        try {
+            inicio = new TelaDeInicio(); // Inicializa Tela de Início
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Adiciona telas
         if (login != null) contentPane.add(login, LOGIN);
@@ -76,6 +82,7 @@ public class Principal extends JFrame {
         if (perfil != null) contentPane.add(perfil, PERFIL);
         if (redefinirSenha != null) contentPane.add(redefinirSenha, REDEFINIR);
         if (controle != null) contentPane.add(controle, ESTOQUE);
+        if (inicio != null) contentPane.add(inicio, INICIO); // Adiciona ao layout
 
         // Responsividade
         addComponentListener(new ComponentAdapter() {
@@ -99,6 +106,9 @@ public class Principal extends JFrame {
         if (controle != null) {
             controle.ajustarFonte(largura, altura);
         }
+        if (inicio != null) {
+            inicio.ajustarFonte(largura, altura);
+        }
 
         repaint();
         revalidate();
@@ -108,5 +118,7 @@ public class Principal extends JFrame {
     public TelaLogin getLogin() { return login; }
     public TelaCadastro getCadastro() { return cadastro; }
     public TelaPerfil getPerfil() { return perfil; }
+    public TelaRedefinirSenha getRedefinirSenha() { return redefinirSenha; }
     public TelaControleEstoque getControle() { return controle; }
+    public TelaDeInicio getInicio() { return inicio; }
 }

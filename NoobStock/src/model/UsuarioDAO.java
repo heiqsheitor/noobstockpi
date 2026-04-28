@@ -32,20 +32,21 @@ public class UsuarioDAO {
     }
 
     public Usuario autenticar(Usuario usuario) {
-        String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
+        // CORREÇÃO: Alterado de 'email' para 'nome_usuario' para atender ao pedido do usuário
+        String sql = "SELECT * FROM usuarios WHERE nome_usuario = ? AND senha = ?";
         Usuario usuarioLogado = null;
 
         try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setString(1, usuario.getEmail());
+            stmt.setString(1, usuario.getNome()); // Agora usa o nome de usuário
             stmt.setString(2, usuario.getSenha());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     // Criando o objeto com as colunas corretas do banco
                     usuarioLogado = new Usuario(
-                        String.valueOf(rs.getInt("id_usuario")), // Converte o ID int para String se mantiver seu modelo
+                        String.valueOf(rs.getInt("id_usuario")),
                         rs.getString("nome_usuario"),
                         rs.getString("email"),
                         rs.getString("senha")
@@ -56,5 +57,29 @@ public class UsuarioDAO {
             System.err.println("Erro na autenticação: " + e.getMessage());
         }
         return usuarioLogado;
+    }
+
+    /**
+     * Atualiza a senha de um usuário baseado no e-mail.
+     * @param email O e-mail do usuário.
+     * @param novaSenha A nova senha a ser definida.
+     * @return true se a senha foi atualizada, false caso contrário.
+     */
+    public boolean atualizarSenha(String email, String novaSenha) {
+        String sql = "UPDATE usuarios SET senha = ? WHERE email = ?";
+        
+        try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, novaSenha);
+            stmt.setString(2, email);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar senha: " + e.getMessage());
+            return false;
+        }
     }
 }

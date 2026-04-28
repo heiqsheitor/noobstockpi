@@ -3,6 +3,7 @@ package main;
 import javax.swing.SwingUtilities;
 import controller.LoginController;
 import controller.UsuarioController;
+import controller.RedefinirSenhaController;
 import controller.Navegador;
 import model.UsuarioDAO;
 import view.Principal;
@@ -25,6 +26,9 @@ public class Main {
                 // Inicializa os Controllers passando as views contidas em Principal
                 new LoginController(principal.getLogin(), usuarioDAO, navegador);
                 new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
+                
+                // CORREÇÃO: Inicializando o controller de redefinição de senha
+                new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
                 
                 // Exibe a janela principal (que começa na TelaLogin por padrão)
                 principal.setVisible(true);

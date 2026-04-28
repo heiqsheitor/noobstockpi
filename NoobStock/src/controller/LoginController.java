@@ -27,28 +27,27 @@ public class LoginController extends ComponentAdapter {
 	}
 
 	private void fazerLogin() {
-		String email = view.getEmail().trim();
+		String nomeUsuario = view.getUsuario();
 		String senha = view.getSenha().trim();
 
-		if (email.isEmpty() || senha.isEmpty()) {
+		if (nomeUsuario.isEmpty() || senha.isEmpty()) {
 			view.mostrarMensagem("Preencha todos os campos!");
 			return;
 		}
 
 		try {
-			// CORREÇÃO: Criar um objeto Usuario com as credenciais para autenticar
-			Usuario credenciais = new Usuario(null, null, email, senha);
+			// CORREÇÃO: Criar um objeto Usuario com o NOME DE USUÁRIO para autenticar
+			Usuario credenciais = new Usuario(nomeUsuario, null, senha);
 			Usuario usuario = model.autenticar(credenciais);
 
 			if (usuario != null) {
 				view.mostrarMensagem("Login realizado com sucesso!");
-				// CORREÇÃO: Usar a constante correta de navegação (ESTOQUE ou INICIO se existisse)
-				// Como "INICIO" não existe em Principal.java, vamos usar ESTOQUE que é a tela principal do sistema
+				
 				if (navegador != null) {
-					navegador.navegarPara("ESTOQUE"); 
+					navegador.navegarPara("INICIO"); 
 				}
 			} else {
-				view.mostrarMensagem("Email ou senha inválidos!");
+				view.mostrarMensagem("Usuário ou senha inválidos!");
 			}
 
 		} catch (Exception e) {

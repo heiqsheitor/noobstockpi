@@ -98,12 +98,12 @@ public class TelaLogin extends JPanel {
 		});
 	}
 
-	public String getEmail() {
-		return tFUsuario.getText();
+	public String getUsuario() {
+		return tFUsuario.getText().trim();
 	}
 
 	public String getSenha() {
-		return pFSenha.getText();
+		return new String(pFSenha.getPassword());
 	}
 
 	public void mostrarMensagem(String msg) {
