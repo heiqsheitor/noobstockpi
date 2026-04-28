@@ -23,37 +23,37 @@ public class TelaDeInicio extends JPanel {
 
 	/**
 	 * Create the panel.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	public TelaDeInicio() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][grow 10][][][grow 3][][grow][]", "[][][grow 1][grow 1][grow 1][grow 1][grow 50][][]"));
+		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][][grow 10]",
+				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow 30][]"));
+
+		JLabel lblPerfil = new JLabel("");
+		lblPerfil.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
+		add(lblPerfil, "cell 0 0");
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
 		add(lblNewLabel, "cell 1 0,alignx left,aligny center");
-		
-				JLabel lblNewLabel_1 = new JLabel("Descubra");
-				lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-				add(lblNewLabel_1, "cell 0 1");
+
+		JLabel lblNewLabel_11 = new JLabel("Início");
+		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 16));
+		add(lblNewLabel_11, "cell 4 1");
 
 		JLabel lblInicio = new JLabel("");
 		lblInicio.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/home.png")));
 		add(lblInicio, "cell 0 2,alignx center");
 
 		JLabel LInicio = new JLabel("Inicio");
-		LInicio.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-			}
-		});
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(LInicio, "cell 1 2,alignx left");
+		add(LInicio, "cell 1 2");
 
-		JLabel lblNewLabel_11 = new JLabel("Início");
-		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblNewLabel_11, "cell 5 2");
+		JLabel lblNewLabel_12 = new JLabel("Bem vindo(a), (Nome de usuário)");
+		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 16));
+		add(lblNewLabel_12, "cell 4 2");
 
 		JLabel lblcontroleEstoq = new JLabel("");
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/caixa(1)1.png")));
@@ -61,30 +61,26 @@ public class TelaDeInicio extends JPanel {
 
 		JLabel LControleEstoq = new JLabel("Controle de estoque");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(LControleEstoq, "cell 1 3,alignx left");
-
-		JLabel lblNewLabel_12 = new JLabel("Bem vindo(a), (Nome de usuário)");
-		lblNewLabel_12.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblNewLabel_12, "cell 5 3");
+		add(LControleEstoq, "cell 1 3");
 
 		JLabel lblEstatis = new JLabel("");
 		lblEstatis.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/grafico.png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
+		JSeparator separator = new JSeparator();
+		separator.setForeground(new Color(0, 0, 0));
+		separator.setOrientation(SwingConstants.VERTICAL);
+		add(separator, "cell 2 0 1 8,gapx 2 2,growy");
+		separator.setBackground(new Color(255, 255, 255));
+
 		JLabel LEstatis = new JLabel("Estatísticas");
 		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEstatis, "cell 1 4");
-		
-		JSeparator separator = new JSeparator();
-		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setBackground(new Color(255, 255, 255));
-		separator.setForeground(new Color(0, 0, 0));
-		add(separator, "cell 2 0 2 9, gapx 10 10, growy");
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
-
+		
 		JLabel LEntraSai = new JLabel("Entrada e saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5");

@@ -46,7 +46,7 @@ public class TelaPerfil extends JPanel {
 		painelEsquerdo.setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 		
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][][][][][][grow]"));
+		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][][][][][grow]"));
 		
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));

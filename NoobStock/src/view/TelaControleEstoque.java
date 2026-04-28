@@ -39,7 +39,7 @@ public class TelaControleEstoque extends JPanel {
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow 12][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][grow 1][grow][]"));
+		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow 12][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
