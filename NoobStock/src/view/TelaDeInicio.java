@@ -8,6 +8,7 @@ import java.awt.Color;
 import javax.swing.JSeparator;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -20,6 +21,7 @@ public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private BufferedImage imagemOriginal;
+	private JLabel LInicio, lblInicio, LControleEstoq, LEstatis, LEntraSai;;
 
 	/**
 	 * Create the panel.
@@ -43,7 +45,7 @@ public class TelaDeInicio extends JPanel {
 		lblInicio.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/home.png")));
 		add(lblInicio, "cell 0 2,alignx center");
 
-		JLabel LInicio = new JLabel("Inicio");
+		LInicio = new JLabel("Inicio");
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LInicio, "cell 1 2");
 
@@ -55,7 +57,7 @@ public class TelaDeInicio extends JPanel {
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/caixa(1)1.png")));
 		add(lblcontroleEstoq, "cell 0 3,alignx center");
 
-		JLabel LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq = new JLabel("Controle de estoque");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LControleEstoq, "cell 1 3");
 
@@ -82,7 +84,6 @@ public class TelaDeInicio extends JPanel {
 		add(LEntraSai, "cell 1 5");
 
 		JLabel lblLogo = new JLabel("");
-		// CORREÇÃO: Alterado de LOGO1.png para logopng.png
 		URL logoUrl = getClass().getResource("/img/logopng.png");
 		if (logoUrl != null) {
 			imagemOriginal = ImageIO.read(logoUrl);
@@ -90,6 +91,21 @@ public class TelaDeInicio extends JPanel {
 			lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 			add(lblLogo, "cell 0 8,growx");
 		}
+	}
+	public void inicioListener(MouseAdapter mouseAdapter) {
+		this.LInicio.addMouseListener(mouseAdapter);;
+	}
+	
+	public void setControleEstoqueListener(MouseAdapter mouseAdapter) {
+		this.LControleEstoq.addMouseListener(mouseAdapter);
+	}
+
+	public void setEstatisticasListener(MouseAdapter mouseAdapter) {
+		this.LEstatis.addMouseListener(mouseAdapter);
+	}
+
+	public void setEntradaSaidaListener(MouseAdapter mouseAdapter) {
+		this.LEntraSai.addMouseListener(mouseAdapter);
 	}
 
 	public void ajustarFonte(int largura, int altura) {

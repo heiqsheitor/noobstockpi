@@ -1,6 +1,8 @@
 package main;
 
 import javax.swing.SwingUtilities;
+
+import controller.InicioController;
 import controller.LoginController;
 import controller.UsuarioController;
 import controller.RedefinirSenhaController;
@@ -30,6 +32,8 @@ public class Main {
                 new LoginController(principal.getLogin(), usuarioDAO, navegador);
                 new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
                 new ProdutoController(principal.getAdicionar(), produtoDAO);
+                new InicioController(principal.getInicio(), navegador); 
+                new 
                 
                 // CORREÇÃO: Inicializando o controller de redefinição de senha
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
@@ -38,7 +42,7 @@ public class Main {
                 
                 
                 // Exibe a janela principal (que começa na TelaLogin por padrão)
-                principal.mostrarTela(Principal.ADICIONAR);
+                principal.mostrarTela(Principal.INICIO);
                 principal.setVisible(true);
                 principal.setLocationRelativeTo(null);
 
