@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
 import javax.swing.border.LineBorder;
+import javax.swing.JButton;
 
 public class TelaDetalhesProduto extends JPanel {
 
@@ -33,7 +34,7 @@ public class TelaDetalhesProduto extends JPanel {
 	public TelaDetalhesProduto() {
 
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][][grow 10][][grow][grow][][grow][grow 3][][grow][]",
+		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow][grow][][grow][grow 3][][grow][]",
 				"[][][][grow][][][][][grow][grow 1][grow 1][grow 1][grow][][]"));
 
 		JLabel lblNewLabel = new JLabel("");
@@ -383,7 +384,7 @@ public class TelaDetalhesProduto extends JPanel {
 
 		JLabel lblNewLabel_23 = new JLabel("");
 
-		lblNewLabel_23.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/seta det p.png")));
+		lblNewLabel_23.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/green.png")));
 
 		lblNewLabel_23.setBounds(10, 36, 40, 40);
 
@@ -401,7 +402,7 @@ public class TelaDetalhesProduto extends JPanel {
 
 		JLabel lblNewLabel_24 = new JLabel("");
 
-		lblNewLabel_24.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/seta det n.png")));
+		lblNewLabel_24.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/red.png")));
 
 		lblNewLabel_24.setBounds(10, 113, 40, 40);
 
@@ -429,7 +430,7 @@ public class TelaDetalhesProduto extends JPanel {
 
 		JLabel lblNewLabel_25 = new JLabel("");
 
-		lblNewLabel_25.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/cube det.png")));
+		lblNewLabel_25.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/blue .png")));
 
 		lblNewLabel_25.setBounds(10, 184, 40, 43);
 
@@ -466,6 +467,13 @@ public class TelaDetalhesProduto extends JPanel {
 		separator_3_1.setBounds(10, 171, 195, 2);
 
 		panel_2_1_1.add(separator_3_1);
+
+		JButton btnNewButton = new JButton("Detalhes");
+		btnNewButton.setBounds(203, 10, 75, 21);
+		panel_2_1_1.add(btnNewButton);
+		
+		JLabel lblNewLabel_26 = new JLabel("");
+		add(lblNewLabel_26, "cell 1 12");
 
 		JLabel lblNewLabel_10 = new JLabel("");
 
