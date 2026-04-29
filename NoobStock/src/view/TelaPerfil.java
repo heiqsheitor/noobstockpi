@@ -22,8 +22,6 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class TelaPerfil extends JPanel {
 
@@ -36,6 +34,7 @@ public class TelaPerfil extends JPanel {
 	private JButton btnAtualizar;
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
+	private JButton btnExcluirConta; 
 	
 	/**
 	 * Create the panel.
@@ -46,7 +45,7 @@ public class TelaPerfil extends JPanel {
 		painelEsquerdo.setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 		
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][][][][][grow]"));
+		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][35px:n][][][][grow]"));
 		
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
@@ -209,17 +208,23 @@ public class TelaPerfil extends JPanel {
 		add(lblLogo, "cell 0 10 2 1,alignx center,aligny bottom");
 
 		btnDeslogar = new JButton("Deslogar");
-		btnDeslogar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
+		
+		btnExcluirConta = new JButton("Excluir Conta");
+		add(btnExcluirConta, "cell 7 9");
 	}
-	
 	
 	public void adicionarDeslogar(ActionListener listener) {
 		btnDeslogar.addActionListener(listener);
+	}
+	
+	public void adicionarExcluirContaListener(ActionListener listener) {
+		btnExcluirConta.addActionListener(listener);
+	}
+
+	
+	public String getEmail() {
+		return tFEmail.getText().trim();
 	}
 	
 	private void LimpaCampos() {

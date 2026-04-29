@@ -117,7 +117,6 @@ public class Principal extends JFrame {
 		revalidate();
 	}
 
-	// Getters
 	public TelaLogin getLogin() {
 		return login;
 	}

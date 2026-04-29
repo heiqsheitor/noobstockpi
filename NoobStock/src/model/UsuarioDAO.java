@@ -82,4 +82,26 @@ public class UsuarioDAO {
             return false;
         }
     }
+
+    /**
+     * Exclui um usuário do banco de dados baseado no e-mail.
+     * @param email O e-mail do usuário que será excluído.
+     * @return true se o usuário foi excluído, false caso contrário.
+     */
+    public boolean excluirUsuario(String email) {
+        String sql = "DELETE FROM usuarios WHERE email = ?";
+        
+        try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir usuário: " + e.getMessage());
+            return false;
+        }
+    }
 }

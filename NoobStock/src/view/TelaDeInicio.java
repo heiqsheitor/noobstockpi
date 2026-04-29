@@ -23,8 +23,6 @@ public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private BufferedImage imagemOriginal;
-	
-	// DECLARAÇÃO DO BOTÃO COMO ATRIBUTO DA CLASSE
 	private JButton btnDeslogar;
 
 	/**
@@ -91,12 +89,10 @@ public class TelaDeInicio extends JPanel {
 
 	}
 
-	// MÉTODO PARA O CONTROLLER ADICIONAR A AÇÃO DE DESLOGAR
 	public void addDeslogarListener(ActionListener listener) {
 		btnDeslogar.addActionListener(listener);
 	}
 
 	public void ajustarFonte(int largura, int altura) {
-		// Implementação opcional
 	}
 }
