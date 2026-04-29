@@ -163,8 +163,8 @@ public class TelaPerfil extends JPanel {
 		add(lblStatusArquivo, "cell 4 9,growx,gapx 10");
 
 		btnAtualizar = new JButton("Atualizar");
-		btnAtualizar.setForeground(new Color(255, 255, 255));
-		btnAtualizar.setBackground(new Color(0, 0, 0));
+		btnAtualizar.setForeground(new Color(0, 0, 0));
+		btnAtualizar.setBackground(new Color(255, 255, 255));
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String primeiroNome = tFPrimeiroNome.getText().trim();

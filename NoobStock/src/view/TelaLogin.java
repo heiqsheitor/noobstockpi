@@ -75,8 +75,8 @@ public class TelaLogin extends JPanel {
 		add(pFSenha, "cell 2 6,growx,aligny top");
 
 		btnEsqueciASenha = new JButton("Esqueci a senha");
-		btnEsqueciASenha.setForeground(new Color(255, 255, 255));
-		btnEsqueciASenha.setBackground(new Color(0, 0, 0));
+		btnEsqueciASenha.setForeground(new Color(0, 0, 0));
+		btnEsqueciASenha.setBackground(new Color(255, 255, 255));
 		add(btnEsqueciASenha, "cell 2 7,alignx center,aligny bottom");
 
 		JPanel panel = new JPanel();
@@ -84,13 +84,13 @@ public class TelaLogin extends JPanel {
 		add(panel, "cell 2 8,grow");
 
 		btnEntrar = new JButton("Entrar");
-		btnEntrar.setBackground(new Color(0, 0, 0));
-		btnEntrar.setForeground(new Color(255, 255, 255));
+		btnEntrar.setBackground(new Color(255, 255, 255));
+		btnEntrar.setForeground(new Color(0, 0, 0));
 		panel.add(btnEntrar);
 
 		btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setForeground(new Color(255, 255, 255));
-		btnCadastrar.setBackground(new Color(0, 0, 0));
+		btnCadastrar.setForeground(new Color(0, 0, 0));
+		btnCadastrar.setBackground(new Color(255, 255, 255));
 		panel.add(btnCadastrar);
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

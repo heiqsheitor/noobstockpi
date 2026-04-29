@@ -15,16 +15,21 @@ import java.io.IOException;
 import java.net.URL;
 import javax.swing.SwingConstants;
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private BufferedImage imagemOriginal;
+	
+	// DECLARAÇÃO DO BOTÃO COMO ATRIBUTO DA CLASSE
+	private JButton btnDeslogar;
 
 	/**
 	 * Create the panel.
-	 * 
-	 * @throws IOException
+	 * * @throws IOException
 	 */
 	public TelaDeInicio() throws IOException {
 		setBackground(new Color(255, 255, 255));
@@ -34,10 +39,6 @@ public class TelaDeInicio extends JPanel {
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
 		add(lblPerfil, "cell 0 0");
-
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
-		add(lblNewLabel, "cell 1 0,alignx left,aligny center");
 
 		JLabel lblNewLabel_11 = new JLabel("Início");
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -85,15 +86,14 @@ public class TelaDeInicio extends JPanel {
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5");
 
-		JLabel lblLogo = new JLabel("");
-		// CORREÇÃO: Alterado de LOGO1.png para logopng.png
-		URL logoUrl = getClass().getResource("/img/logopng.png");
-		if (logoUrl != null) {
-			imagemOriginal = ImageIO.read(logoUrl);
-			lblLogo.setIcon(new ImageIcon(logoUrl));
-			lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			add(lblLogo, "cell 0 8,growx");
-		}
+		btnDeslogar = new JButton("Deslogar");
+		add(btnDeslogar, "cell 5 7,alignx right");
+
+	}
+
+	// MÉTODO PARA O CONTROLLER ADICIONAR A AÇÃO DE DESLOGAR
+	public void addDeslogarListener(ActionListener listener) {
+		btnDeslogar.addActionListener(listener);
 	}
 
 	public void ajustarFonte(int largura, int altura) {

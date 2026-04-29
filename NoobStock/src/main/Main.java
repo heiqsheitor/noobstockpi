@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 import controller.LoginController;
 import controller.UsuarioController;
 import controller.RedefinirSenhaController;
+import controller.InicioController; // IMPORTANTE: Importe o seu novo controller aqui
 import controller.Navegador;
 import model.UsuarioDAO;
 import view.Principal;
@@ -29,6 +30,10 @@ public class Main {
                 
                 // CORREÇÃO: Inicializando o controller de redefinição de senha
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
+                
+                // ----> A MÁGICA ACONTECE AQUI <----
+                // Conectando a sua Tela de Início ao seu Controller!
+                new InicioController(principal.getInicio(), navegador);
                 
                 // Exibe a janela principal (que começa na TelaLogin por padrão)
                 principal.setVisible(true);

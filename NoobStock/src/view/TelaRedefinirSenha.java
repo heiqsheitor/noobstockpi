@@ -59,13 +59,9 @@ public class TelaRedefinirSenha extends JPanel {
 		add(pFConfirmarNovaSenha, "cell 2 8,grow");
 		
 		btnSalvar = new JButton("Salvar");
-		btnSalvar.setForeground(new Color(255, 255, 255));
-		btnSalvar.setBackground(new Color(0, 0, 0));
+		btnSalvar.setForeground(new Color(0, 0, 0));
+		btnSalvar.setBackground(new Color(255, 255, 255));
 		add(btnSalvar, "cell 2 10,grow");
-		
-		JLabel lblTermos = new JLabel("Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade");
-		lblTermos.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(lblTermos, "cell 2 12,alignx center,aligny bottom");
 
 	}
 

@@ -77,7 +77,7 @@ public class TelaCadastro extends JPanel {
 		
 		btnCadastrar = new JButton("Cadastrar-se");
 		btnCadastrar.setForeground(new Color(0, 0, 0));
-		btnCadastrar.setBackground(new Color(0, 0, 0));
+		btnCadastrar.setBackground(new Color(255, 255, 255));
 		add(btnCadastrar, "cell 3 9,grow");
 		
 		JLabel lblNewLabel = new JLabel("Ao continuar, você concorda com os nossos Termos de Serviço e Política de Privacidade");
