@@ -25,6 +25,7 @@ public class Principal extends JFrame {
     private TelaRedefinirSenha redefinirSenha;
     private TelaControleEstoque controle;
     private TelaDeInicio inicio; // Adicionada Tela de Início
+    private TelaAdicionarProduto adicionar;
 
     // Constantes de navegação
     public static final String LOGIN = "LOGIN";
@@ -33,6 +34,7 @@ public class Principal extends JFrame {
     public static final String ESTOQUE = "ESTOQUE";
     public static final String REDEFINIR = "REDEFINIR";
     public static final String INICIO = "INICIO"; // Adicionada constante INICIO
+    public static final String ADICIONAR = "ADICIONAR"; 
 
     public Principal() {
         setTitle("NoobStock");
@@ -63,6 +65,7 @@ public class Principal extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+        
         perfil = new TelaPerfil();
         redefinirSenha = new TelaRedefinirSenha();
         try {
@@ -75,6 +78,12 @@ public class Principal extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        try {
+            adicionar = new TelaAdicionarProduto(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Adiciona telas
         if (login != null) contentPane.add(login, LOGIN);
@@ -82,7 +91,8 @@ public class Principal extends JFrame {
         if (perfil != null) contentPane.add(perfil, PERFIL);
         if (redefinirSenha != null) contentPane.add(redefinirSenha, REDEFINIR);
         if (controle != null) contentPane.add(controle, ESTOQUE);
-        if (inicio != null) contentPane.add(inicio, INICIO); // Adiciona ao layout
+        if (inicio != null) contentPane.add(inicio, INICIO);// Adiciona ao layout
+        if (adicionar != null) contentPane.add(adicionar, ADICIONAR);
 
         // Responsividade
         addComponentListener(new ComponentAdapter() {
@@ -121,4 +131,5 @@ public class Principal extends JFrame {
     public TelaRedefinirSenha getRedefinirSenha() { return redefinirSenha; }
     public TelaControleEstoque getControle() { return controle; }
     public TelaDeInicio getInicio() { return inicio; }
+    public TelaAdicionarProduto getAdicionar() { return adicionar; }
 }

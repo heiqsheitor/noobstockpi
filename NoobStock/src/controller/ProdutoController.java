@@ -17,7 +17,8 @@ public class ProdutoController extends ComponentAdapter {
         this.view = view;
         this.model = model;
 
-        // Injetando a ação no botão da view
+        
+        
         this.view.adicionarproduto(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -27,7 +28,7 @@ public class ProdutoController extends ComponentAdapter {
     }
 
     private void adicionarProduto() {
-        // 1. Pegar os dados da tela
+        
         String nomeProduto = view.getNomeProduto();
         String sku = view.getSKU();
         String qtd = view.getQuantidade();
@@ -35,16 +36,16 @@ public class ProdutoController extends ComponentAdapter {
         String fornecedor = view.getFornecedor();
         String categoria = view.getCategoria();
 
-        // 2. Validação simples (exemplo)
+       
         if (nomeProduto.trim().isEmpty() || sku.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha pelo menos o Nome e o SKU.");
             return;
         }
 
-        // 3. Empacotar os dados no Model
+        
         Produto novoProduto = new Produto(null, sku, nomeProduto, qtd, localizacao, fornecedor, categoria);
 
-        // 4. Mandar para o Banco de Dados
+        
         if (model.cadastrarProduto(novoProduto)) {
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
             view.limparCampos();
