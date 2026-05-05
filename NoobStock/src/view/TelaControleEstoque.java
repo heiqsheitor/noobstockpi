@@ -27,6 +27,9 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import controller.ComponentUtils;
+
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 
@@ -37,12 +40,14 @@ public class TelaControleEstoque extends JPanel {
 	private BufferedImage imagemOriginal;
 	private JTable table;
 	private JTextField txtPesquisar;
+	private JLabel LInicio, LControleEstoq, lblPerfil;
+	private JButton btnAdicionar;
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow 12][grow 10][grow][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
-		JLabel lblPerfil = new JLabel("");
+		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
 		add(lblPerfil, "cell 0 0 2 1,alignx center,aligny center");
 
@@ -90,8 +95,8 @@ public class TelaControleEstoque extends JPanel {
 //		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
 //		lblNewLabel_4.setForeground(new Color(128, 128, 128));
 
-		JButton btnNewButton = new JButton("Adicionar");
-		add(btnNewButton, "cell 8 2,grow");
+		btnAdicionar = new JButton("Adicionar");
+		add(btnAdicionar, "cell 8 2,grow");
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
@@ -157,7 +162,7 @@ public class TelaControleEstoque extends JPanel {
 		lblEntraSai.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
-		JLabel LInicio = new JLabel("Inicio");
+		LInicio = new JLabel("Inicio");
 		LInicio.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -167,7 +172,7 @@ public class TelaControleEstoque extends JPanel {
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 
-		JLabel LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq = new JLabel("Controle de estoque");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
@@ -186,6 +191,22 @@ public class TelaControleEstoque extends JPanel {
 
 	}
 
+	public void setAdicionarAcao(Runnable acao) {
+		btnAdicionar.addActionListener(e -> acao.run());
+	}
+
+	public void setPerfilAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.lblPerfil, acao);
+    }
+
+	public void setInicioAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LInicio, acao);
+    }
+
+    public void setControleEstoqueAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
+    }
+	
 	private void redimensionarImagem(int largura, int altura) {
 		largura /= 4;
 		altura /= 4;

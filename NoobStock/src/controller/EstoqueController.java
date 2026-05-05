@@ -5,13 +5,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import view.Principal;
-import view.TelaDeInicio;
+import view.TelaControleEstoque;
 
-public class InicioController extends ComponentAdapter {
-	private TelaDeInicio view;
+public class EstoqueController extends ComponentAdapter {
+	private TelaControleEstoque view;
     private Navegador navegador;
 
-    public InicioController(TelaDeInicio view, Navegador navegador) {
+    public EstoqueController(TelaControleEstoque view, Navegador navegador) {
         this.view = view;
         this.navegador = navegador;
 
@@ -24,6 +24,10 @@ public class InicioController extends ComponentAdapter {
             navegador.navegarPara(Principal.ESTOQUE);
         });
 
+        view.setAdicionarAcao(() -> {
+            navegador.navegarPara(Principal.ADICIONAR);
+        });
+        
         view.setPerfilAcao(() -> {
             navegador.navegarPara(Principal.PERFIL);
         });

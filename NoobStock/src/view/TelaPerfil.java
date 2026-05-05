@@ -6,6 +6,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import controller.ComponentUtils;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +37,7 @@ public class TelaPerfil extends JPanel {
 	private JButton btnAtualizar;
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
+	private JLabel LInicio, LControleEstoq;
 	
 	/**
 	 * Create the panel.
@@ -70,7 +72,7 @@ public class TelaPerfil extends JPanel {
 		separatorVer.setForeground(Color.BLACK);
 		add(separatorVer, "cell 2 0 1 11,gapx 2 2,growy");
 		
-		JLabel LInicio = new JLabel("Inicio");
+		LInicio = new JLabel("Inicio");
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 		
@@ -82,7 +84,7 @@ public class TelaPerfil extends JPanel {
 		lblNewLabel_2.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/home.png")));
 		add(lblNewLabel_2, "flowx,cell 0 2,alignx center");
 		
-		JLabel LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq = new JLabel("Controle de estoque");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 		
@@ -216,6 +218,13 @@ public class TelaPerfil extends JPanel {
 		});
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
 	}
+	public void setInicioAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LInicio, acao);
+    }
+
+    public void setControleEstoqueAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
+    }
 	
 	
 	public void adicionarDeslogar(ActionListener listener) {

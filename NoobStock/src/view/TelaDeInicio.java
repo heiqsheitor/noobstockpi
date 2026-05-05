@@ -15,13 +15,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import javax.swing.SwingConstants;
+
+import controller.ComponentUtils;
+
 import javax.imageio.ImageIO;
 
 public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private BufferedImage imagemOriginal;
-	private JLabel LInicio, lblInicio, LControleEstoq, LEstatis, LEntraSai;;
+	private JLabel LInicio, LControleEstoq, LEstatis, LEntraSai, lblPerfil;;
 
 	/**
 	 * Create the panel.
@@ -33,7 +36,7 @@ public class TelaDeInicio extends JPanel {
 		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][][grow 10]",
 				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow 30][]"));
 
-		JLabel lblPerfil = new JLabel("");
+		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
 		add(lblPerfil, "cell 0 0");
 
@@ -71,15 +74,15 @@ public class TelaDeInicio extends JPanel {
 		add(separator, "cell 2 0 1 8,gapx 2 2,growy");
 		separator.setBackground(new Color(255, 255, 255));
 
-		JLabel LEstatis = new JLabel("Estatísticas");
+		LEstatis = new JLabel("Estatísticas");
 		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEstatis, "cell 1 4");
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
-		
-		JLabel LEntraSai = new JLabel("Entrada e saída");
+
+		LEntraSai = new JLabel("Entrada e saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5");
 
@@ -92,21 +95,25 @@ public class TelaDeInicio extends JPanel {
 			add(lblLogo, "cell 0 8,growx");
 		}
 	}
-	public void inicioListener(MouseAdapter mouseAdapter) {
-		this.LInicio.addMouseListener(mouseAdapter);;
-	}
-	
-	public void setControleEstoqueListener(MouseAdapter mouseAdapter) {
-		this.LControleEstoq.addMouseListener(mouseAdapter);
-	}
+	public void setPerfilAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.lblPerfil, acao);
+    }
 
-	public void setEstatisticasListener(MouseAdapter mouseAdapter) {
-		this.LEstatis.addMouseListener(mouseAdapter);
-	}
+	public void setInicioAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LInicio, acao);
+    }
 
-	public void setEntradaSaidaListener(MouseAdapter mouseAdapter) {
-		this.LEntraSai.addMouseListener(mouseAdapter);
-	}
+    public void setControleEstoqueAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
+    }
+
+    public void setEstatisticasAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LEstatis, acao);
+    }
+
+    public void setEntradaSaidaAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LEntraSai, acao);
+    }
 
 	public void ajustarFonte(int largura, int altura) {
 		// Implementação opcional

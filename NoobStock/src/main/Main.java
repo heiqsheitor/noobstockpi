@@ -32,8 +32,7 @@ public class Main {
                 new LoginController(principal.getLogin(), usuarioDAO, navegador);
                 new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
                 new ProdutoController(principal.getAdicionar(), produtoDAO);
-                new InicioController(principal.getInicio(), navegador); 
-                new 
+                new InicioController(principal.getInicio(), navegador);  
                 
                 // CORREÇÃO: Inicializando o controller de redefinição de senha
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
