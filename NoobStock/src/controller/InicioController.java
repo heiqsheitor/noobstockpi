@@ -2,6 +2,7 @@ package controller;
 
 import view.TelaDeInicio;
 import java.awt.event.ActionListener;
+import view.Principal;
 
 public class InicioController {
     
@@ -12,20 +13,32 @@ public class InicioController {
         this.view = view;
         this.navegador = navegador;
 
-        // Avisa que o botão agora tem uma função
-        configurarEventos();
+        view.setInicioAcao(() -> {
+            navegador.navegarPara(Principal.INICIO);
+        });
+
+     
+        view.setControleEstoqueAcao(() -> {
+            navegador.navegarPara(Principal.ESTOQUE);
+        });
+
+        view.setPerfilAcao(() -> {
+            navegador.navegarPara(Principal.PERFIL);
+        });
+        
+//        configurarEventos();
     }
 
-    private void configurarEventos() {
-        // Conecta o método deslogar() ao botão da View
-        view.addDeslogarListener(e -> deslogar());
-    }
+//    private void configurarEventos() {
+//        view.addDeslogarListener(e -> deslogar());
+//    }
 
-    private void deslogar() {
-        System.out.println("Botão deslogar clicado!"); // Para teste no console
-        if (navegador != null) {
-            // "LOGIN" deve ser o nome que você deu para a tela de login no seu Navegador
-            navegador.navegarPara("LOGIN"); 
-        }
-    }
+//    private void deslogar() {
+//        System.out.println("Botão deslogar clicado!");
+//        if (navegador != null) {
+//            navegador.navegarPara("LOGIN"); 
+//        }
+//    }
+    
+    
 }

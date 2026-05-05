@@ -13,7 +13,7 @@ public class UsuarioDAO {
 
     public void cadastrarUsuario(Usuario usuario) {
         // Ajustado para a tabela 'usuarios' e coluna 'nome_usuario'
-        String sql = "INSERT INTO usuarios (nome_usuario, email, senha) VALUES (?, ?, ?)";
+        String sql = "insert into usuarios (nome_usuario, email, senha) values (?, ?, ?)";
 
         try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -33,7 +33,7 @@ public class UsuarioDAO {
 
     public Usuario autenticar(Usuario usuario) {
         // CORREÇÃO: Alterado de 'email' para 'nome_usuario' para atender ao pedido do usuário
-        String sql = "SELECT * FROM usuarios WHERE nome_usuario = ? AND senha = ?";
+        String sql = "select * from usuarios where nome_usuario = ? and senha = ?";
         Usuario usuarioLogado = null;
 
         try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
@@ -56,7 +56,30 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             System.err.println("Erro na autenticação: " + e.getMessage());
         }
-        return usuarioLogado;
+        
+        return usuarioLogado; // 1. Adicione o retorno que sumiu
+    }
+        
+        public boolean atualizarUsuario(String idUsuarioStr, String nome, String email, String senha) {
+            String sql = "update usuarios set nome_usuario = ?, email = ?, senha = ? where id_usuario = ?";
+            
+            try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+                 PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+                stmt.setString(1, nome);
+                stmt.setString(2, email);
+                stmt.setString(3, senha);
+                
+                // Converte a String do seu model de volta para Int para o banco de dados
+                stmt.setInt(4, Integer.parseInt(idUsuarioStr)); 
+
+                int rowsAffected = stmt.executeUpdate();
+                return rowsAffected > 0;
+
+            } catch (SQLException | NumberFormatException e) {
+                System.err.println("Erro ao atualizar perfil do usuário: " + e.getMessage());
+                return false;
+            }
     }
 
     /**
@@ -66,7 +89,7 @@ public class UsuarioDAO {
      * @return true se a senha foi atualizada, false caso contrário.
      */
     public boolean atualizarSenha(String email, String novaSenha) {
-        String sql = "UPDATE usuarios SET senha = ? WHERE email = ?";
+        String sql = "update usuarios set senha = ? where email = ?";
         
         try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -89,7 +112,7 @@ public class UsuarioDAO {
      * @return true se o usuário foi excluído, false caso contrário.
      */
     public boolean excluirUsuario(String email) {
-        String sql = "DELETE FROM usuarios WHERE email = ?";
+        String sql = "delete from usuarios where email = ?";
         
         try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
              PreparedStatement stmt = conexao.prepareStatement(sql)) {

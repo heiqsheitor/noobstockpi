@@ -36,4 +36,18 @@ public class Usuario {
 	public String getSenha() {
 		return senha;
 	}
+
+	// Setters (Necessários para atualizar os dados do usuário na memória após
+	// edição)
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 }
