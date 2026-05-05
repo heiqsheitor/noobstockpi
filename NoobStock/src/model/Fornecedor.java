@@ -1,33 +1,50 @@
 package model;
 
 public class Fornecedor {
-	private int id_fornecedor;
+	private int idfornecedor;
 	private String nome;
 	private String cnpj;
-	private String email;
+	private String contato;
 
-	public Fornecedor(int id_fornecedor, String nome, String cnpj, String email) {
-		super();
-		this.id_fornecedor = id_fornecedor;
-		this.nome = nome;
-		this.cnpj = cnpj;
-		this.email = email;
+	public Fornecedor() {
 	}
 
-	public int getId_fornecedor() {
-		return id_fornecedor;
+	public Fornecedor(String nome, String cnpj, String contato) {
+		this.nome = nome;
+		this.cnpj = cnpj;
+		this.contato = contato;
+	}
+
+	public int getIdfornecedor() {
+		return idfornecedor;
+	}
+
+	public void setIdfornecedor(int idfornecedor) {
+		this.idfornecedor = idfornecedor;
 	}
 
 	public String getNome() {
 		return nome;
 	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	public String getCnpj() {
 		return cnpj;
 	}
 
-	public String getEmail() {
-		return email;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+	public String getContato() {
+		return contato;
+	}
+
+	public void setContato(String contato) {
+		this.contato = contato;
 	}
 
 }

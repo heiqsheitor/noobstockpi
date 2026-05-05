@@ -29,6 +29,8 @@ import controller.ComponentUtils;
 import java.util.List;
 import model.Produto;
 import model.ProdutoDAO;
+import model.Fornecedor;
+import model.FornecedorDAO;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTable;
@@ -139,15 +141,18 @@ public class TelaFornecedor extends JPanel {
 		
 		table = new JTable();
 		table.setModel(
-					new DefaultTableModel(new Object[][] { { "0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30" }, },
-								new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" }) {
-							Class[] columnTypes = new Class[] { String.class, Object.class, Object.class, Object.class,
-									Object.class };
-
-							public Class getColumnClass(int columnIndex) {
-								return columnTypes[columnIndex];
-							}
-						});
+		    new DefaultTableModel(
+		        new Object[][] {}, // Começa vazio
+		        new String[] { "ID", "Nome", "CNPJ", "Contato" } // Suas colunas reais
+		    ) {
+		        boolean[] columnEditables = new boolean[] {
+		            false, false, false, false // Impede edição direta na célula
+		        };
+		        public boolean isCellEditable(int row, int column) {
+		            return columnEditables[column];
+		        }
+		    }
+		);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		add(table, "cell 4 4 5 3,grow");
 
@@ -198,7 +203,7 @@ public class TelaFornecedor extends JPanel {
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
 		
-		carregarTabelaProdutos();
+		carregarTabelaFornecedores();
 
 	}
 	public void setPerfilAcao(Runnable acao) {
@@ -238,37 +243,23 @@ public class TelaFornecedor extends JPanel {
 
 	}
 	
-	private void carregarTabelaProdutos() {
-	    // Pega o modelo da sua JTable
+	public void carregarTabelaFornecedores() {
 	    DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 	    
-	    // Limpa a tabela para não duplicar dados caso seja atualizada
+	    // Limpa a tabela antes de atualizar
 	    modelo.setRowCount(0); 
 
-	    // Instancia o seu DAO e busca a lista
-	    ProdutoDAO dao = new ProdutoDAO();
-	    List<Produto> listaProdutos = dao.listarProdutos();
+	    // Instancia o DAO de Fornecedor
+	    FornecedorDAO dao = new FornecedorDAO();
+	    List<Fornecedor> listaFornecedores = dao.listar();
 
-	    // Percorre a lista e adiciona linha por linha
-	    for (Produto p : listaProdutos) {
-	        
-	        // Lógica simples para a coluna "Disponibilidade" baseada na quantidade
-	        int qtd = 0;
-	        try {
-	            // Ajuste "getQtd()" para o nome exato do getter na sua classe Produto
-	            qtd = Integer.parseInt(p.getQtd()); 
-	        } catch (NumberFormatException e) {
-	            qtd = 0;
-	        }
-	        String disponibilidade = (qtd > 0) ? "Alta" : "Falta";
-
-	        // Adiciona a linha na ordem exata das suas colunas: "ID", "Produto", "SKU", "Disponibilidade", "Quantidade"
+	    // Percorre a lista e preenche a tabela
+	    for (Fornecedor f : listaFornecedores) {
 	        modelo.addRow(new Object[]{
-	            p.getId_produto(),       // Substitua pelo seu getter correto de ID, ex: p.getIdProduto()
-	            p.getNome(),     // Substitua pelo seu getter correto de Nome
-	            p.getSKU(),      // Substitua pelo seu getter correto de SKU
-	            disponibilidade,
-	            p.getQtd()       // Substitua pelo seu getter correto de Quantidade
+	            f.getIdfornecedor(),
+	            f.getNome(),
+	            f.getCnpj(),
+	            f.getContato()
 	        });
 	    }
 	}

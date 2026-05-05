@@ -74,7 +74,7 @@ public class TelaDeInicio extends JPanel {
 		add(separator, "cell 2 0 1 8,gapx 2 2,growy");
 		separator.setBackground(new Color(255, 255, 255));
 
-		LFor = new JLabel("Estatísticas");
+		LFor = new JLabel("Fornecedores");
 		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LFor, "cell 1 4");
 

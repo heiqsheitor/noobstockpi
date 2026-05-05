@@ -11,6 +11,7 @@ import controller.RedefinirSenhaController;
 import controller.Navegador;
 import controller.PerfilController;
 import controller.ProdutoController;
+import model.FornecedorDAO;
 import model.ProdutoDAO;
 import model.UsuarioDAO;
 import view.Principal;
@@ -27,6 +28,7 @@ public class Main {
                 // DAO
                 UsuarioDAO usuarioDAO = new UsuarioDAO();
 				ProdutoDAO produtoDAO = new ProdutoDAO();
+				FornecedorDAO fornecedorDAO = new FornecedorDAO();
                 
                 // Navegador utilitário
                 Navegador navegador = new Navegador(principal);
@@ -38,7 +40,7 @@ public class Main {
                 new EstoqueController(principal.getControle(), navegador);
                 new InicioController(principal.getInicio(), navegador);  
                 new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
-                new FornecedorController(principal.getFornecedor(), navegador);
+                new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO);
                 
                 // CORREÇÃO: Inicializando o controller de redefinição de senha
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);

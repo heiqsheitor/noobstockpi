@@ -109,7 +109,7 @@ public class Principal extends JFrame {
 		if (adicionar != null)
 			contentPane.add(adicionar, ADICIONAR);
 		if (fornecedor != null)
-			contentPane.add(adicionar, ADICIONAR);
+			contentPane.add(fornecedor, FORNECEDOR);
 
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
