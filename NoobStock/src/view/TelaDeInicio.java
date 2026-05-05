@@ -24,7 +24,7 @@ public class TelaDeInicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private BufferedImage imagemOriginal;
-	private JLabel LInicio, LControleEstoq, LEstatis, LEntraSai, lblPerfil;;
+	private JLabel LInicio, LControleEstoq, LFor, LEntraSai, lblPerfil;;
 
 	/**
 	 * Create the panel.
@@ -74,9 +74,9 @@ public class TelaDeInicio extends JPanel {
 		add(separator, "cell 2 0 1 8,gapx 2 2,growy");
 		separator.setBackground(new Color(255, 255, 255));
 
-		LEstatis = new JLabel("Estatísticas");
-		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(LEstatis, "cell 1 4");
+		LFor = new JLabel("Estatísticas");
+		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LFor, "cell 1 4");
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/entradaesaida(1)1.png")));
@@ -107,8 +107,8 @@ public class TelaDeInicio extends JPanel {
         ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
     }
 
-    public void setEstatisticasAcao(Runnable acao) {
-        ComponentUtils.transformarEmLink(this.LEstatis, acao);
+    public void setFornecedorAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LFor, acao);
     }
 
     public void setEntradaSaidaAcao(Runnable acao) {

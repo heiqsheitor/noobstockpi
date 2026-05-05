@@ -13,123 +13,164 @@ import javax.swing.JPanel;
 
 public class Principal extends JFrame {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JPanel contentPane;
-    private CardLayout cardLayout;
+	private JPanel contentPane;
+	private CardLayout cardLayout;
 
-    // Telas
-    private TelaLogin login;
-    private TelaCadastro cadastro;
-    private TelaPerfil perfil;
-    private TelaRedefinirSenha redefinirSenha;
-    private TelaControleEstoque controle;
-    private TelaDeInicio inicio; // Adicionada Tela de Início
-    private TelaAdicionarProduto adicionar;
+	// Telas
+	private TelaLogin login;
+	private TelaCadastro cadastro;
+	private TelaPerfil perfil;
+	private TelaRedefinirSenha redefinirSenha;
+	private TelaControleEstoque controle;
+	private TelaDeInicio inicio; // Adicionada Tela de Início
+	private TelaAdicionarProduto adicionar;
+	private TelaFornecedor fornecedor;
 
-    // Constantes de navegação
-    public static final String LOGIN = "LOGIN";
-    public static final String CADASTRO = "CADASTRO";
-    public static final String PERFIL = "PERFIL";
-    public static final String ESTOQUE = "ESTOQUE";
-    public static final String REDEFINIR = "REDEFINIR";
-    public static final String INICIO = "INICIO"; // Adicionada constante INICIO
-    public static final String ADICIONAR = "ADICIONAR"; 
+	// Constantes de navegação
+	public static final String LOGIN = "LOGIN";
+	public static final String CADASTRO = "CADASTRO";
+	public static final String PERFIL = "PERFIL";
+	public static final String ESTOQUE = "ESTOQUE";
+	public static final String REDEFINIR = "REDEFINIR";
+	public static final String INICIO = "INICIO"; // Adicionada constante INICIO
+	public static final String ADICIONAR = "ADICIONAR";
+	public static final String FORNECEDOR = "FORNECEDOR";
 
-    public Principal() {
-        setTitle("NoobStock");
-        
-        URL iconUrl = Principal.class.getResource("/img/logopng.png");
-        if (iconUrl != null) {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
-        }
+	public Principal() {
+		setTitle("NoobStock");
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 600);
+		URL iconUrl = Principal.class.getResource("/img/logopng.png");
+		if (iconUrl != null) {
+			setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
+		}
 
-        // CardLayout
-        cardLayout = new CardLayout();
-        contentPane = new JPanel(cardLayout);
-        contentPane.setPreferredSize(new Dimension(816, 522));
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 800, 600);
 
-        setContentPane(contentPane);
+		// CardLayout
+		cardLayout = new CardLayout();
+		contentPane = new JPanel(cardLayout);
+		contentPane.setPreferredSize(new Dimension(816, 522));
 
-        // Inicializa telas
-        try {
+		setContentPane(contentPane);
+
+		// Inicializa telas
+		try {
+			fornecedor = new TelaFornecedor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
 			login = new TelaLogin();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        try {
+		try {
 			cadastro = new TelaCadastro();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        
-        perfil = new TelaPerfil();
-        redefinirSenha = new TelaRedefinirSenha();
-        try {
+
+		perfil = new TelaPerfil();
+		redefinirSenha = new TelaRedefinirSenha();
+		try {
 			controle = new TelaControleEstoque();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        try {
-            inicio = new TelaDeInicio(); // Inicializa Tela de Início
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        try {
-            adicionar = new TelaAdicionarProduto(); 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		try {
+			inicio = new TelaDeInicio(); // Inicializa Tela de Início
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        // Adiciona telas
-        if (login != null) contentPane.add(login, LOGIN);
-        if (cadastro != null) contentPane.add(cadastro, CADASTRO);
-        if (perfil != null) contentPane.add(perfil, PERFIL);
-        if (redefinirSenha != null) contentPane.add(redefinirSenha, REDEFINIR);
-        if (controle != null) contentPane.add(controle, ESTOQUE);
-        if (inicio != null) contentPane.add(inicio, INICIO);// Adiciona ao layout
-        if (adicionar != null) contentPane.add(adicionar, ADICIONAR);
+		try {
+			adicionar = new TelaAdicionarProduto();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-        // Responsividade
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                ajustarFonte();
-            }
-        });
-    }
+		// Adiciona telas
+		if (login != null)
+			contentPane.add(login, LOGIN);
+		if (cadastro != null)
+			contentPane.add(cadastro, CADASTRO);
+		if (perfil != null)
+			contentPane.add(perfil, PERFIL);
+		if (redefinirSenha != null)
+			contentPane.add(redefinirSenha, REDEFINIR);
+		if (controle != null)
+			contentPane.add(controle, ESTOQUE);
+		if (inicio != null)
+			contentPane.add(inicio, INICIO);// Adiciona ao layout
+		if (adicionar != null)
+			contentPane.add(adicionar, ADICIONAR);
+		if (fornecedor != null)
+			contentPane.add(adicionar, ADICIONAR);
 
-    // Navegação
-    public void mostrarTela(String nome) {
-        cardLayout.show(contentPane, nome);
-    }
+		// Responsividade
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				ajustarFonte();
+			}
+		});
+	}
 
-    // Responsividade
-    private void ajustarFonte() {
-        int largura = getWidth();
-        int altura = getHeight();
+	// Navegação
+	public void mostrarTela(String nome) {
+		cardLayout.show(contentPane, nome);
+	}
 
-        if (controle != null) {
-            controle.ajustarFonte(largura, altura);
-        }
-        if (inicio != null) {
-            inicio.ajustarFonte(largura, altura);
-        }
+	// Responsividade
+	private void ajustarFonte() {
+		int largura = getWidth();
+		int altura = getHeight();
 
-        repaint();
-        revalidate();
-    }
+		if (controle != null) {
+			controle.ajustarFonte(largura, altura);
+		}
+		if (inicio != null) {
+			inicio.ajustarFonte(largura, altura);
+		}
 
-    // Getters
-    public TelaLogin getLogin() { return login; }
-    public TelaCadastro getCadastro() { return cadastro; }
-    public TelaPerfil getPerfil() { return perfil; }
-    public TelaRedefinirSenha getRedefinirSenha() { return redefinirSenha; }
-    public TelaControleEstoque getControle() { return controle; }
-    public TelaDeInicio getInicio() { return inicio; }
-    public TelaAdicionarProduto getAdicionar() { return adicionar; }
+		repaint();
+		revalidate();
+	}
+
+	// Getters
+	public TelaLogin getLogin() {
+		return login;
+	}
+
+	public TelaCadastro getCadastro() {
+		return cadastro;
+	}
+
+	public TelaPerfil getPerfil() {
+		return perfil;
+	}
+
+	public TelaRedefinirSenha getRedefinirSenha() {
+		return redefinirSenha;
+	}
+
+	public TelaControleEstoque getControle() {
+		return controle;
+	}
+
+	public TelaDeInicio getInicio() {
+		return inicio;
+	}
+
+	public TelaAdicionarProduto getAdicionar() {
+		return adicionar;
+	}
+	
+	public TelaFornecedor getFornecedor() {
+		return fornecedor;
+	}
 }

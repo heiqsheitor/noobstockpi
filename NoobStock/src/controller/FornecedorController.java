@@ -1,17 +1,14 @@
 package controller;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import view.Principal;
 import view.TelaDeInicio;
+import view.TelaFornecedor;
 
-public class InicioController extends ComponentAdapter {
-	private TelaDeInicio view;
+public class FornecedorController {
+	private TelaFornecedor view;
     private Navegador navegador;
 
-    public InicioController(TelaDeInicio view, Navegador navegador) {
+    public FornecedorController(TelaFornecedor view, Navegador navegador) {
         this.view = view;
         this.navegador = navegador;
 
@@ -27,13 +24,6 @@ public class InicioController extends ComponentAdapter {
         view.setPerfilAcao(() -> {
             navegador.navegarPara(Principal.PERFIL);
         });
-        
-        view.setFornecedorAcao(() -> {
-            navegador.navegarPara(Principal.FORNECEDOR);
-        });
 
-       
-    }
-	
-
+}
 }

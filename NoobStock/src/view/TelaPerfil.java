@@ -37,7 +37,7 @@ public class TelaPerfil extends JPanel {
 	private JButton btnAtualizar;
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
-	private JLabel LInicio, LControleEstoq;
+	private JLabel LInicio, LControleEstoq, lblPerfil;
 	
 	/**
 	 * Create the panel.
@@ -50,7 +50,7 @@ public class TelaPerfil extends JPanel {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][][][][][grow]"));
 		
-		JLabel lblPerfil = new JLabel("");
+		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
 		add(lblPerfil, "cell 0 0 2 1,alignx center");
 		
@@ -218,6 +218,11 @@ public class TelaPerfil extends JPanel {
 		});
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
 	}
+	
+	public void setPerfilAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.lblPerfil, acao);
+    }
+
 	public void setInicioAcao(Runnable acao) {
         ComponentUtils.transformarEmLink(this.LInicio, acao);
     }
@@ -225,7 +230,7 @@ public class TelaPerfil extends JPanel {
     public void setControleEstoqueAcao(Runnable acao) {
         ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
     }
-	
+    	
 	
 	public void adicionarDeslogar(ActionListener listener) {
 		btnDeslogar.addActionListener(listener);

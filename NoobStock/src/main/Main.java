@@ -2,11 +2,14 @@ package main;
 
 import javax.swing.SwingUtilities;
 
+import controller.EstoqueController;
+import controller.FornecedorController;
 import controller.InicioController;
 import controller.LoginController;
 import controller.UsuarioController;
 import controller.RedefinirSenhaController;
 import controller.Navegador;
+import controller.PerfilController;
 import controller.ProdutoController;
 import model.ProdutoDAO;
 import model.UsuarioDAO;
@@ -32,7 +35,10 @@ public class Main {
                 new LoginController(principal.getLogin(), usuarioDAO, navegador);
                 new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
                 new ProdutoController(principal.getAdicionar(), produtoDAO);
+                new EstoqueController(principal.getControle(), navegador);
                 new InicioController(principal.getInicio(), navegador);  
+                new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
+                new FornecedorController(principal.getFornecedor(), navegador);
                 
                 // CORREÇÃO: Inicializando o controller de redefinição de senha
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);

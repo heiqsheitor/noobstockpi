@@ -10,15 +10,35 @@ import javax.swing.SwingUtilities;
 
 import model.UsuarioDAO;
 import view.TelaPerfil;
+import view.Principal;
 import view.TelaLogin; // Importando a sua tela de login
 
 public class PerfilController {
 	private final TelaPerfil view;
 	private final UsuarioDAO model;
+	private final Navegador navegador;
 	
-	public PerfilController(TelaPerfil view, UsuarioDAO model) {
+	public PerfilController(TelaPerfil view, UsuarioDAO model, Navegador navegador) {
 		this.model = model;
 		this.view = view;
+		this.navegador = navegador;
+		
+		 view.setInicioAcao(() -> {
+	            navegador.navegarPara(Principal.INICIO);
+	        });
+	    
+	        
+	        view.setControleEstoqueAcao(() -> {
+	            navegador.navegarPara(Principal.ESTOQUE);
+	        });
+
+//	        view.setAdicionarAcao(() -> {
+//	            navegador.navegarPara(Principal.ADICIONAR);
+//	        });
+	        
+	        view.setPerfilAcao(() -> {
+	            navegador.navegarPara(Principal.PERFIL);
+	        });
 		  
 		this.view.adicionarDeslogar(new ActionListener() {
 			@Override

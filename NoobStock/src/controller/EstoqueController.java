@@ -24,7 +24,7 @@ public class EstoqueController extends ComponentAdapter {
             navegador.navegarPara(Principal.ESTOQUE);
         });
 
-        view.setAdicionarAcao(() -> {
+        view.setAdicionar(() -> {
             navegador.navegarPara(Principal.ADICIONAR);
         });
         
