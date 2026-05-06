@@ -128,7 +128,8 @@ public class TelaPerfil extends JPanel {
 		btnImportarAvatar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser selector = new JFileChooser();
-				FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagens (JPG, PNG)", "jpg", "png", "jpeg");
+				FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagens (JPG, PNG)", "jpg", "png",
+						"jpeg");
 				selector.setFileFilter(filtro);
 				int retorno = selector.showOpenDialog(null);
 				if (retorno == JFileChooser.APPROVE_OPTION) {
@@ -148,17 +149,17 @@ public class TelaPerfil extends JPanel {
 		btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.setForeground(new Color(0, 0, 0));
 		btnAtualizar.setBackground(new Color(255, 255, 255));
-		// A lógica do botão foi movida para o PerfilController para seguir o MVC
 		add(btnAtualizar, "cell 6 9,alignx right");
 
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBackground(new Color(255, 255, 255));
 		add(btnCancelar, "flowx,cell 7 9,width 100!,alignx left");
 
+		// logo
 		JLabel lblLogo = new JLabel("");
 		ImageIcon icon = new ImageIcon(TelaPerfil.class.getResource("/img/logopng.png"));
 		Image img = icon.getImage();
-		Image imgRedimensionada = img.getScaledInstance(70, 35, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = img.getScaledInstance(120, 50, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		add(lblLogo, "cell 0 10 2 1,alignx center,aligny bottom");
 
@@ -186,9 +187,17 @@ public class TelaPerfil extends JPanel {
 		btnExcluirConta.addActionListener(listener);
 	}
 
-	public String getNome() { return tFNome.getText().trim(); }
-	public String getEmail() { return tFEmail.getText().trim(); }
-	public String getSenha() { return new String(pFSenha.getPassword()); }
+	public String getNome() {
+		return tFNome.getText().trim();
+	}
+
+	public String getEmail() {
+		return tFEmail.getText().trim();
+	}
+
+	public String getSenha() {
+		return new String(pFSenha.getPassword());
+	}
 
 	public void limparCampos() {
 		tFNome.setText("");

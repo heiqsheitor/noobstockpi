@@ -18,8 +18,9 @@ public class TelaRedefinirSenha extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPasswordField pFNovaSenha;
 	private JPasswordField pFConfirmarNovaSenha;
-	private JTextField tFEmail; // Adicionado campo de e-mail para saber qual senha alterar
+	private JTextField tFEmail;
 	private JButton btnSalvar;
+	private JButton btnVoltarLogin;
 
 	/**
 	 * Create the panel.
@@ -47,22 +48,26 @@ public class TelaRedefinirSenha extends JPanel {
 		add(tFEmail, "cell 2 5,grow");
 		
 		JLabel lblNovaSenha = new JLabel("Nova senha:");
-		add(lblNovaSenha, "cell 1 7,alignx trailing");
+		add(lblNovaSenha, "cell 1 6,alignx trailing");
 		
 		pFNovaSenha = new JPasswordField();
-		add(pFNovaSenha, "cell 2 7,grow");
+		add(pFNovaSenha, "cell 2 6,grow");
 		
 		JLabel lblConfirmarSenha = new JLabel("Confirmar senha nova:");
-		add(lblConfirmarSenha, "cell 1 8,alignx trailing");
+		add(lblConfirmarSenha, "cell 1 7,alignx trailing");
 		
 		pFConfirmarNovaSenha = new JPasswordField();
-		add(pFConfirmarNovaSenha, "cell 2 8,grow");
+		add(pFConfirmarNovaSenha, "cell 2 7,grow");
 		
 		btnSalvar = new JButton("Salvar");
 		btnSalvar.setForeground(new Color(0, 0, 0));
 		btnSalvar.setBackground(new Color(255, 255, 255));
-		add(btnSalvar, "cell 2 10,grow");
-
+		add(btnSalvar, "cell 2 10,growx,aligny bottom");
+		
+		// ALTERADO: Apenas removi o "JButton" do início para usar a variável da classe
+		btnVoltarLogin = new JButton("Voltar");
+		btnVoltarLogin.setBackground(new Color(255, 255, 255));
+		add(btnVoltarLogin, "cell 2 11,growx,aligny top");
 	}
 
 	public String getEmail() {
@@ -79,6 +84,11 @@ public class TelaRedefinirSenha extends JPanel {
 
 	public void adicionarListenerSalvar(ActionListener listener) {
 		btnSalvar.addActionListener(listener);
+	}
+
+	// NOVO: Método que o seu RedefinirSenhaController vai usar
+	public void adicionarListenerVoltar(ActionListener listener) {
+		btnVoltarLogin.addActionListener(listener);
 	}
 
 	public void mostrarMensagem(String msg) {

@@ -53,6 +53,10 @@ public class TelaLogin extends JPanel {
 
 		// lblLogo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
 		add(lblLogo, "cell 2 0,alignx center,aligny top");
+		ImageIcon icon = new ImageIcon(TelaPerfil.class.getResource("/img/logopng.png"));
+		Image img = icon.getImage();
+		Image imgRedimensionada = img.getScaledInstance(300, 200, Image.SCALE_SMOOTH);
+		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 
 		lblFacaLogin = new JLabel("Faça seu Login");
 		add(lblFacaLogin, "flowy,cell 2 2,alignx center,aligny bottom");

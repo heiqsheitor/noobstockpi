@@ -16,10 +16,23 @@ public class RedefinirSenhaController {
         this.dao = dao;
         this.navegador = navegador;
 
+        // Listener do botão Salvar (já existia no seu código)
         this.view.adicionarListenerSalvar(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 redefinirSenha();
+            }
+        });
+
+        // NOVO: Listener do botão Voltar
+        // Quando clicado, ele limpa os campos e volta para a tela de Login
+        this.view.adicionarListenerVoltar(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.limparCampos();
+                if (navegador != null) {
+                    navegador.navegarPara("LOGIN");
+                }
             }
         });
     }
