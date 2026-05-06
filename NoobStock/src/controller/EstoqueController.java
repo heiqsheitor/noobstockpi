@@ -31,6 +31,10 @@ public class EstoqueController extends ComponentAdapter {
         view.setPerfilAcao(() -> {
             navegador.navegarPara(Principal.PERFIL);
         });
+        
+        view.setFornecedorAcao(() -> {
+        	navegador.navegarPara(Principal.FORNECEDOR);
+        });
 
        
     }

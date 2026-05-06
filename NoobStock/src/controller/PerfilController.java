@@ -31,13 +31,13 @@ public class PerfilController {
 	        view.setControleEstoqueAcao(() -> {
 	            navegador.navegarPara(Principal.ESTOQUE);
 	        });
-
-//	        view.setAdicionarAcao(() -> {
-//	            navegador.navegarPara(Principal.ADICIONAR);
-//	        });
 	        
 	        view.setPerfilAcao(() -> {
 	            navegador.navegarPara(Principal.PERFIL);
+	        });
+	        
+	        view.setFornecedores(() -> {
+	        	navegador.navegarPara(Principal.FORNECEDOR);
 	        });
 		  
 		this.view.adicionarDeslogar(new ActionListener() {

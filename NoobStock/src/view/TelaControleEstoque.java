@@ -43,7 +43,7 @@ public class TelaControleEstoque extends JPanel {
 	private BufferedImage imagemOriginal;
 	private JTable table;
 	private JTextField txtPesquisar;
-	private JLabel LInicio, LControleEstoq, LFor, lblPerfil, LEstatis, LEntraSai;   
+	private JLabel LInicio, LControleEstoq, LFor, lblPerfil, LEntraSai;   
 	private JButton Adicionar;
 
 	public TelaControleEstoque() throws IOException {
@@ -185,9 +185,9 @@ public class TelaControleEstoque extends JPanel {
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
-		LEstatis = new JLabel("Estatísticas");
-		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(LEstatis, "cell 1 4,alignx left,aligny center");
+		LFor = new JLabel("Fornecedores");
+		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LFor, "cell 1 4,alignx left,aligny center");
 
 		LEntraSai = new JLabel("Entrada e saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));

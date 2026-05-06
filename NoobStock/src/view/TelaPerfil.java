@@ -37,7 +37,7 @@ public class TelaPerfil extends JPanel {
 	private JButton btnAtualizar;
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
-	private JLabel LInicio, LControleEstoq, lblPerfil;
+	private JLabel LInicio, LControleEstoq, lblPerfil, LFor;
 	
 	/**
 	 * Create the panel.
@@ -102,9 +102,9 @@ public class TelaPerfil extends JPanel {
 		tFPrimeiroNome = new JTextField();
 		add(tFPrimeiroNome, "cell 6 3 2 1,grow");
 		
-		JLabel LEstatis = new JLabel("Estatísticas");
-		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(LEstatis, "cell 1 4");
+		LFor = new JLabel("Fornecedores");
+		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LFor, "cell 1 4");
 		
 		JLabel lblSegundoNome = new JLabel("Segundo Nome:");
 		add(lblSegundoNome, "cell 5 4,alignx trailing");
@@ -217,6 +217,9 @@ public class TelaPerfil extends JPanel {
 			}
 		});
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
+	}
+	public void setFornecedores(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LFor, acao);
 	}
 	
 	public void setPerfilAcao(Runnable acao) {
