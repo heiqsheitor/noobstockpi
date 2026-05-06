@@ -143,10 +143,10 @@ public class TelaFornecedor extends JPanel {
 		table.setModel(
 		    new DefaultTableModel(
 		        new Object[][] {}, // Começa vazio
-		        new String[] { "ID", "Nome", "CNPJ", "Contato" } // Suas colunas reais
+		        new String[] { "ID", "Nome", "CNPJ", "Contato", "Duração" } // <-- ADICIONADO A 5ª COLUNA
 		    ) {
 		        boolean[] columnEditables = new boolean[] {
-		            false, false, false, false // Impede edição direta na célula
+		            false, false, false, false, false // <-- ADICIONADO O 5º FALSE
 		        };
 		        public boolean isCellEditable(int row, int column) {
 		            return columnEditables[column];
@@ -244,23 +244,21 @@ public class TelaFornecedor extends JPanel {
 	}
 	
 	public void carregarTabelaFornecedores() {
-	    DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-	    
-	    // Limpa a tabela antes de atualizar
-	    modelo.setRowCount(0); 
+        DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+        modelo.setRowCount(0); 
 
-	    // Instancia o DAO de Fornecedor
-	    FornecedorDAO dao = new FornecedorDAO();
-	    List<Fornecedor> listaFornecedores = dao.listar();
+        FornecedorDAO dao = new FornecedorDAO();
+        List<Fornecedor> listaFornecedores = dao.listar();
 
-	    // Percorre a lista e preenche a tabela
-	    for (Fornecedor f : listaFornecedores) {
-	        modelo.addRow(new Object[]{
-	            f.getIdfornecedor(),
-	            f.getNome(),
-	            f.getCnpj(),
-	            f.getContato()
-	        });
-	    }
-	}
+        for (Fornecedor f : listaFornecedores) {
+            // Adiciona a 5ª informação na linha do JTable
+            modelo.addRow(new Object[]{
+                f.getIdfornecedor(),
+                f.getNome(),
+                f.getCnpj(),
+                f.getContato(),
+                f.getDuracaoContrato() 
+            });
+        }
+    }
 }

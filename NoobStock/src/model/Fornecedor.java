@@ -5,14 +5,16 @@ public class Fornecedor {
 	private String nome;
 	private String cnpj;
 	private String contato;
+	private String duracaoContrato;
 
 	public Fornecedor() {
 	}
 
-	public Fornecedor(String nome, String cnpj, String contato) {
+	public Fornecedor(String nome, String cnpj, String contato, String duracaoContrato) {
 		this.nome = nome;
 		this.cnpj = cnpj;
 		this.contato = contato;
+		this.duracaoContrato = duracaoContrato;
 	}
 
 	public int getIdfornecedor() {
@@ -47,4 +49,12 @@ public class Fornecedor {
 		this.contato = contato;
 	}
 
+	public void setDuracaoContrato(String duracaoContrato) {
+		this.duracaoContrato = duracaoContrato;
+	}
+
+	public String getDuracaoContrato() {
+		// TODO Auto-generated method stub
+		return duracaoContrato;
+	}
 }

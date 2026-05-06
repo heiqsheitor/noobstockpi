@@ -2,6 +2,7 @@ package controller;
 
 import model.Produto;
 import model.ProdutoDAO;
+import view.Principal;
 import view.TelaAdicionarProduto;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
@@ -12,10 +13,12 @@ public class ProdutoController extends ComponentAdapter {
 
     private final TelaAdicionarProduto view;
     private final ProdutoDAO model;
+    private final Navegador navegador;
 
-    public ProdutoController(TelaAdicionarProduto view, ProdutoDAO model) {
+    public ProdutoController(TelaAdicionarProduto view, ProdutoDAO model, Navegador navegador) {
         this.view = view;
         this.model = model;
+        this.navegador = navegador;
 
         
         
@@ -24,6 +27,10 @@ public class ProdutoController extends ComponentAdapter {
             public void actionPerformed(ActionEvent e) {
                 adicionarProduto();
             }
+        });
+        
+        view.voltaracaoo(() -> {
+        	navegador.navegarPara(Principal.ESTOQUE);
         });
     }
 
@@ -53,4 +60,6 @@ public class ProdutoController extends ComponentAdapter {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto. Verifique os dados.");
         }
     }
+    
+    
 }

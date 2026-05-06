@@ -21,15 +21,16 @@ public class FornecedorDAO {
 
     // ── ADICIONAR FORNECEDOR ──
     public boolean adicionar(Fornecedor fornecedor) {
-        String sql = "INSERT INTO fornecedor (nome, cnpj, contato) VALUES (?, ?, ?)";
+        // Atualize a string SQL
+        String sql = "INSERT INTO fornecedor (nome, cnpj, contato, duracao_contrato) VALUES (?, ?, ?, ?)";
         
-        // Usa o conectar() no try, igual ao ProdutoDAO
         try (Connection con = conectar();
              PreparedStatement stmt = con.prepareStatement(sql)) {
              
             stmt.setString(1, fornecedor.getNome());
             stmt.setString(2, fornecedor.getCnpj());
             stmt.setString(3, fornecedor.getContato());
+            stmt.setString(4, fornecedor.getDuracaoContrato()); 
             stmt.executeUpdate();
             return true;
             
@@ -49,12 +50,13 @@ public class FornecedorDAO {
              PreparedStatement stmt = con.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
              
-            while (rs.next()) {
+        	while (rs.next()) {
                 Fornecedor f = new Fornecedor();
                 f.setIdfornecedor(rs.getInt("idfornecedor"));
                 f.setNome(rs.getString("nome"));
                 f.setCnpj(rs.getString("cnpj"));
                 f.setContato(rs.getString("contato"));
+                f.setDuracaoContrato(rs.getString("duracao_contrato")); 
                 lista.add(f);
             }
             

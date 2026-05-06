@@ -2,6 +2,9 @@ package view;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
+
+import controller.ComponentUtils;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -16,11 +19,12 @@ public class TelaAdicionarProduto extends JPanel {
 	private JTextField TFFornecedor;
 	private JTextField TFCategoria;
 	private JButton btnCancelar, btnAdicionar;
+	private JLabel Voltar;
 	public TelaAdicionarProduto() {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[grow 1][][][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][]"));
 		
-		JLabel Voltar = new JLabel("");
+		Voltar = new JLabel("");
 		Voltar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -109,6 +113,10 @@ public class TelaAdicionarProduto extends JPanel {
 		add(TFCategoria, "cell 3 8,growx");
 		TFCategoria.setColumns(10);
 	}
+	public void voltaracaoo(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.Voltar, acao);
+    }
+	
 	public void adicionarproduto(ActionListener actionListener) {
 		this.btnAdicionar.addActionListener(actionListener);
 	}

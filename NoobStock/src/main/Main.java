@@ -36,11 +36,11 @@ public class Main {
                 // Inicializa os Controllers passando as views contidas em Principal
                 new LoginController(principal.getLogin(), usuarioDAO, navegador);
                 new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
-                new ProdutoController(principal.getAdicionar(), produtoDAO);
+                new ProdutoController(principal.getAdicionar(), produtoDAO, navegador);
                 new EstoqueController(principal.getControle(), navegador);
                 new InicioController(principal.getInicio(), navegador);  
                 new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
-                new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO);
+                new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO, principal.getAdicionarFor());
                 
                 // CORREÇÃO: Inicializando o controller de redefinição de senha
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);

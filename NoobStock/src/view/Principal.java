@@ -27,6 +27,7 @@ public class Principal extends JFrame {
 	private TelaDeInicio inicio; // Adicionada Tela de Início
 	private TelaAdicionarProduto adicionar;
 	private TelaFornecedor fornecedor;
+	private TelaAdicionarFornecedor adicionarfor;
 
 	// Constantes de navegação
 	public static final String LOGIN = "LOGIN";
@@ -37,6 +38,7 @@ public class Principal extends JFrame {
 	public static final String INICIO = "INICIO"; // Adicionada constante INICIO
 	public static final String ADICIONAR = "ADICIONAR";
 	public static final String FORNECEDOR = "FORNECEDOR";
+	public static final String ADICIONARFOR = "ADICIONARFOR";
 
 	public Principal() {
 		setTitle("NoobStock");
@@ -57,6 +59,9 @@ public class Principal extends JFrame {
 		setContentPane(contentPane);
 
 		// Inicializa telas
+		
+			adicionarfor = new TelaAdicionarFornecedor();
+		
 		try {
 			fornecedor = new TelaFornecedor();
 		} catch (IOException e) {
@@ -110,6 +115,8 @@ public class Principal extends JFrame {
 			contentPane.add(adicionar, ADICIONAR);
 		if (fornecedor != null)
 			contentPane.add(fornecedor, FORNECEDOR);
+		if(adicionarfor != null)
+			contentPane.add(adicionarfor, ADICIONARFOR);
 
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
@@ -172,5 +179,9 @@ public class Principal extends JFrame {
 	
 	public TelaFornecedor getFornecedor() {
 		return fornecedor;
+	}
+	
+	public TelaAdicionarFornecedor getAdicionarFor() {
+		return adicionarfor;
 	}
 }
