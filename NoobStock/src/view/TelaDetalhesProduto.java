@@ -392,7 +392,7 @@ public class TelaDetalhesProduto extends JPanel {
 		
 		JLabel lblNewLabel_26 = new JLabel("");
 		add(lblNewLabel_26, "cell 1 12");
-
+ 
 		JLabel lblNewLabel_10 = new JLabel("");
 
 		lblNewLabel_10.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/LOGO1.png")));
