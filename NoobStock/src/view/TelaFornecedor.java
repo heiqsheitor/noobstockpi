@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -12,41 +11,43 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import controller.ComponentUtils;
 
 import java.util.List;
-import model.Produto;
-import model.ProdutoDAO;
 import model.Fornecedor;
 import model.FornecedorDAO;
 
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTextField;
 
 public class TelaFornecedor extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private TelaLogin login;
 	private BufferedImage imagemOriginal;
 	private JTable table;
 	private JTextField txtPesquisar;
-	private JLabel LInicio, LControleEstoq, LFor, lblPerfil, LEstatis, LEntraSai;   
+	private JLabel LInicio, LControleEstoq, LFor, lblPerfil, LEntraSai;
 	private JButton Adicionar;
+
+	// Callbacks para o controller
+	private Consumer<Fornecedor> editarAcao;
+	private Consumer<Fornecedor> excluirAcao;
 
 	public TelaFornecedor() throws IOException {
 		setBackground(new Color(255, 255, 255));
@@ -68,37 +69,24 @@ public class TelaFornecedor extends JPanel {
 		lblInicio.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/home.png")));
 		add(lblInicio, "cell 0 2,alignx center");
 
-		txtPesquisar = new JTextField(){
-		    @Override
-		    protected void paintComponent(Graphics g) {
-		        super.paintComponent(g);
-		        
-		        if (getText().isEmpty()) {
-		            Graphics2D g2 = (Graphics2D) g.create();
-		            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		            
-		            g2.setColor(new Color(192, 192, 192));
-		            g2.setFont(getFont());
-		            
-		            FontMetrics fm = g2.getFontMetrics();
-		            int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
-		            
-		            g2.drawString("Buscar Itens...", getInsets().left, y);
-		            g2.dispose();
-		        }
-		    }
+		txtPesquisar = new JTextField() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if (getText().isEmpty()) {
+					Graphics2D g2 = (Graphics2D) g.create();
+					g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+					g2.setColor(new Color(192, 192, 192));
+					g2.setFont(getFont());
+					FontMetrics fm = g2.getFontMetrics();
+					int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+					g2.drawString("Buscar Itens...", getInsets().left, y);
+					g2.dispose();
+				}
+			}
 		};
 		add(txtPesquisar, "cell 4 2 3 1,grow");
 		txtPesquisar.setColumns(10);
-
-//		JLabel lblNewLabel_3 = new JLabel("");
-//		panel_1.add(lblNewLabel_3);
-//		lblNewLabel_3.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/filter (1).png")));
-//
-//		JLabel lblNewLabel_4 = new JLabel("Filtrar");
-//		panel_1.add(lblNewLabel_4);
-//		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-//		lblNewLabel_4.setForeground(new Color(128, 128, 128));
 
 		Adicionar = new JButton("Adicionar");
 		add(Adicionar, "cell 8 2,grow");
@@ -115,63 +103,61 @@ public class TelaFornecedor extends JPanel {
 		add(separator, "cell 2 0 1 9,gapx 2 2,growy");
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setForeground(Color.BLACK);
-		
+
 		JLabel lblcontroleEstoq = new JLabel("");
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/caixa(1)1.png")));
 		add(lblcontroleEstoq, "cell 0 3,alignx left");
-		
+
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
-		
+
 		JLabel lblNewLabel_7 = new JLabel("Nome");
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblNewLabel_7, "cell 5 3,alignx center,aligny center");
-		
+
 		JLabel lblNewLabel_7_1 = new JLabel("CNPJ");
 		lblNewLabel_7_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblNewLabel_7_1, "cell 6 3,alignx center,aligny center");
-		
+
 		JLabel lblNewLabel_7_1_1 = new JLabel("Email");
 		lblNewLabel_7_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblNewLabel_7_1_1, "cell 7 3,alignx center,aligny center");
-		
+
 		JLabel lblNewLabel_7_1_1_1 = new JLabel("Ativo");
 		lblNewLabel_7_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblNewLabel_7_1_1_1, "cell 8 3,alignx center,aligny center");
-		
+
+		// ── TABELA ────────────────────────────────────────────────────────────
 		table = new JTable();
 		table.setModel(
-		    new DefaultTableModel(
-		        new Object[][] {}, // Começa vazio
-		        new String[] { "ID", "Nome", "CNPJ", "Contato", "Duração" } // <-- ADICIONADO A 5ª COLUNA
-		    ) {
-		        boolean[] columnEditables = new boolean[] {
-		            false, false, false, false, false // <-- ADICIONADO O 5º FALSE
-		        };
-		        public boolean isCellEditable(int row, int column) {
-		            return columnEditables[column];
-		        }
-		    }
+			new DefaultTableModel(
+				new Object[][] {},
+				new String[] { "ID", "Nome", "CNPJ", "Contato", "Duração" }
+			) {
+				boolean[] columnEditables = new boolean[] { false, false, false, false, false };
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+			}
 		);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setRowHeight(28);
 		add(table, "cell 4 4 5 3,grow");
+
+		// ── POPUP MENU (CLIQUE DIREITO NA TABELA) ─────────────────────────────
+		configurarPopupMenu();
 
 		JLabel lblEstatis = new JLabel("");
 		lblEstatis.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/grafico.png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
-		Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-
-		String[] columnNames = { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" };
-		Object[][] data = { { "0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30" }, };
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
 		JLabel lblLogo = new JLabel("");
-		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/logopng.png")));
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLogo.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/logopng.png")));
 		add(lblLogo, "cell 1 7,growx");
@@ -179,9 +165,7 @@ public class TelaFornecedor extends JPanel {
 		LInicio = new JLabel("Inicio");
 		LInicio.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-			}
+			public void mouseClicked(MouseEvent e) {}
 		});
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
@@ -197,68 +181,133 @@ public class TelaFornecedor extends JPanel {
 		LEntraSai = new JLabel("Entrada e saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5,alignx left,aligny center");
-		
+
 		JLabel lblNewLabel_5 = new JLabel("ID");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 16));
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
-		
-		carregarTabelaFornecedores();
 
+		carregarTabelaFornecedores();
 	}
+
+	// ── CONFIGURA O POPUP DE EDITAR / EXCLUIR ─────────────────────────────────
+	private void configurarPopupMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+
+		JMenuItem itemEditar = new JMenuItem("✏️  Editar fornecedor");
+		itemEditar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		itemEditar.addActionListener(e -> {
+			Fornecedor selecionado = getFornecedorSelecionado();
+			if (selecionado != null && editarAcao != null) {
+				editarAcao.accept(selecionado);
+			}
+		});
+
+		JMenuItem itemExcluir = new JMenuItem("🗑️  Excluir fornecedor");
+		itemExcluir.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		itemExcluir.setForeground(new Color(180, 30, 30));
+		itemExcluir.addActionListener(e -> {
+			Fornecedor selecionado = getFornecedorSelecionado();
+			if (selecionado != null && excluirAcao != null) {
+				excluirAcao.accept(selecionado);
+			}
+		});
+
+		popupMenu.add(itemEditar);
+		popupMenu.addSeparator();
+		popupMenu.add(itemExcluir);
+
+		// Ao clicar com botão DIREITO: seleciona a linha e abre o menu
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int row = table.rowAtPoint(e.getPoint());
+				if (row >= 0) {
+					table.setRowSelectionInterval(row, row);
+				}
+				if (SwingUtilities.isRightMouseButton(e) && row >= 0) {
+					popupMenu.show(table, e.getX(), e.getY());
+				}
+			}
+		});
+	}
+
+	// ── RETORNA O FORNECEDOR DA LINHA SELECIONADA NA TABELA ───────────────────
+	private Fornecedor getFornecedorSelecionado() {
+		int row = table.getSelectedRow();
+		if (row < 0) return null;
+
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+		Fornecedor f = new Fornecedor();
+		f.setIdfornecedor((int) model.getValueAt(row, 0));
+		f.setNome(String.valueOf(model.getValueAt(row, 1)));
+		f.setCnpj(String.valueOf(model.getValueAt(row, 2)));
+		f.setContato(String.valueOf(model.getValueAt(row, 3)));
+		f.setDuracaoContrato(String.valueOf(model.getValueAt(row, 4)));
+		return f;
+	}
+
+	// ── RECARREGA A TABELA DO BANCO ───────────────────────────────────────────
+	public void recarregarTabela() {
+		carregarTabelaFornecedores();
+	}
+
+	// ── SETTERS DE CALLBACKS ──────────────────────────────────────────────────
+	public void setEditarAcao(Consumer<Fornecedor> acao) {
+		this.editarAcao = acao;
+	}
+
+	public void setExcluirAcao(Consumer<Fornecedor> acao) {
+		this.excluirAcao = acao;
+	}
+
 	public void setPerfilAcao(Runnable acao) {
-        ComponentUtils.transformarEmLink(this.lblPerfil, acao);
-    }
+		ComponentUtils.transformarEmLink(this.lblPerfil, acao);
+	}
 
 	public void setInicioAcao(Runnable acao) {
-        ComponentUtils.transformarEmLink(this.LInicio, acao);
-    }
+		ComponentUtils.transformarEmLink(this.LInicio, acao);
+	}
 
-    public void setControleEstoqueAcao(Runnable acao) {
-        ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
-    }
+	public void setControleEstoqueAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
+	}
 
-    public void setFornecedorAcao(Runnable acao) {
-        ComponentUtils.transformarEmLink(this.LFor, acao);
-    }
-    
-    public void setAdicionar(Runnable acao) {
-    	Adicionar.addActionListener(e -> acao.run());
-    }
-    
+	public void setFornecedorAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LFor, acao);
+	}
+
+	public void setAdicionar(Runnable acao) {
+		Adicionar.addActionListener(e -> acao.run());
+	}
 
 	private void redimensionarImagem(int largura, int altura) {
 		largura /= 4;
 		altura /= 4;
-		System.out.println(largura);
-		if (largura <= 0 || altura <= 0)
-			return;
-
-		Image scaled = imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
-
+		if (largura <= 0 || altura <= 0) return;
+		imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
 	}
 
 	public void ajustarFonte(int largura, int altura) {
 		// TODO Auto-generated method stub
-
 	}
-	
+
 	public void carregarTabelaFornecedores() {
-        DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-        modelo.setRowCount(0); 
+		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+		modelo.setRowCount(0);
 
-        FornecedorDAO dao = new FornecedorDAO();
-        List<Fornecedor> listaFornecedores = dao.listar();
+		FornecedorDAO dao = new FornecedorDAO();
+		List<Fornecedor> listaFornecedores = dao.listar();
 
-        for (Fornecedor f : listaFornecedores) {
-            // Adiciona a 5ª informação na linha do JTable
-            modelo.addRow(new Object[]{
-                f.getIdfornecedor(),
-                f.getNome(),
-                f.getCnpj(),
-                f.getContato(),
-                f.getDuracaoContrato() 
-            });
-        }
-    }
+		for (Fornecedor f : listaFornecedores) {
+			modelo.addRow(new Object[]{
+				f.getIdfornecedor(),
+				f.getNome(),
+				f.getCnpj(),
+				f.getContato(),
+				f.getDuracaoContrato()
+			});
+		}
+	}
 }
