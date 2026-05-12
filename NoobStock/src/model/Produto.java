@@ -9,52 +9,96 @@ public class Produto {
 	private String Localização;
 	private String Fornecedor;
 	private String Categoria;
+	private String dataCriacao; // Atributo para a data de cadastro
 
-	// Construtor completo (usado ao buscar do banco)
-	public Produto(String id_produto, String SKU, String nome, String qtd, String localização, String fornecedor,
-			String categoria) {
+	// Construtor completo para uso no DAO
+	public Produto(String id_produto, String sKU, String nome, String qtd, int estoqueMinimo, String localização,
+			String fornecedor, String categoria, String dataCriacao) {
 		this.id_produto = id_produto;
-		this.SKU = SKU;
+		this.SKU = sKU;
 		this.nome = nome;
 		this.Qtd = qtd;
+		this.estoqueMinimo = estoqueMinimo;
 		this.Localização = localização;
 		this.Fornecedor = fornecedor;
 		this.Categoria = categoria;
+		this.dataCriacao = dataCriacao;
 	}
 
+	// Construtor vazio para inicialização flexível
+	public Produto() {
+	}
+
+	// Getters e Setters
 	public String getId_produto() {
 		return id_produto;
+	}
+
+	public void setId_produto(String id_produto) {
+		this.id_produto = id_produto;
 	}
 
 	public String getSKU() {
 		return SKU;
 	}
 
+	public void setSKU(String sKU) {
+		SKU = sKU;
+	}
+
 	public String getNome() {
 		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getQtd() {
 		return Qtd;
 	}
 
+	public void setQtd(String qtd) {
+		Qtd = qtd;
+	}
+
 	public int getEstoqueMinimo() {
 		return estoqueMinimo;
+	}
+
+	public void setEstoqueMinimo(int estoqueMinimo) {
+		this.estoqueMinimo = estoqueMinimo;
 	}
 
 	public String getLocalização() {
 		return Localização;
 	}
 
+	public void setLocalização(String localização) {
+		Localização = localização;
+	}
+
 	public String getFornecedor() {
 		return Fornecedor;
+	}
+
+	public void setFornecedor(String fornecedor) {
+		Fornecedor = fornecedor;
 	}
 
 	public String getCategoria() {
 		return Categoria;
 	}
 
-	public void setEstoqueMinimo(int estoqueMinimo) {
-		this.estoqueMinimo = estoqueMinimo;
+	public void setCategoria(String categoria) {
+		Categoria = categoria;
+	}
+
+	public String getDataCriacao() {
+		return dataCriacao;
+	}
+
+	public void setDataCriacao(String dataCriacao) {
+		this.dataCriacao = dataCriacao;
 	}
 }

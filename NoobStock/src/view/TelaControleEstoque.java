@@ -115,23 +115,29 @@ public class TelaControleEstoque extends JPanel {
 		// ── TABELA ────────────────────────────────────────────────────────────
 		// ── TABELA ────────────────────────────────────────────────────────────
 				table = new JTable();
+				// --- Linha ~106: Atualize o modelo da tabela ---
 				table.setModel(
-					new DefaultTableModel(
-						new Object[][] {},
-						new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade", "Data" } // 👉 ADICIONADO "Data"
-					) {
-						Class[] columnTypes = new Class[] {
-							String.class, Object.class, Object.class, Object.class, Object.class, Object.class
-						};
-						public Class getColumnClass(int columnIndex) {
-							return columnTypes[columnIndex];
-						}
-						@Override
-						public boolean isCellEditable(int row, int column) {
-							return false;
-						}
-					}
+				    new DefaultTableModel(
+				        new Object[][] {},
+				        new String[] { "ID", "Produto", "SKU", "Fornecedor", "Quantidade", "Data" } // Substituído "Disponibilidade" por "Fornecedor"
+				    ) {
+				        Class[] columnTypes = new Class[] {
+				            String.class, Object.class, Object.class, Object.class, Object.class, Object.class
+				        };
+				        public Class getColumnClass(int columnIndex) {
+				            return columnTypes[columnIndex];
+				        }
+				        @Override
+				        public boolean isCellEditable(int row, int column) {
+				            return false;
+				        }
+				    }
 				);
+
+				// --- Linha ~137: Atualize o rótulo visual que fica acima da tabela ---
+				JLabel lblNewLabel_7_1_1 = new JLabel("Fornecedor"); // Alterado de "Disponibilidade" para "Fornecedor"
+				lblNewLabel_7_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+				add(lblNewLabel_7_1_1, "cell 7 3,alignx center,aligny center");
 				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				table.setRowHeight(28);
 
@@ -252,7 +258,7 @@ public class TelaControleEstoque extends JPanel {
 		} catch (NumberFormatException ignored) {}
 
 		// Fallback com os dados da tabela (sem localização/fornecedor/categoria)
-		return new Produto(id, sku, nome, quantidade, "", "", "");
+		return new Produto(id, sku, nome, quantidade, 0, "", "", "", "");
 	}
 
 	// ── RECARREGA A TABELA DO BANCO ───────────────────────────────────────────
@@ -300,6 +306,7 @@ public class TelaControleEstoque extends JPanel {
 		// TODO Auto-generated method stub
 	}
 	
+	// --- Final do arquivo: Método atualizado ---
 	private void carregarTabelaProdutos() {
 	    DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 	    modelo.setRowCount(0);
@@ -308,21 +315,15 @@ public class TelaControleEstoque extends JPanel {
 	    List<Produto> listaProdutos = dao.listarProdutos();
 
 	    for (Produto p : listaProdutos) {
-	        int qtd = 0;
-	        try {
-	            qtd = Integer.parseInt(p.getQtd()); 
-	        } catch (NumberFormatException e) {
-	            qtd = 0;
-	        }
-	        String disponibilidade = (qtd > 0) ? "Alta" : "Falta";
-
+	        // Removemos a lógica de cálculo de disponibilidade
+	        
 	        modelo.addRow(new Object[]{
-	            p.getId_produto(),       // 0: ID (Agora está invisível)
-	            p.getNome(),             // 1: Alinhado sob Produto
-	            p.getSKU(),              // 2: Alinhado sob SKU
-	            disponibilidade,         // 3: Alinhado sob Disponibilidade
-	            p.getQtd(),              // 4: Alinhado sob Quantidade
-	            "-"                      // 5: Alinhado sob Data
+	            p.getId_produto(),       // Coluna 0 (ID - Oculta)
+	            p.getNome(),             // Coluna 1 (Produto)
+	            p.getSKU(),              // Coluna 2 (SKU)
+	            p.getFornecedor(),       // Coluna 3 (Agora exibe o Fornecedor)
+	            p.getQtd(),              // Coluna 4 (Quantidade)
+	           p.getDataCriacao()                     // Coluna 5 (Data)
 	        });
 	    }
 	}

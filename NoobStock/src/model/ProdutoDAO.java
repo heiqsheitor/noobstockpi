@@ -162,6 +162,70 @@ public class ProdutoDAO {
         }
         return null;
     }
+    
+    public List<Produto> listarProdutos() {
+
+        List<Produto> lista = new ArrayList<>();
+
+        // SQL atualizado para buscar a data formatada
+
+        String sql = "SELECT p.*, f.nome AS fornecedor, c.nome AS categoria, "
+
+                   + "DATE_FORMAT(p.data_criacao, '%d/%m/%Y') as data_formatada "
+
+                   + "FROM produto p "
+
+                   + "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
+
+                   + "LEFT JOIN categoria c ON p.categoria_id  = c.idcategoria";
+
+
+
+        try (Connection con = conectar();
+
+             PreparedStatement stmt = con.prepareStatement(sql);
+
+             ResultSet rs = stmt.executeQuery()) {
+
+
+
+            while (rs.next()) {
+
+                Produto p = new Produto(
+
+                    String.valueOf(rs.getInt("idproduto")),
+
+                    rs.getString("SKU"),
+
+                    rs.getString("nome"),
+
+                    String.valueOf(rs.getInt("qtdestoque")),
+
+                    rs.getInt("estoque_minimo"),
+
+                    rs.getString("localizacao"),
+
+                    rs.getString("fornecedor"),
+
+                    rs.getString("categoria"),
+
+                    rs.getString("data_formatada") // Pega a data formatada do SQL
+
+                );
+
+                lista.add(p);
+
+            }
+
+        } catch (SQLException e) {
+
+            System.err.println("Erro ao listar produtos: " + e.getMessage());
+
+        }
+
+        return lista;
+
+    }
 
     // ── REGISTRAR ENTRADA ─────────────────────────────────────────────────────
     public boolean registrarEntrada(int idProduto, int quantidade, int idUsuario) {
