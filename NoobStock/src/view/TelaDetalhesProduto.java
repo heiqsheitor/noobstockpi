@@ -398,7 +398,7 @@ public class TelaDetalhesProduto extends JPanel {
 		lblNewLabel_10.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/LOGO1.png")));
 
 		add(lblNewLabel_10, "cell 0 14");
-
+ 
 	}
 
 	/**
