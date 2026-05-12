@@ -35,6 +35,7 @@ import model.Fornecedor;
 import model.FornecedorDAO;
 
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JScrollPane;
 
 public class TelaFornecedor extends JPanel {
 
@@ -51,7 +52,7 @@ public class TelaFornecedor extends JPanel {
 
 	public TelaFornecedor() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow 12][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
+		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/image8.png")));
@@ -111,22 +112,6 @@ public class TelaFornecedor extends JPanel {
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
 
-		JLabel lblNewLabel_7 = new JLabel("Nome");
-		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7, "cell 5 3,alignx center,aligny center");
-
-		JLabel lblNewLabel_7_1 = new JLabel("CNPJ");
-		lblNewLabel_7_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7_1, "cell 6 3,alignx center,aligny center");
-
-		JLabel lblNewLabel_7_1_1 = new JLabel("Email");
-		lblNewLabel_7_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7_1_1, "cell 7 3,alignx center,aligny center");
-
-		JLabel lblNewLabel_7_1_1_1 = new JLabel("Ativo");
-		lblNewLabel_7_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7_1_1_1, "cell 8 3,alignx center,aligny center");
-
 		// ── TABELA ────────────────────────────────────────────────────────────
 		table = new JTable();
 		table.setModel(
@@ -142,7 +127,8 @@ public class TelaFornecedor extends JPanel {
 		);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(28);
-		add(table, "cell 4 4 5 3,grow");
+		JScrollPane scrollPane = new JScrollPane(table);
+		add(scrollPane, "cell 4 4 5 3,grow");
 
 		// ── POPUP MENU (CLIQUE DIREITO NA TABELA) ─────────────────────────────
 		configurarPopupMenu();
@@ -152,6 +138,8 @@ public class TelaFornecedor extends JPanel {
 		add(lblEstatis, "cell 0 4,alignx center");
 
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
+		
+		
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/entradaesaida(1)1.png")));
@@ -181,11 +169,6 @@ public class TelaFornecedor extends JPanel {
 		LEntraSai = new JLabel("Entrada e saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5,alignx left,aligny center");
-
-		JLabel lblNewLabel_5 = new JLabel("ID");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
 
 		carregarTabelaFornecedores();
 	}

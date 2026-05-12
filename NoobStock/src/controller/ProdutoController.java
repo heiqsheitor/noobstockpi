@@ -4,6 +4,7 @@ import model.Produto;
 import model.ProdutoDAO;
 import view.Principal;
 import view.TelaAdicionarProduto;
+import view.TelaControleEstoque; // IMPORTANTE: Importar a tela de estoque
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,16 +15,19 @@ public class ProdutoController extends ComponentAdapter {
     private final TelaAdicionarProduto view;
     private final ProdutoDAO model;
     private final Navegador navegador;
+    private final TelaControleEstoque telaEstoque; // IMPORTANTE: Nova variável
 
-    public ProdutoController(TelaAdicionarProduto view, ProdutoDAO model, Navegador navegador) {
+    // Construtor atualizado para receber o ecrã de estoque
+    public ProdutoController(TelaAdicionarProduto view, ProdutoDAO model, Navegador navegador, TelaControleEstoque telaEstoque) {
         this.view = view;
         this.model = model;
         this.navegador = navegador;
+        this.telaEstoque = telaEstoque;
 
         this.view.adicionarproduto(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Detecta automaticamente se é edição ou cadastro
+                // Deteta automaticamente se é edição ou cadastro
                 if (view.isEdicao()) {
                     editarProduto();
                 } else {
@@ -33,8 +37,8 @@ public class ProdutoController extends ComponentAdapter {
         });
         
         view.voltaracaoo(() -> {
-        	view.limparCampos(); // Garante que sai do modo edição ao voltar
-        	navegador.navegarPara(Principal.ESTOQUE);
+            view.limparCampos(); // Garante que sai do modo edição ao voltar
+            navegador.navegarPara(Principal.ESTOQUE);
         });
     }
 
@@ -57,6 +61,10 @@ public class ProdutoController extends ComponentAdapter {
         if (model.cadastrarProduto(novoProduto)) {
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
             view.limparCampos();
+            
+            // 👉 ATUALIZA A TABELA EM TEMPO REAL
+            telaEstoque.recarregarTabela();
+            navegador.navegarPara(Principal.ESTOQUE);
         } else {
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto. Verifique os dados.");
         }
@@ -82,9 +90,12 @@ public class ProdutoController extends ComponentAdapter {
         if (model.atualizarProduto(produtoAtualizado)) {
             JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!");
             view.limparCampos();
+            
+            // 👉 ATUALIZA A TABELA EM TEMPO REAL
+            telaEstoque.recarregarTabela();
             navegador.navegarPara(Principal.ESTOQUE);
         } else {
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar o produto. Verifique os dados.");
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar o produto.");
         }
     }
 }

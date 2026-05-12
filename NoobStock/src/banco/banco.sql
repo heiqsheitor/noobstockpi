@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS fornecedor (
     idfornecedor INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) NOT NULL,
     cnpj VARCHAR(45),
-    contato VARCHAR(45)
+    contato VARCHAR(45),
+    duracao_contrato VARCHAR(45)
 );
 
 CREATE TABLE IF NOT EXISTS categoria (

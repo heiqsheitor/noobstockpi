@@ -60,7 +60,6 @@ public class ProdutoDAO {
 
     // ── ATUALIZAR ─────────────────────────────────────────────────────────────
     public boolean atualizarProduto(Produto produto) {
-        // Busca o fornecedor_id e categoria_id pelo nome (pois a view retorna nomes, não IDs)
         String sql = "UPDATE produto "
                    + "SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
                    + "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "

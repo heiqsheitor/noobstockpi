@@ -10,15 +10,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import model.Produto;
+import model.Fornecedor;
+import model.FornecedorDAO;
 
 public class TelaAdicionarProduto extends JPanel {
 	private JTextField TFProduto;
 	private JTextField TFSKU;
 	private JTextField TFQtd;
 	private JTextField TFLocalizacao;
-	private JTextField TFFornecedor;
+	private JComboBox<String> cbFornecedor; // 👉 CAMPO ALTERADO PARA JComboBox
 	private JTextField TFCategoria;
 	private JButton btnCancelar, btnAdicionar;
 	private JLabel Voltar;
@@ -111,13 +114,34 @@ public class TelaAdicionarProduto extends JPanel {
 		add(TFLocalizacao, "cell 3 6,growx");
 		TFLocalizacao.setColumns(10);
 		
-		TFFornecedor = new JTextField();
-		add(TFFornecedor, "cell 3 7,growx");
-		TFFornecedor.setColumns(10);
+		// 👉 AQUI INICIALIZAMOS O JCOMBOBOX
+		cbFornecedor = new JComboBox<>();
+		add(cbFornecedor, "cell 3 7,growx");
 		
 		TFCategoria = new JTextField();
 		add(TFCategoria, "cell 3 8,growx");
 		TFCategoria.setColumns(10);
+
+		// 👉 EVENTO QUE ATUALIZA A LISTA DE FORNECEDORES AO ABRIR A TELA
+		this.addComponentListener(new java.awt.event.ComponentAdapter() {
+			public void componentShown(java.awt.event.ComponentEvent e) {
+				carregarComboBoxFornecedores();
+			}
+		});
+	}
+
+	// ── CARREGA OS FORNECEDORES DO BANCO PARA O COMBOBOX ──────────────────────
+	public void carregarComboBoxFornecedores() {
+		cbFornecedor.removeAllItems();
+		cbFornecedor.addItem("0 - Selecione um fornecedor..."); 
+		
+		FornecedorDAO dao = new FornecedorDAO();
+		List<Fornecedor> lista = dao.listar();
+		
+		for (Fornecedor f : lista) {
+			// Formato: "ID - Nome"
+			cbFornecedor.addItem(f.getIdfornecedor() + " - " + f.getNome());
+		}
 	}
 
 	// ── PRÉ-PREENCHE OS CAMPOS PARA EDIÇÃO ────────────────────────────────────
@@ -127,8 +151,21 @@ public class TelaAdicionarProduto extends JPanel {
 		TFSKU.setText(p.getSKU());
 		TFQtd.setText(p.getQtd());
 		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "");
-		TFFornecedor.setText(p.getFornecedor() != null ? p.getFornecedor() : "");
 		TFCategoria.setText(p.getCategoria() != null ? p.getCategoria() : "");
+		
+		// Lógica para selecionar o fornecedor correto no JComboBox
+		cbFornecedor.setSelectedIndex(0);
+		if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
+			for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
+				String item = cbFornecedor.getItemAt(i);
+				// Tenta casar o nome ou ID do fornecedor do produto com a lista
+				if (item.contains(" - " + p.getFornecedor()) || item.startsWith(p.getFornecedor() + " -")) {
+					cbFornecedor.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
+		
 		// Muda o botão para indicar que é uma edição
 		btnAdicionar.setText("Salvar alterações");
 	}
@@ -169,8 +206,15 @@ public class TelaAdicionarProduto extends JPanel {
 	    return TFLocalizacao.getText();
 	}
 
+	// 👉 AGORA O GET FORNECEDOR RETORNA O ID SELECIONADO NA COMBOBOX
 	public String getFornecedor() {
-	    return TFFornecedor.getText();
+		if (cbFornecedor.getSelectedItem() == null) return "";
+		String selecionado = cbFornecedor.getSelectedItem().toString();
+		
+		if (selecionado.startsWith("0")) return ""; 
+		
+		// Separa a string "ID - Nome" e pega só a primeira parte (o ID)
+		return selecionado.split(" - ")[0]; 
 	}
 
 	public String getCategoria() {
@@ -183,8 +227,12 @@ public class TelaAdicionarProduto extends JPanel {
 	    TFSKU.setText("");
 	    TFQtd.setText("");
 	    TFLocalizacao.setText("");
-	    TFFornecedor.setText("");
 	    TFCategoria.setText("");
+	    
+	    if (cbFornecedor.getItemCount() > 0) {
+	    	cbFornecedor.setSelectedIndex(0); // Volta para "Selecione um fornecedor..."
+	    }
+	    
 	    // Reseta o modo edição
 	    this.produtoIdEmEdicao = null;
 	    btnAdicionar.setText("Adicionar");

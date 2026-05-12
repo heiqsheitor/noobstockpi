@@ -36,7 +36,7 @@ public class Main {
 				// Inicializa os Controllers
 				new LoginController(principal.getLogin(), usuarioDAO, navegador);
 				new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
-				new ProdutoController(principal.getAdicionar(), produtoDAO, navegador);
+				new ProdutoController(principal.getAdicionar(), produtoDAO, navegador, principal.getControle());
 
 				// EstoqueController agora recebe produtoDAO e telaAdicionar
 				// para poder fazer edição e exclusão
