@@ -631,7 +631,7 @@ public class TelaDetalhesProduto extends JPanel {
 		JPanel panel_2 = new JPanel();
 
 		add(panel_2, "cell 4 8 2 3,grow");
-
+ 
 		JPanel panel_2_1 = new JPanel();
 
 		add(panel_2_1, "cell 4 11 2 3,grow");
