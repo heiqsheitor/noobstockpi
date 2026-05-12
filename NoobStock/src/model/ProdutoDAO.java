@@ -28,12 +28,11 @@ public class ProdutoDAO {
 
             stmt.setString(1, produto.getNome());
             stmt.setString(2, produto.getSKU());
-            stmt.setString(3, produto.getSKU()); // Usando SKU como número de série se não houver campo específico
+            stmt.setString(3, produto.getSKU());
             stmt.setInt   (4, Integer.parseInt(produto.getQtd()));
             stmt.setInt   (5, produto.getEstoqueMinimo());
             stmt.setString(6, produto.getLocalização());
             
-            // Tratamento para IDs que podem vir como String no modelo
             try {
                 stmt.setInt(7, Integer.parseInt(produto.getFornecedor()));
             } catch (Exception e) {
@@ -55,6 +54,47 @@ public class ProdutoDAO {
             return false;
         } catch (SQLException e) {
             System.err.println("Erro ao cadastrar produto: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ── ATUALIZAR ─────────────────────────────────────────────────────────────
+    public boolean atualizarProduto(Produto produto) {
+        // Busca o fornecedor_id e categoria_id pelo nome (pois a view retorna nomes, não IDs)
+        String sql = "UPDATE produto "
+                   + "SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
+                   + "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
+                   + "    categoria_id  = (SELECT idcategoria  FROM categoria  WHERE nome = ? LIMIT 1) "
+                   + "WHERE idproduto = ?";
+
+        try (Connection con = conectar();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setString(1, produto.getNome());
+            stmt.setString(2, produto.getSKU());
+
+            try {
+                stmt.setInt(3, Integer.parseInt(produto.getQtd()));
+            } catch (NumberFormatException e) {
+                stmt.setInt(3, 0);
+            }
+
+            stmt.setString(4, produto.getLocalização());
+            stmt.setString(5, produto.getFornecedor());   // nome do fornecedor
+            stmt.setString(6, produto.getCategoria());    // nome da categoria
+            stmt.setInt   (7, Integer.parseInt(produto.getId_produto()));
+
+            int linhasAfetadas = stmt.executeUpdate();
+            if (linhasAfetadas > 0) {
+                System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
+                return true;
+            } else {
+                System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar produto: " + e.getMessage());
             return false;
         }
     }
@@ -131,7 +171,7 @@ public class ProdutoDAO {
                                + "VALUES (?, ?, 'entrada', ?)";
 
         try (Connection con = conectar()) {
-            con.setAutoCommit(false); // transação
+            con.setAutoCommit(false);
 
             try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
                  PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
@@ -168,7 +208,6 @@ public class ProdutoDAO {
         try (Connection con = conectar()) {
             con.setAutoCommit(false);
 
-            // Verifica se há estoque suficiente antes de baixar
             try (PreparedStatement stmtV = con.prepareStatement(sqlVerifica)) {
                 stmtV.setInt(1, idProduto);
                 ResultSet rs = stmtV.executeQuery();
@@ -204,7 +243,7 @@ public class ProdutoDAO {
         }
     }
 
-    // ── AJUSTE DE INVENTÁRIO (RF13) ───────────────────────────────────────────
+    // ── AJUSTE DE INVENTÁRIO ──────────────────────────────────────────────────
     public boolean ajustarEstoque(int idProduto, int novaQtd, String motivo, int idUsuario) {
         String sqlEstoque      = "UPDATE produto SET qtdestoque = ? WHERE idproduto = ?";
         String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade, motivo) "
@@ -239,7 +278,7 @@ public class ProdutoDAO {
         }
     }
 
-    // ── VERIFICAR ALERTAS DE ESTOQUE BAIXO (RF12) ────────────────────────────
+    // ── VERIFICAR ALERTAS DE ESTOQUE BAIXO ───────────────────────────────────
     public List<Produto> listarEstoqueBaixo() {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
@@ -272,7 +311,7 @@ public class ProdutoDAO {
         return lista;
     }
 
-    // ── DELETAR 
+    // ── DELETAR ───────────────────────────────────────────────────────────────
     public boolean deletarProduto(int id) {
         String sql = "DELETE FROM produto WHERE idproduto = ?";
 

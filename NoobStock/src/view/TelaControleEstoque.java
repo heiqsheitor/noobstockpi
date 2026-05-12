@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -12,16 +11,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import controller.ComponentUtils;
@@ -31,20 +35,19 @@ import model.Produto;
 import model.ProdutoDAO;
 
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTextField;
 
 public class TelaControleEstoque extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private TelaLogin login;
 	private BufferedImage imagemOriginal;
 	private JTable table;
 	private JTextField txtPesquisar;
 	private JLabel LInicio, LControleEstoq, LFor, lblPerfil, LEntraSai;   
 	private JButton Adicionar;
+
+	// Callbacks para o controller
+	private Consumer<Produto> editarAcao;
+	private Consumer<Produto> excluirAcao;
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
@@ -66,21 +69,17 @@ public class TelaControleEstoque extends JPanel {
 		lblInicio.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/home.png")));
 		add(lblInicio, "cell 0 2,alignx center");
 
-		txtPesquisar = new JTextField(){
+		txtPesquisar = new JTextField() {
 		    @Override
 		    protected void paintComponent(Graphics g) {
 		        super.paintComponent(g);
-		        
 		        if (getText().isEmpty()) {
 		            Graphics2D g2 = (Graphics2D) g.create();
 		            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		            
 		            g2.setColor(new Color(192, 192, 192));
 		            g2.setFont(getFont());
-		            
 		            FontMetrics fm = g2.getFontMetrics();
 		            int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
-		            
 		            g2.drawString("Buscar Itens...", getInsets().left, y);
 		            g2.dispose();
 		        }
@@ -88,15 +87,6 @@ public class TelaControleEstoque extends JPanel {
 		};
 		add(txtPesquisar, "cell 4 2 3 1,grow");
 		txtPesquisar.setColumns(10);
-
-//		JLabel lblNewLabel_3 = new JLabel("");
-//		panel_1.add(lblNewLabel_3);
-//		lblNewLabel_3.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/filter (1).png")));
-//
-//		JLabel lblNewLabel_4 = new JLabel("Filtrar");
-//		panel_1.add(lblNewLabel_4);
-//		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-//		lblNewLabel_4.setForeground(new Color(128, 128, 128));
 
 		Adicionar = new JButton("Adicionar");
 		add(Adicionar, "cell 8 2,grow");
@@ -137,36 +127,44 @@ public class TelaControleEstoque extends JPanel {
 		lblNewLabel_7_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		add(lblNewLabel_7_1_1_1, "cell 8 3,alignx center,aligny center");
 		
+		// ── TABELA ────────────────────────────────────────────────────────────
 		table = new JTable();
 		table.setModel(
-					new DefaultTableModel(new Object[][] { { "0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30" }, },
-								new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" }) {
-							Class[] columnTypes = new Class[] { String.class, Object.class, Object.class, Object.class,
-									Object.class };
-
-							public Class getColumnClass(int columnIndex) {
-								return columnTypes[columnIndex];
-							}
-						});
+			new DefaultTableModel(
+				new Object[][] {},
+				new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" }
+			) {
+				Class[] columnTypes = new Class[] {
+					String.class, Object.class, Object.class, Object.class, Object.class
+				};
+				public Class getColumnClass(int columnIndex) {
+					return columnTypes[columnIndex];
+				}
+				// Torna a tabela não editável diretamente (evita edição acidental)
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			}
+		);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setRowHeight(28);
 		add(table, "cell 4 4 5 3,grow");
+
+		// ── POPUP MENU (CLIQUE DIREITO NA TABELA) ─────────────────────────────
+		configurarPopupMenu();
 
 		JLabel lblEstatis = new JLabel("");
 		lblEstatis.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/grafico.png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
-		Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-
-		String[] columnNames = { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" };
-		Object[][] data = { { "0044831576", "Mouse", "ELEC-101-BK", "Baixa", "30" }, };
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
 		JLabel lblLogo = new JLabel("");
-		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/logopng.png")));
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblLogo.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/logopng.png")));
 		add(lblLogo, "cell 1 7,growx");
@@ -174,9 +172,7 @@ public class TelaControleEstoque extends JPanel {
 		LInicio = new JLabel("Inicio");
 		LInicio.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-			}
+			public void mouseClicked(MouseEvent e) {}
 		});
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
@@ -199,8 +195,87 @@ public class TelaControleEstoque extends JPanel {
 		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
 		
 		carregarTabelaProdutos();
-
 	}
+
+	// ── CONFIGURA O POPUP DE EDITAR / EXCLUIR ─────────────────────────────────
+	private void configurarPopupMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+
+		JMenuItem itemEditar = new JMenuItem("✏️  Editar produto");
+		itemEditar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		itemEditar.addActionListener(e -> {
+			Produto selecionado = getProdutoSelecionado();
+			if (selecionado != null && editarAcao != null) {
+				editarAcao.accept(selecionado);
+			}
+		});
+
+		JMenuItem itemExcluir = new JMenuItem("🗑️  Excluir produto");
+		itemExcluir.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		itemExcluir.setForeground(new Color(180, 30, 30));
+		itemExcluir.addActionListener(e -> {
+			Produto selecionado = getProdutoSelecionado();
+			if (selecionado != null && excluirAcao != null) {
+				excluirAcao.accept(selecionado);
+			}
+		});
+
+		popupMenu.add(itemEditar);
+		popupMenu.addSeparator();
+		popupMenu.add(itemExcluir);
+
+		// Ao clicar com botão DIREITO: seleciona a linha e abre o menu
+		// Ao clicar com botão ESQUERDO: seleção normal já funciona por padrão
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int row = table.rowAtPoint(e.getPoint());
+				if (row >= 0) {
+					table.setRowSelectionInterval(row, row);
+				}
+				if (SwingUtilities.isRightMouseButton(e) && row >= 0) {
+					popupMenu.show(table, e.getX(), e.getY());
+				}
+			}
+		});
+	}
+
+	// ── RETORNA O PRODUTO DA LINHA SELECIONADA NA TABELA ─────────────────────
+	private Produto getProdutoSelecionado() {
+		int row = table.getSelectedRow();
+		if (row < 0) return null;
+
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		String id          = String.valueOf(model.getValueAt(row, 0));
+		String nome        = String.valueOf(model.getValueAt(row, 1));
+		String sku         = String.valueOf(model.getValueAt(row, 2));
+		String quantidade  = String.valueOf(model.getValueAt(row, 4));
+
+		// Busca dados completos do banco para ter localização, fornecedor e categoria
+		ProdutoDAO dao = new ProdutoDAO();
+		try {
+			Produto completo = dao.buscarPorId(Integer.parseInt(id));
+			if (completo != null) return completo;
+		} catch (NumberFormatException ignored) {}
+
+		// Fallback com os dados da tabela (sem localização/fornecedor/categoria)
+		return new Produto(id, sku, nome, quantidade, "", "", "");
+	}
+
+	// ── RECARREGA A TABELA DO BANCO ───────────────────────────────────────────
+	public void recarregarTabela() {
+		carregarTabelaProdutos();
+	}
+
+	// ── SETTERS DE CALLBACKS ──────────────────────────────────────────────────
+	public void setEditarAcao(Consumer<Produto> acao) {
+		this.editarAcao = acao;
+	}
+
+	public void setExcluirAcao(Consumer<Produto> acao) {
+		this.excluirAcao = acao;
+	}
+
 	public void setPerfilAcao(Runnable acao) {
         ComponentUtils.transformarEmLink(this.lblPerfil, acao);
     }
@@ -220,55 +295,40 @@ public class TelaControleEstoque extends JPanel {
     public void setAdicionar(Runnable acao) {
     	Adicionar.addActionListener(e -> acao.run());
     }
-    
 
 	private void redimensionarImagem(int largura, int altura) {
 		largura /= 4;
 		altura /= 4;
-		System.out.println(largura);
-		if (largura <= 0 || altura <= 0)
-			return;
-
-		Image scaled = imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
-
+		if (largura <= 0 || altura <= 0) return;
+		imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
 	}
 
 	public void ajustarFonte(int largura, int altura) {
 		// TODO Auto-generated method stub
-
 	}
 	
 	private void carregarTabelaProdutos() {
-	    // Pega o modelo da sua JTable
 	    DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-	    
-	    // Limpa a tabela para não duplicar dados caso seja atualizada
-	    modelo.setRowCount(0); 
+	    modelo.setRowCount(0);
 
-	    // Instancia o seu DAO e busca a lista
 	    ProdutoDAO dao = new ProdutoDAO();
 	    List<Produto> listaProdutos = dao.listarProdutos();
 
-	    // Percorre a lista e adiciona linha por linha
 	    for (Produto p : listaProdutos) {
-	        
-	        // Lógica simples para a coluna "Disponibilidade" baseada na quantidade
 	        int qtd = 0;
 	        try {
-	            // Ajuste "getQtd()" para o nome exato do getter na sua classe Produto
 	            qtd = Integer.parseInt(p.getQtd()); 
 	        } catch (NumberFormatException e) {
 	            qtd = 0;
 	        }
 	        String disponibilidade = (qtd > 0) ? "Alta" : "Falta";
 
-	        // Adiciona a linha na ordem exata das suas colunas: "ID", "Produto", "SKU", "Disponibilidade", "Quantidade"
 	        modelo.addRow(new Object[]{
-	            p.getId_produto(),       // Substitua pelo seu getter correto de ID, ex: p.getIdProduto()
-	            p.getNome(),     // Substitua pelo seu getter correto de Nome
-	            p.getSKU(),      // Substitua pelo seu getter correto de SKU
+	            p.getId_produto(),
+	            p.getNome(),
+	            p.getSKU(),
 	            disponibilidade,
-	            p.getQtd()       // Substitua pelo seu getter correto de Quantidade
+	            p.getQtd()
 	        });
 	    }
 	}
