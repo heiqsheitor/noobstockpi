@@ -35,6 +35,7 @@ import model.Produto;
 import model.ProdutoDAO;
 
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JScrollPane;
 
 public class TelaControleEstoque extends JPanel {
 
@@ -51,7 +52,7 @@ public class TelaControleEstoque extends JPanel {
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow 12][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
+		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
@@ -111,45 +112,40 @@ public class TelaControleEstoque extends JPanel {
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
 		
-		JLabel lblNewLabel_7 = new JLabel("SKU");
-		lblNewLabel_7.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7, "cell 5 3,alignx center,aligny center");
-		
-		JLabel lblNewLabel_7_1 = new JLabel("Disponibilidade");
-		lblNewLabel_7_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7_1, "cell 6 3,alignx center,aligny center");
-		
-		JLabel lblNewLabel_7_1_1 = new JLabel("Quantidade");
-		lblNewLabel_7_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7_1_1, "cell 7 3,alignx center,aligny center");
-		
-		JLabel lblNewLabel_7_1_1_1 = new JLabel("Data");
-		lblNewLabel_7_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(lblNewLabel_7_1_1_1, "cell 8 3,alignx center,aligny center");
-		
 		// ── TABELA ────────────────────────────────────────────────────────────
-		table = new JTable();
-		table.setModel(
-			new DefaultTableModel(
-				new Object[][] {},
-				new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade" }
-			) {
-				Class[] columnTypes = new Class[] {
-					String.class, Object.class, Object.class, Object.class, Object.class
-				};
-				public Class getColumnClass(int columnIndex) {
-					return columnTypes[columnIndex];
-				}
-				// Torna a tabela não editável diretamente (evita edição acidental)
-				@Override
-				public boolean isCellEditable(int row, int column) {
-					return false;
-				}
-			}
-		);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setRowHeight(28);
-		add(table, "cell 4 4 5 3,grow");
+		// ── TABELA ────────────────────────────────────────────────────────────
+				table = new JTable();
+				table.setModel(
+					new DefaultTableModel(
+						new Object[][] {},
+						new String[] { "ID", "Produto", "SKU", "Disponibilidade", "Quantidade", "Data" } // 👉 ADICIONADO "Data"
+					) {
+						Class[] columnTypes = new Class[] {
+							String.class, Object.class, Object.class, Object.class, Object.class, Object.class
+						};
+						public Class getColumnClass(int columnIndex) {
+							return columnTypes[columnIndex];
+						}
+						@Override
+						public boolean isCellEditable(int row, int column) {
+							return false;
+						}
+					}
+				);
+				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				table.setRowHeight(28);
+
+				// 👉 O SEGREDO AQUI: Esconde a coluna ID visualmente para alinhar os textos!
+				table.getColumnModel().getColumn(0).setMinWidth(0);
+				table.getColumnModel().getColumn(0).setMaxWidth(0);
+				table.getColumnModel().getColumn(0).setWidth(0);
+		        table.getColumnModel().getColumn(0).setPreferredWidth(0);
+		
+		JScrollPane scrollPane = new JScrollPane(table);
+		add(scrollPane, "cell 4 4 4 3,grow");
+
+//				add(table, "cell 4 4 5 3,grow");
+//		add(table, "cell 4 4 5 3,grow");
 
 		// ── POPUP MENU (CLIQUE DIREITO NA TABELA) ─────────────────────────────
 		configurarPopupMenu();
@@ -163,6 +159,8 @@ public class TelaControleEstoque extends JPanel {
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
+		
+		
 
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -188,11 +186,6 @@ public class TelaControleEstoque extends JPanel {
 		LEntraSai = new JLabel("Entrada e saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LEntraSai, "cell 1 5,alignx left,aligny center");
-		
-		JLabel lblNewLabel_5 = new JLabel("Produto");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblNewLabel_5, "cell 4 3,growx,aligny center");
 		
 		carregarTabelaProdutos();
 	}
@@ -324,11 +317,12 @@ public class TelaControleEstoque extends JPanel {
 	        String disponibilidade = (qtd > 0) ? "Alta" : "Falta";
 
 	        modelo.addRow(new Object[]{
-	            p.getId_produto(),
-	            p.getNome(),
-	            p.getSKU(),
-	            disponibilidade,
-	            p.getQtd()
+	            p.getId_produto(),       // 0: ID (Agora está invisível)
+	            p.getNome(),             // 1: Alinhado sob Produto
+	            p.getSKU(),              // 2: Alinhado sob SKU
+	            disponibilidade,         // 3: Alinhado sob Disponibilidade
+	            p.getQtd(),              // 4: Alinhado sob Quantidade
+	            "-"                      // 5: Alinhado sob Data
 	        });
 	    }
 	}

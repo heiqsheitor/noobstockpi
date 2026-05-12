@@ -7,20 +7,11 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.net.URL;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Principal extends JFrame {
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private CardLayout cardLayout;
-	private TelaLogin login;
-	private TelaCadastro cadastro;
-	private TelaPerfil perfil;
-	private TelaRedefinirSenha redefinirSenha;
-	private TelaControleEstoque controle;
-	private TelaDeInicio inicio;
-	private TelaAdicionarProduto adicionar;
 
 	private static final long serialVersionUID = 1L;
 
