@@ -22,13 +22,32 @@ public class Principal extends JFrame {
 	private TelaDeInicio inicio;
 	private TelaAdicionarProduto adicionar;
 
+	private static final long serialVersionUID = 1L;
+
+	private JPanel contentPane;
+	private CardLayout cardLayout;
+
+	// Telas
+	private TelaLogin login;
+	private TelaCadastro cadastro;
+	private TelaPerfil perfil;
+	private TelaRedefinirSenha redefinirSenha;
+	private TelaControleEstoque controle;
+	private TelaDeInicio inicio; // Adicionada Tela de Início
+	private TelaAdicionarProduto adicionar;
+	private TelaFornecedor fornecedor;
+	private TelaAdicionarFornecedor adicionarfor;
+
+	// Constantes de navegação
 	public static final String LOGIN = "LOGIN";
 	public static final String CADASTRO = "CADASTRO";
 	public static final String PERFIL = "PERFIL";
 	public static final String ESTOQUE = "ESTOQUE";
 	public static final String REDEFINIR = "REDEFINIR";
-	public static final String INICIO = "INICIO";
+	public static final String INICIO = "INICIO"; // Adicionada constante INICIO
 	public static final String ADICIONAR = "ADICIONAR";
+	public static final String FORNECEDOR = "FORNECEDOR";
+	public static final String ADICIONARFOR = "ADICIONARFOR";
 
 	public Principal() {
 		setTitle("NoobStock");
@@ -41,12 +60,23 @@ public class Principal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 
+		// CardLayout
 		cardLayout = new CardLayout();
 		contentPane = new JPanel(cardLayout);
 		contentPane.setPreferredSize(new Dimension(816, 522));
 
 		setContentPane(contentPane);
 
+		// Inicializa telas
+		
+			adicionarfor = new TelaAdicionarFornecedor();
+		
+		try {
+			fornecedor = new TelaFornecedor();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		try {
 			login = new TelaLogin();
 		} catch (IOException e) {
@@ -57,6 +87,7 @@ public class Principal extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		perfil = new TelaPerfil();
 		redefinirSenha = new TelaRedefinirSenha();
 		try {
@@ -65,16 +96,18 @@ public class Principal extends JFrame {
 			e.printStackTrace();
 		}
 		try {
-			inicio = new TelaDeInicio();
+			inicio = new TelaDeInicio(); // Inicializa Tela de Início
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		try {
 			adicionar = new TelaAdicionarProduto();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		// Adiciona telas
 		if (login != null)
 			contentPane.add(login, LOGIN);
 		if (cadastro != null)
@@ -86,10 +119,15 @@ public class Principal extends JFrame {
 		if (controle != null)
 			contentPane.add(controle, ESTOQUE);
 		if (inicio != null)
-			contentPane.add(inicio, INICIO);
+			contentPane.add(inicio, INICIO);// Adiciona ao layout
 		if (adicionar != null)
 			contentPane.add(adicionar, ADICIONAR);
+		if (fornecedor != null)
+			contentPane.add(fornecedor, FORNECEDOR);
+		if(adicionarfor != null)
+			contentPane.add(adicionarfor, ADICIONARFOR);
 
+		// Responsividade
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -98,10 +136,12 @@ public class Principal extends JFrame {
 		});
 	}
 
+	// Navegação
 	public void mostrarTela(String nome) {
 		cardLayout.show(contentPane, nome);
 	}
 
+	// Responsividade
 	private void ajustarFonte() {
 		int largura = getWidth();
 		int altura = getHeight();
@@ -141,7 +181,16 @@ public class Principal extends JFrame {
 	public TelaDeInicio getInicio() {
 		return inicio;
 	}
+
 	public TelaAdicionarProduto getAdicionar() {
 		return adicionar;
+	}
+	
+	public TelaFornecedor getFornecedor() {
+		return fornecedor;
+	}
+	
+	public TelaAdicionarFornecedor getAdicionarFor() {
+		return adicionarfor;
 	}
 }

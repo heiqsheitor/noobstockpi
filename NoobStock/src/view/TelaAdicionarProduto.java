@@ -2,11 +2,16 @@ package view;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
+
+import controller.ComponentUtils;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import model.Produto;
 
 public class TelaAdicionarProduto extends JPanel {
 	private JTextField TFProduto;
@@ -16,11 +21,16 @@ public class TelaAdicionarProduto extends JPanel {
 	private JTextField TFFornecedor;
 	private JTextField TFCategoria;
 	private JButton btnCancelar, btnAdicionar;
+	private JLabel Voltar;
+
+	// Armazena o ID do produto em edição (null = modo cadastro)
+	private String produtoIdEmEdicao = null;
+
 	public TelaAdicionarProduto() {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[grow 1][][][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][]"));
 		
-		JLabel Voltar = new JLabel("");
+		Voltar = new JLabel("");
 		Voltar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -109,10 +119,40 @@ public class TelaAdicionarProduto extends JPanel {
 		add(TFCategoria, "cell 3 8,growx");
 		TFCategoria.setColumns(10);
 	}
+
+	// ── PRÉ-PREENCHE OS CAMPOS PARA EDIÇÃO ────────────────────────────────────
+	public void preencherParaEdicao(Produto p) {
+		this.produtoIdEmEdicao = p.getId_produto();
+		TFProduto.setText(p.getNome());
+		TFSKU.setText(p.getSKU());
+		TFQtd.setText(p.getQtd());
+		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "");
+		TFFornecedor.setText(p.getFornecedor() != null ? p.getFornecedor() : "");
+		TFCategoria.setText(p.getCategoria() != null ? p.getCategoria() : "");
+		// Muda o botão para indicar que é uma edição
+		btnAdicionar.setText("Salvar alterações");
+	}
+
+	// ── INDICA SE ESTÁ EM MODO EDIÇÃO ─────────────────────────────────────────
+	public boolean isEdicao() {
+		return produtoIdEmEdicao != null;
+	}
+
+	// ── RETORNA O ID DO PRODUTO EM EDIÇÃO ─────────────────────────────────────
+	public String getProdutoIdEmEdicao() {
+		return produtoIdEmEdicao;
+	}
+
+	// ── AÇÕES ─────────────────────────────────────────────────────────────────
+	public void voltaracaoo(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.Voltar, acao);
+    }
+	
 	public void adicionarproduto(ActionListener actionListener) {
 		this.btnAdicionar.addActionListener(actionListener);
 	}
 
+	// ── GETTERS DOS CAMPOS ────────────────────────────────────────────────────
 	public String getNomeProduto() {
 	    return TFProduto.getText();
 	}
@@ -137,6 +177,7 @@ public class TelaAdicionarProduto extends JPanel {
 	    return TFCategoria.getText();
 	}
 
+	// ── LIMPA OS CAMPOS E RESETA O MODO EDIÇÃO ────────────────────────────────
 	public void limparCampos() {
 	    TFProduto.setText("");
 	    TFSKU.setText("");
@@ -144,5 +185,8 @@ public class TelaAdicionarProduto extends JPanel {
 	    TFLocalizacao.setText("");
 	    TFFornecedor.setText("");
 	    TFCategoria.setText("");
+	    // Reseta o modo edição
+	    this.produtoIdEmEdicao = null;
+	    btnAdicionar.setText("Adicionar");
 	}
 }

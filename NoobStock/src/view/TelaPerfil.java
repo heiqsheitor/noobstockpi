@@ -6,6 +6,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import controller.ComponentUtils;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +37,7 @@ public class TelaPerfil extends JPanel {
 	private JButton btnAtualizar;
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
+	private JLabel LInicio, LControleEstoq, lblPerfil, LFor;
 	
 	/**
 	 * Create the panel.
@@ -48,7 +50,7 @@ public class TelaPerfil extends JPanel {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][][][][][grow]"));
 		
-		JLabel lblPerfil = new JLabel("");
+		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
 		add(lblPerfil, "cell 0 0 2 1,alignx center");
 		
@@ -70,7 +72,7 @@ public class TelaPerfil extends JPanel {
 		separatorVer.setForeground(Color.BLACK);
 		add(separatorVer, "cell 2 0 1 11,gapx 2 2,growy");
 		
-		JLabel LInicio = new JLabel("Inicio");
+		LInicio = new JLabel("Inicio");
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 		
@@ -82,7 +84,7 @@ public class TelaPerfil extends JPanel {
 		lblNewLabel_2.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/home.png")));
 		add(lblNewLabel_2, "flowx,cell 0 2,alignx center");
 		
-		JLabel LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq = new JLabel("Controle de estoque");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 		
@@ -100,9 +102,9 @@ public class TelaPerfil extends JPanel {
 		tFPrimeiroNome = new JTextField();
 		add(tFPrimeiroNome, "cell 6 3 2 1,grow");
 		
-		JLabel LEstatis = new JLabel("Estatísticas");
-		LEstatis.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		add(LEstatis, "cell 1 4");
+		LFor = new JLabel("Fornecedores");
+		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		add(LFor, "cell 1 4");
 		
 		JLabel lblSegundoNome = new JLabel("Segundo Nome:");
 		add(lblSegundoNome, "cell 5 4,alignx trailing");
@@ -216,7 +218,22 @@ public class TelaPerfil extends JPanel {
 		});
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
 	}
+	public void setFornecedores(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LFor, acao);
+	}
 	
+	public void setPerfilAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.lblPerfil, acao);
+    }
+
+	public void setInicioAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LInicio, acao);
+    }
+
+    public void setControleEstoqueAcao(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
+    }
+    	
 	
 	public void adicionarDeslogar(ActionListener listener) {
 		btnDeslogar.addActionListener(listener);
