@@ -60,12 +60,19 @@ CREATE TABLE IF NOT EXISTS venda (
     FOREIGN KEY (usuario_idusuario) REFERENCES usuarios(id_usuario)
 );
 
-CREATE TABLE IF NOT EXISTS itemvenda (
-    venda_idvenda INT,
-    produto_idproduto INT,
-    qtdvendida INT,
-    precounitario DOUBLE,
-    PRIMARY KEY (venda_idvenda, produto_idproduto),
-    FOREIGN KEY (venda_idvenda) REFERENCES venda(idvenda),
-    FOREIGN KEY (produto_idproduto) REFERENCES produto(idproduto)
+CREATE TABLE IF NOT EXISTS saida_estoque (
+    idsaida INT PRIMARY KEY AUTO_INCREMENT,
+    datahora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    responsavel VARCHAR(100) NOT NULL,
+    observacao VARCHAR(255),
+    status VARCHAR(45) DEFAULT 'Concluída'
+);
+
+CREATE TABLE IF NOT EXISTS item_saida (
+    iditem INT PRIMARY KEY AUTO_INCREMENT,
+    saida_id INT,
+    produto_id INT,
+    quantidade INT NOT NULL,
+    FOREIGN KEY (saida_id) REFERENCES saida_estoque(idsaida),
+    FOREIGN KEY (produto_id) REFERENCES produto(idproduto)
 );
