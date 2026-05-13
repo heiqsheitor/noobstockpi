@@ -133,11 +133,6 @@ public class TelaControleEstoque extends JPanel {
 				        }
 				    }
 				);
-
-				// --- Linha ~137: Atualize o rótulo visual que fica acima da tabela ---
-				JLabel lblNewLabel_7_1_1 = new JLabel("Fornecedor"); // Alterado de "Disponibilidade" para "Fornecedor"
-				lblNewLabel_7_1_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-				add(lblNewLabel_7_1_1, "cell 7 3,alignx center,aligny center");
 				table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				table.setRowHeight(28);
 

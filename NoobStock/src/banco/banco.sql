@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS produto (
     categoria_id INT,  
     preco DOUBLE,
     descricao VARCHAR(45),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (fornecedor_id) REFERENCES fornecedor(idfornecedor),
     FOREIGN KEY (categoria_id) REFERENCES categoria(idcategoria)
 );

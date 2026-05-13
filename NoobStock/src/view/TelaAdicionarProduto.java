@@ -146,6 +146,11 @@ public class TelaAdicionarProduto extends JPanel {
 
 	// ── PRÉ-PREENCHE OS CAMPOS PARA EDIÇÃO ────────────────────────────────────
 	public void preencherParaEdicao(Produto p) {
+		// Garante que o ComboBox está carregado mesmo que componentShown ainda não tenha disparado
+		if (cbFornecedor.getItemCount() == 0) {
+			carregarComboBoxFornecedores();
+		}
+
 		this.produtoIdEmEdicao = p.getId_produto();
 		TFProduto.setText(p.getNome());
 		TFSKU.setText(p.getSKU());

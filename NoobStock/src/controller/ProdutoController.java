@@ -56,7 +56,7 @@ public class ProdutoController extends ComponentAdapter {
             return;
         }
 
-        Produto novoProduto = new Produto(null, sku, nomeProduto, qtd, localizacao, fornecedor, categoria);
+        Produto novoProduto = new Produto(null, sku, nomeProduto, qtd, 0, localizacao, fornecedor, categoria, null);
 
         if (model.cadastrarProduto(novoProduto)) {
             JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
@@ -85,7 +85,7 @@ public class ProdutoController extends ComponentAdapter {
             return;
         }
 
-        Produto produtoAtualizado = new Produto(id, sku, nomeProduto, qtd, localizacao, fornecedor, categoria);
+        Produto produtoAtualizado = new Produto(id, sku, nomeProduto, qtd, 0, localizacao, fornecedor, categoria, null);
 
         if (model.atualizarProduto(produtoAtualizado)) {
             JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!");

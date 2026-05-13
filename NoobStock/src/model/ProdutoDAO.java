@@ -62,8 +62,8 @@ public class ProdutoDAO {
     public boolean atualizarProduto(Produto produto) {
         String sql = "UPDATE produto "
                    + "SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
-                   + "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
-                   + "    categoria_id  = (SELECT idcategoria  FROM categoria  WHERE nome = ? LIMIT 1) "
+                   + "    fornecedor_id = ?, "
+                   + "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
                    + "WHERE idproduto = ?";
 
         try (Connection con = conectar();
@@ -79,8 +79,15 @@ public class ProdutoDAO {
             }
 
             stmt.setString(4, produto.getLocalização());
-            stmt.setString(5, produto.getFornecedor());   // nome do fornecedor
-            stmt.setString(6, produto.getCategoria());    // nome da categoria
+
+            // fornecedor vem como ID numérico do ComboBox
+            try {
+                stmt.setInt(5, Integer.parseInt(produto.getFornecedor()));
+            } catch (Exception e) {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            }
+
+            stmt.setString(6, produto.getCategoria());
             stmt.setInt   (7, Integer.parseInt(produto.getId_produto()));
 
             int linhasAfetadas = stmt.executeUpdate();
@@ -96,38 +103,6 @@ public class ProdutoDAO {
             System.err.println("Erro ao atualizar produto: " + e.getMessage());
             return false;
         }
-    }
-
-    // ── LISTAR TODOS ──────────────────────────────────────────────────────────
-    public List<Produto> listarProdutos() {
-        List<Produto> lista = new ArrayList<>();
-        String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
-                   + "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria "
-                   + "FROM produto p "
-                   + "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
-                   + "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria";
-
-        try (Connection con = conectar();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Produto p = new Produto(
-                    String.valueOf(rs.getInt("idproduto")),
-                    rs.getString("SKU"),
-                    rs.getString("nome"),
-                    String.valueOf(rs.getInt("qtdestoque")),
-                    rs.getString("localizacao"),
-                    rs.getString("fornecedor"),
-                    rs.getString("categoria")
-                );
-                lista.add(p);
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao listar produtos: " + e.getMessage());
-        }
-        return lista;
     }
 
     // ── BUSCAR POR ID ─────────────────────────────────────────────────────────
@@ -150,9 +125,11 @@ public class ProdutoDAO {
                         rs.getString("SKU"),
                         rs.getString("nome"),
                         String.valueOf(rs.getInt("qtdestoque")),
+                        rs.getInt("estoque_minimo"),
                         rs.getString("localizacao"),
                         rs.getString("fornecedor"),
-                        rs.getString("categoria")
+                        rs.getString("categoria"),
+                        null
                     );
                 }
             }
@@ -361,9 +338,11 @@ public class ProdutoDAO {
                     rs.getString("SKU"),
                     rs.getString("nome"),
                     String.valueOf(rs.getInt("qtdestoque")),
+                    rs.getInt("estoque_minimo"),
                     rs.getString("localizacao"),
                     rs.getString("fornecedor"),
-                    rs.getString("categoria")
+                    rs.getString("categoria"),
+                    null
                 );
                 lista.add(p);
             }

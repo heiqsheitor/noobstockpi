@@ -1,5 +1,4 @@
-/model/
-/controller/
-/main/
-/view/
 /banco/
+/controller/
+/model/
+/view/
