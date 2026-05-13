@@ -34,7 +34,7 @@ public class TelaDetalhesProduto extends JPanel {
 	public TelaDetalhesProduto() {
 
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow][grow][][grow][grow 3][][grow][]", "[][][][grow][][][][][grow][grow 1][grow 1][grow 1][grow][grow][]"));
+		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow][grow][][grow][grow 3][][grow][]", "[][][grow][grow][][][][][grow][grow 1][grow 1][grow 1][grow][grow][]"));
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/image8.png")));
@@ -85,13 +85,13 @@ public class TelaDetalhesProduto extends JPanel {
 		lblNewLabel_13.setFont(new Font("Tahoma", Font.PLAIN, 15));
 
 		panel.add(lblNewLabel_13, "cell 0 0,alignx left,growy");
-		
-				JLabel lblNewLabel_14_3 = new JLabel("Categoria");
-				
-						lblNewLabel_14_3.setForeground(Color.GRAY);
-						
-								panel.add(lblNewLabel_14_3, "cell 5 0,alignx center,aligny center");
-		
+
+		JLabel lblNewLabel_14_3 = new JLabel("Categoria");
+
+		lblNewLabel_14_3.setForeground(Color.GRAY);
+
+		panel.add(lblNewLabel_14_3, "cell 5 0,alignx center,aligny center");
+
 		JLabel lblNewLabel_17_2 = new JLabel("Periféricos");
 		panel.add(lblNewLabel_17_2, "cell 5 1,alignx center,aligny center");
 
@@ -133,53 +133,53 @@ public class TelaDetalhesProduto extends JPanel {
 		JLabel lblNewLabel_17 = new JLabel("TechSupply Ltda");
 
 		panel_1.add(lblNewLabel_17, "cell 0 1,growx,aligny top");
-				
-						JPanel panel_1_1 = new JPanel();
-						
-								panel_1_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-								
-										panel_1_1.setForeground(Color.BLACK);
-										
-												panel_1_1.setBackground(new Color(243, 243, 243));
-												
-														panel.add(panel_1_1, "cell 1 4 3 1,grow");
-														panel_1_1.setLayout(new MigLayout("", "[][129px]", "[14px][14px]"));
-																								
-																										JLabel lblNewLabel_14_1_1 = new JLabel("Última atualização");
-																										
-																												lblNewLabel_14_1_1.setForeground(Color.GRAY);
-																												
-																														panel_1_1.add(lblNewLabel_14_1_1, "cell 0 0,growx,aligny top");
-																						
-																								JLabel lblNewLabel_18 = new JLabel("");
-																								
-																										lblNewLabel_18.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/calendario.png")));
-																										
-																												panel_1_1.add(lblNewLabel_18, "flowx,cell 0 1,alignx left,growy");
-																								
-																										JLabel lblNewLabel_17_1 = new JLabel("Dez 5");
-																										
-																												panel_1_1.add(lblNewLabel_17_1, "cell 0 1,growx,aligny top");
-		
-				JPanel panel_1_2 = new JPanel();
-				
-						panel_1_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-						
-								panel_1_2.setForeground(Color.BLACK);
-								
-										panel_1_2.setBackground(new Color(243, 243, 243));
-										
-												panel.add(panel_1_2, "cell 5 4,grow");
-												panel_1_2.setLayout(new MigLayout("", "[103px]", "[14px][14px]"));
-												
-														JLabel lblNewLabel_14_1_2 = new JLabel("Quantidade em tempo real");
-														
-																lblNewLabel_14_1_2.setForeground(Color.GRAY);
-																
-																		panel_1_2.add(lblNewLabel_14_1_2, "cell 0 0,growx,aligny top");
-																		
-																		JLabel lblNewLabel_17_1_1 = new JLabel("250");
-																		panel_1_2.add(lblNewLabel_17_1_1, "cell 0 1");
+
+		JPanel panel_1_1 = new JPanel();
+
+		panel_1_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+
+		panel_1_1.setForeground(Color.BLACK);
+
+		panel_1_1.setBackground(new Color(243, 243, 243));
+
+		panel.add(panel_1_1, "cell 1 4 3 1,grow");
+		panel_1_1.setLayout(new MigLayout("", "[][129px]", "[14px][14px]"));
+
+		JLabel lblNewLabel_14_1_1 = new JLabel("Última atualização");
+
+		lblNewLabel_14_1_1.setForeground(Color.GRAY);
+
+		panel_1_1.add(lblNewLabel_14_1_1, "cell 0 0,growx,aligny top");
+
+		JLabel lblNewLabel_18 = new JLabel("");
+
+		lblNewLabel_18.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/calendario.png")));
+
+		panel_1_1.add(lblNewLabel_18, "flowx,cell 0 1,alignx left,growy");
+
+		JLabel lblNewLabel_17_1 = new JLabel("Dez 5");
+
+		panel_1_1.add(lblNewLabel_17_1, "cell 0 1,growx,aligny top");
+
+		JPanel panel_1_2 = new JPanel();
+
+		panel_1_2.setBorder(new LineBorder(new Color(0, 0, 0)));
+
+		panel_1_2.setForeground(Color.BLACK);
+
+		panel_1_2.setBackground(new Color(243, 243, 243));
+
+		panel.add(panel_1_2, "cell 5 4,grow");
+		panel_1_2.setLayout(new MigLayout("", "[103px]", "[14px][14px]"));
+
+		JLabel lblNewLabel_14_1_2 = new JLabel("Quantidade em tempo real");
+
+		lblNewLabel_14_1_2.setForeground(Color.GRAY);
+
+		panel_1_2.add(lblNewLabel_14_1_2, "cell 0 0,growx,aligny top");
+
+		JLabel lblNewLabel_17_1_1 = new JLabel("250");
+		panel_1_2.add(lblNewLabel_17_1_1, "cell 0 1");
 
 		JLabel lblNewLabel_4 = new JLabel("");
 
@@ -227,8 +227,9 @@ public class TelaDetalhesProduto extends JPanel {
 
 		panel_2.setBackground(new Color(255, 255, 255));
 
-		add(panel_2, "cell 4 8 2 7,grow");
-		panel_2.setLayout(new MigLayout("", "[20px][6px][87px][87px][87px]", "[14px][20px][2px][20px][][2px][][][14px][][][][][][][][][]"));
+		add(panel_2, "cell 4 8 2 7,growx, aligny top");
+		panel_2.setLayout(new MigLayout("", "[20px][6px][87px][87px][87px]",
+				"[14px][20px][2px][20px][][2px][][][14px][][][][][][][][][]"));
 
 		JLabel lblNewLabel_13_1 = new JLabel("Localização no Estoque");
 
@@ -241,62 +242,62 @@ public class TelaDetalhesProduto extends JPanel {
 		lblNewLabel_20.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/loc.png")));
 
 		panel_2.add(lblNewLabel_20, "cell 0 1,alignx left,aligny top");
-		
-				JLabel lblNewLabel_14_2 = new JLabel("Armazém:");
-				
-						lblNewLabel_14_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-						
-								lblNewLabel_14_2.setForeground(Color.GRAY);
-								
-										panel_2.add(lblNewLabel_14_2, "cell 2 3,growx,aligny bottom");
-				
-						JLabel lblNewLabel_14_2_3 = new JLabel("Armazem A");
-						
-								lblNewLabel_14_2_3.setForeground(new Color(0, 0, 0));
-								
-										lblNewLabel_14_2_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
-										
-												panel_2.add(lblNewLabel_14_2_3, "cell 4 3,growx,aligny bottom");
-		
-				JSeparator separator = new JSeparator();
-				
-						panel_2.add(separator, "cell 0 7 5 1,growx,aligny top");
-						
-								JLabel lblNewLabel_14_2_1 = new JLabel("Armazém:");
-								
-										lblNewLabel_14_2_1.setForeground(Color.GRAY);
-										
-												lblNewLabel_14_2_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-												
-														panel_2.add(lblNewLabel_14_2_1, "cell 2 10,growx,aligny center");
-						
-								JLabel lblNewLabel_14_2_3_1 = new JLabel("Corredor 3");
-								
-										lblNewLabel_14_2_3_1.setForeground(Color.BLACK);
-										
-												lblNewLabel_14_2_3_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-												
-														panel_2.add(lblNewLabel_14_2_3_1, "cell 4 10,grow");
-				
-						JSeparator separator_2 = new JSeparator();
-						
-								panel_2.add(separator_2, "cell 0 13 5 1,growx,aligny top");
-												
-														JLabel lblNewLabel_14_2_2 = new JLabel("Armazém:");
-														
-																lblNewLabel_14_2_2.setForeground(Color.GRAY);
-																
-																		lblNewLabel_14_2_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-																		
-																				panel_2.add(lblNewLabel_14_2_2, "cell 2 16,grow");
-																		
-																				JLabel lblNewLabel_14_2_3_2 = new JLabel("Prateleira 12");
-																				
-																						lblNewLabel_14_2_3_2.setForeground(Color.BLACK);
-																						
-																								lblNewLabel_14_2_3_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-																								
-																										panel_2.add(lblNewLabel_14_2_3_2, "cell 4 16,grow");
+
+		JLabel lblNewLabel_14_2 = new JLabel("Armazém:");
+
+		lblNewLabel_14_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+		lblNewLabel_14_2.setForeground(Color.GRAY);
+
+		panel_2.add(lblNewLabel_14_2, "cell 2 3,growx,aligny bottom");
+
+		JLabel lblNewLabel_14_2_3 = new JLabel("Armazem A");
+
+		lblNewLabel_14_2_3.setForeground(new Color(0, 0, 0));
+
+		lblNewLabel_14_2_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+		panel_2.add(lblNewLabel_14_2_3, "cell 4 3,growx,aligny bottom");
+
+		JSeparator separator = new JSeparator();
+
+		panel_2.add(separator, "cell 0 7 5 1,growx,aligny top");
+
+		JLabel lblNewLabel_14_2_1 = new JLabel("Armazém:");
+
+		lblNewLabel_14_2_1.setForeground(Color.GRAY);
+
+		lblNewLabel_14_2_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+		panel_2.add(lblNewLabel_14_2_1, "cell 2 10,growx,aligny center");
+
+		JLabel lblNewLabel_14_2_3_1 = new JLabel("Corredor 3");
+
+		lblNewLabel_14_2_3_1.setForeground(Color.BLACK);
+
+		lblNewLabel_14_2_3_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+		panel_2.add(lblNewLabel_14_2_3_1, "cell 4 10,grow");
+
+		JSeparator separator_2 = new JSeparator();
+
+		panel_2.add(separator_2, "cell 0 13 5 1,growx,aligny top");
+
+		JLabel lblNewLabel_14_2_2 = new JLabel("Armazém:");
+
+		lblNewLabel_14_2_2.setForeground(Color.GRAY);
+
+		lblNewLabel_14_2_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+		panel_2.add(lblNewLabel_14_2_2, "cell 2 16,grow");
+
+		JLabel lblNewLabel_14_2_3_2 = new JLabel("Prateleira 12");
+
+		lblNewLabel_14_2_3_2.setForeground(Color.BLACK);
+
+		lblNewLabel_14_2_3_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
+
+		panel_2.add(lblNewLabel_14_2_3_2, "cell 4 16,growx, aligny top");
 
 		JPanel panel_2_1_1 = new JPanel();
 
@@ -304,8 +305,9 @@ public class TelaDetalhesProduto extends JPanel {
 
 		panel_2_1_1.setBackground(new Color(255, 255, 255));
 
-		add(panel_2_1_1, "cell 7 8 5 7,grow");
-		panel_2_1_1.setLayout(new MigLayout("", "[40px][10px][125px][18px][75px]", "[21px][17px][23px][2px][25px][1px][14px][2px][28px][1px][14px]"));
+		add(panel_2_1_1, "cell 7 8 4 7,growx,aligny top");
+		panel_2_1_1.setLayout(new MigLayout("", "[40px][10px][125px][18px][75px]",
+				"[21px][17px][23px][2px][25px][1px][14px][2px][28px][1px][14px]"));
 
 		JLabel lblNewLabel_13_1_2 = new JLabel("Histórico de Movimentações");
 
@@ -389,16 +391,16 @@ public class TelaDetalhesProduto extends JPanel {
 
 		JButton btnNewButton = new JButton("Detalhes");
 		panel_2_1_1.add(btnNewButton, "cell 4 0,alignx left,growy");
-		
+
 		JLabel lblNewLabel_26 = new JLabel("");
 		add(lblNewLabel_26, "cell 1 12");
- 
+
 		JLabel lblNewLabel_10 = new JLabel("");
 
 		lblNewLabel_10.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/LOGO1.png")));
 
 		add(lblNewLabel_10, "cell 0 14");
- 
+
 	}
 
 	/**
@@ -631,7 +633,7 @@ public class TelaDetalhesProduto extends JPanel {
 		JPanel panel_2 = new JPanel();
 
 		add(panel_2, "cell 4 8 2 3,grow");
- 
+
 		JPanel panel_2_1 = new JPanel();
 
 		add(panel_2_1, "cell 4 11 2 3,grow");
@@ -641,6 +643,6 @@ public class TelaDetalhesProduto extends JPanel {
 		lblNewLabel_10.setIcon(new ImageIcon(TelaDetalhesProduto.class.getResource("/img/LOGO1.png")));
 
 		add(lblNewLabel_10, "cell 0 14");
- 
+
 	}
 }
