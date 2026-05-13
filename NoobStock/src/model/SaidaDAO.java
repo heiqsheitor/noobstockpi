@@ -16,7 +16,7 @@ public class SaidaDAO {
     }
 
     public boolean registrarSaida(SaidaEstoque saida) {
-        Connection con = null;
+		Connection con = null;
         try {
             con = conectar();
             // Desativa o autocommit para iniciar a transação
