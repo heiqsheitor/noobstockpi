@@ -28,6 +28,7 @@ public class Principal extends JFrame {
 	private TelaAdicionarProduto adicionar;
 	private TelaFornecedor fornecedor;
 	private TelaAdicionarFornecedor adicionarfor;
+	private TelaDetalhesProduto telaDetalhes;
 
 	// Constantes de navegação
 	public static final String LOGIN = "LOGIN";
@@ -39,8 +40,9 @@ public class Principal extends JFrame {
 	public static final String ADICIONAR = "ADICIONAR";
 	public static final String FORNECEDOR = "FORNECEDOR";
 	public static final String ADICIONARFOR = "ADICIONARFOR";
+	public static final String DETALHES = "DETALHES";
 
-	public Principal() {
+	public Principal() throws IOException {
 		setTitle("NoobStock");
 
 		URL iconUrl = Principal.class.getResource("/img/logopng.png");
@@ -59,15 +61,17 @@ public class Principal extends JFrame {
 		setContentPane(contentPane);
 
 		// Inicializa telas
-		
-			adicionarfor = new TelaAdicionarFornecedor();
-		
+
+		adicionarfor = new TelaAdicionarFornecedor();
+
 		try {
 			fornecedor = new TelaFornecedor();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
+		telaDetalhes = new TelaDetalhesProduto();
+
 		try {
 			login = new TelaLogin();
 		} catch (IOException e) {
@@ -115,8 +119,10 @@ public class Principal extends JFrame {
 			contentPane.add(adicionar, ADICIONAR);
 		if (fornecedor != null)
 			contentPane.add(fornecedor, FORNECEDOR);
-		if(adicionarfor != null)
+		if (adicionarfor != null)
 			contentPane.add(adicionarfor, ADICIONARFOR);
+		if (telaDetalhes != null)
+			contentPane.add(telaDetalhes, DETALHES);
 
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
@@ -176,12 +182,16 @@ public class Principal extends JFrame {
 	public TelaAdicionarProduto getAdicionar() {
 		return adicionar;
 	}
-	
+
 	public TelaFornecedor getFornecedor() {
 		return fornecedor;
 	}
-	
+
 	public TelaAdicionarFornecedor getAdicionarFor() {
 		return adicionarfor;
+	}
+
+	public TelaDetalhesProduto getTelaDetalhesProduto() {
+		return telaDetalhes;
 	}
 }

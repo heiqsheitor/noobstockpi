@@ -2,31 +2,26 @@ package view;
 
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
-
 import controller.ComponentUtils;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Produto;
+import model.ProdutoDAO;
 import model.Fornecedor;
 import model.FornecedorDAO;
+import model.CategoriaDAO; // 👉 IMPORTADO
 
 public class TelaAdicionarProduto extends JPanel {
-	private JTextField TFProduto;
-	private JTextField TFSKU;
-	private JTextField TFQtd;
-	private JTextField TFLocalizacao;
-	private JComboBox<String> cbFornecedor; // 👉 CAMPO ALTERADO PARA JComboBox
-	private JTextField TFCategoria;
+	private JTextField TFProduto, TFSKU, TFQtd, TFLocalizacao;
+	private JComboBox<String> cbFornecedor;
+	private JComboBox<String> cbCategoria; // 👉 ALTERADO PARA JComboBox
 	private JButton btnCancelar, btnAdicionar;
 	private JLabel Voltar;
-
-	// Armazena o ID do produto em edição (null = modo cadastro)
 	private String produtoIdEmEdicao = null;
 
 	public TelaAdicionarProduto() {
@@ -34,12 +29,7 @@ public class TelaAdicionarProduto extends JPanel {
 		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[grow 1][][][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][grow 1][]"));
 		
 		Voltar = new JLabel("");
-		Voltar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-			}
-		});
+		Voltar.addMouseListener(new MouseAdapter() { @Override public void mouseClicked(MouseEvent e) {} });
 		Voltar.setIcon(new ImageIcon(TelaAdicionarProduto.class.getResource("/img/button→svg.png")));
 		add(Voltar, "cell 0 0");
 		
@@ -55,7 +45,7 @@ public class TelaAdicionarProduto extends JPanel {
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		add(lblNewLabel_3, "cell 3 1,alignx left");
 		
-		JLabel lblNewLabel_4 = new JLabel("Preencha as informações abaixo para adicionar um novo produto ao seu estoque");
+		JLabel lblNewLabel_4 = new JLabel("Preencha as informações abaixo para adicionar um novo produto");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel_4.setForeground(new Color(192, 192, 192));
 		add(lblNewLabel_4, "cell 3 2");
@@ -72,7 +62,7 @@ public class TelaAdicionarProduto extends JPanel {
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(lblNewLabel_7, "flowy,cell 3 5");
 		
-		JLabel lblNewLabel_8 = new JLabel("Localização no Estoque");
+		JLabel lblNewLabel_8 = new JLabel("Localização no Estoque (Clique para selecionar)");
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		add(lblNewLabel_8, "flowy,cell 3 6");
 		
@@ -85,10 +75,6 @@ public class TelaAdicionarProduto extends JPanel {
 		add(lblNewLabel_10, "flowy,cell 3 8");
 		
 		btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		add(btnCancelar, "flowx,cell 3 9,growx");
 		
 		btnAdicionar = new JButton("Adicionar");
@@ -100,145 +86,174 @@ public class TelaAdicionarProduto extends JPanel {
 		
 		TFProduto = new JTextField();
 		add(TFProduto, "cell 3 3,growx");
-		TFProduto.setColumns(10);
 		
 		TFSKU = new JTextField();
 		add(TFSKU, "cell 3 4,growx");
-		TFSKU.setColumns(10);
 		
 		TFQtd = new JTextField();
 		add(TFQtd, "cell 3 5,growx");
-		TFQtd.setColumns(10);
 		
 		TFLocalizacao = new JTextField();
+		TFLocalizacao.setEditable(false);
+		TFLocalizacao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		TFLocalizacao.setText("Clique para definir a prateleira...");
+		TFLocalizacao.setBackground(new Color(245, 245, 245));
 		add(TFLocalizacao, "cell 3 6,growx");
-		TFLocalizacao.setColumns(10);
 		
-		// 👉 AQUI INICIALIZAMOS O JCOMBOBOX
+		TFLocalizacao.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				mostrarMenuLocalizacao(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+		
 		cbFornecedor = new JComboBox<>();
 		add(cbFornecedor, "cell 3 7,growx");
 		
-		TFCategoria = new JTextField();
-		add(TFCategoria, "cell 3 8,growx");
-		TFCategoria.setColumns(10);
+		// 👉 INICIALIZAÇÃO DO COMBOBOX DE CATEGORIAS
+		cbCategoria = new JComboBox<>();
+		add(cbCategoria, "cell 3 8,growx");
 
-		// 👉 EVENTO QUE ATUALIZA A LISTA DE FORNECEDORES AO ABRIR A TELA
+		// 👉 GATILHO QUE ATUALIZA AMBAS AS LISTAS AO EXIBIR A TELA
 		this.addComponentListener(new java.awt.event.ComponentAdapter() {
 			public void componentShown(java.awt.event.ComponentEvent e) {
 				carregarComboBoxFornecedores();
+				carregarComboBoxCategorias(); // Carrega as categorias do banco
 			}
 		});
 	}
 
-	// ── CARREGA OS FORNECEDORES DO BANCO PARA O COMBOBOX ──────────────────────
+	private void mostrarMenuLocalizacao(Component invoker, int x, int y) {
+		JPopupMenu popup = new JPopupMenu();
+		ProdutoDAO dao = new ProdutoDAO();
+		List<Produto> todosProdutos = dao.listarProdutos();
+		List<String> locaisOcupados = new ArrayList<>();
+		
+		for(Produto p : todosProdutos) {
+			if(p.getLocalização() != null && !p.getLocalização().trim().isEmpty()) {
+				if (isEdicao() && p.getId_produto().equals(this.produtoIdEmEdicao)) continue;
+				locaisOcupados.add(p.getLocalização());
+			}
+		}
+
+		JMenu menuArmazem1 = new JMenu("Armazém 1 - Estoque Principal");
+		JMenu menuArmazem2 = new JMenu("Armazém 2 - Excedentes");
+		String[] corredores = {"Corredor A", "Corredor B", "Corredor C"};
+		
+		for (String corredor : corredores) {
+			JMenu menuCorredor = new JMenu(corredor);
+			for (int i = 1; i <= 5; i++) {
+				String nomeLocal = "Arm. 1 - " + corredor + " - Prat. " + i;
+				JMenuItem itemPrateleira = new JMenuItem("Prateleira " + i);
+				
+				if (locaisOcupados.contains(nomeLocal)) {
+					itemPrateleira.setText("Prateleira " + i + " (Ocupada)");
+					itemPrateleira.setEnabled(false);
+				} else {
+					itemPrateleira.addActionListener(e -> TFLocalizacao.setText(nomeLocal));
+				}
+				menuCorredor.add(itemPrateleira);
+			}
+			menuArmazem1.add(menuCorredor);
+		}
+
+		popup.add(menuArmazem1);
+		popup.add(menuArmazem2);
+		popup.show(invoker, x, y);
+	}
+
 	public void carregarComboBoxFornecedores() {
 		cbFornecedor.removeAllItems();
 		cbFornecedor.addItem("0 - Selecione um fornecedor..."); 
-		
-		FornecedorDAO dao = new FornecedorDAO();
-		List<Fornecedor> lista = dao.listar();
-		
+		List<Fornecedor> lista = new FornecedorDAO().listar();
 		for (Fornecedor f : lista) {
-			// Formato: "ID - Nome"
 			cbFornecedor.addItem(f.getIdfornecedor() + " - " + f.getNome());
 		}
 	}
 
-	// ── PRÉ-PREENCHE OS CAMPOS PARA EDIÇÃO ────────────────────────────────────
-	public void preencherParaEdicao(Produto p) {
-		// Garante que o ComboBox está carregado mesmo que componentShown ainda não tenha disparado
-		if (cbFornecedor.getItemCount() == 0) {
-			carregarComboBoxFornecedores();
+	// ── POPULA O COMBOBOX DE CATEGORIAS ──────────────────────────────────────
+	public void carregarComboBoxCategorias() {
+		cbCategoria.removeAllItems();
+		cbCategoria.addItem("0 - Selecione uma categoria...");
+		
+		CategoriaDAO dao = new CategoriaDAO();
+		List<String> lista = dao.listarCategorias();
+		for (String cat : lista) {
+			cbCategoria.addItem(cat);
 		}
+	}
 
+	public void preencherParaEdicao(Produto p) {
 		this.produtoIdEmEdicao = p.getId_produto();
 		TFProduto.setText(p.getNome());
 		TFSKU.setText(p.getSKU());
 		TFQtd.setText(p.getQtd());
-		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "");
-		TFCategoria.setText(p.getCategoria() != null ? p.getCategoria() : "");
+		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "Clique para definir a prateleira...");
 		
-		// Lógica para selecionar o fornecedor correto no JComboBox
+		// Fornecedor Seleção
 		cbFornecedor.setSelectedIndex(0);
 		if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
 			for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
 				String item = cbFornecedor.getItemAt(i);
-				// Tenta casar o nome ou ID do fornecedor do produto com a lista
 				if (item.contains(" - " + p.getFornecedor()) || item.startsWith(p.getFornecedor() + " -")) {
 					cbFornecedor.setSelectedIndex(i);
 					break;
 				}
 			}
 		}
-		
-		// Muda o botão para indicar que é uma edição
+
+		// 👉 Categoria Seleção Automática na Edição
+		cbCategoria.setSelectedIndex(0);
+		if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
+			for (int i = 0; i < cbCategoria.getItemCount(); i++) {
+				String item = cbCategoria.getItemAt(i);
+				if (item.contains(" - " + p.getCategoria()) || item.startsWith(p.getCategoria() + " -")) {
+					cbCategoria.setSelectedIndex(i);
+					break;
+				}
+			}
+		}
+
 		btnAdicionar.setText("Salvar alterações");
 	}
 
-	// ── INDICA SE ESTÁ EM MODO EDIÇÃO ─────────────────────────────────────────
-	public boolean isEdicao() {
-		return produtoIdEmEdicao != null;
-	}
+	public boolean isEdicao() { return produtoIdEmEdicao != null; }
+	public String getProdutoIdEmEdicao() { return produtoIdEmEdicao; }
+	public void voltaracaoo(Runnable acao) { ComponentUtils.transformarEmLink(this.Voltar, acao); }
+	public void adicionarproduto(ActionListener actionListener) { this.btnAdicionar.addActionListener(actionListener); }
 
-	// ── RETORNA O ID DO PRODUTO EM EDIÇÃO ─────────────────────────────────────
-	public String getProdutoIdEmEdicao() {
-		return produtoIdEmEdicao;
+	public String getNomeProduto() { return TFProduto.getText(); }
+	public String getSKU() { return TFSKU.getText(); }
+	public String getQuantidade() { return TFQtd.getText(); }
+	public String getLocalizacao() { 
+		if(TFLocalizacao.getText().startsWith("Clique")) return "";
+		return TFLocalizacao.getText(); 
 	}
-
-	// ── AÇÕES ─────────────────────────────────────────────────────────────────
-	public void voltaracaoo(Runnable acao) {
-        ComponentUtils.transformarEmLink(this.Voltar, acao);
-    }
 	
-	public void adicionarproduto(ActionListener actionListener) {
-		this.btnAdicionar.addActionListener(actionListener);
-	}
-
-	// ── GETTERS DOS CAMPOS ────────────────────────────────────────────────────
-	public String getNomeProduto() {
-	    return TFProduto.getText();
-	}
-
-	public String getSKU() {
-	    return TFSKU.getText();
-	}
-
-	public String getQuantidade() {
-	    return TFQtd.getText();
-	}
-
-	public String getLocalizacao() {
-	    return TFLocalizacao.getText();
-	}
-
-	// 👉 AGORA O GET FORNECEDOR RETORNA O ID SELECIONADO NA COMBOBOX
 	public String getFornecedor() {
 		if (cbFornecedor.getSelectedItem() == null) return "";
 		String selecionado = cbFornecedor.getSelectedItem().toString();
-		
 		if (selecionado.startsWith("0")) return ""; 
-		
-		// Separa a string "ID - Nome" e pega só a primeira parte (o ID)
 		return selecionado.split(" - ")[0]; 
 	}
 
+	// 👉 RETORNA APENAS O NÚMERO (ID) DA CATEGORIA PARA O CONTROLLER
 	public String getCategoria() {
-	    return TFCategoria.getText();
+		if (cbCategoria.getSelectedItem() == null) return "";
+		String selecionado = cbCategoria.getSelectedItem().toString();
+		if (selecionado.startsWith("0")) return "";
+		return selecionado.split(" - ")[0]; // Pega apenas a ID numérica antes do hífen
 	}
 
-	// ── LIMPA OS CAMPOS E RESETA O MODO EDIÇÃO ────────────────────────────────
 	public void limparCampos() {
 	    TFProduto.setText("");
 	    TFSKU.setText("");
 	    TFQtd.setText("");
-	    TFLocalizacao.setText("");
-	    TFCategoria.setText("");
+	    TFLocalizacao.setText("Clique para definir a prateleira...");
 	    
-	    if (cbFornecedor.getItemCount() > 0) {
-	    	cbFornecedor.setSelectedIndex(0); // Volta para "Selecione um fornecedor..."
-	    }
+	    if (cbFornecedor.getItemCount() > 0) cbFornecedor.setSelectedIndex(0); 
+	    if (cbCategoria.getItemCount() > 0) cbCategoria.setSelectedIndex(0); // 👉 RESETA CATEGORIA
 	    
-	    // Reseta o modo edição
 	    this.produtoIdEmEdicao = null;
 	    btnAdicionar.setText("Adicionar");
 	}

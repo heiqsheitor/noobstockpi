@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.SwingUtilities;
 
+import controller.DetalhesController;
 import controller.EstoqueController;
 import controller.FornecedorController;
 import controller.InicioController;
@@ -11,6 +12,7 @@ import controller.RedefinirSenhaController;
 import controller.Navegador;
 import controller.PerfilController;
 import controller.ProdutoController;
+import model.CategoriaDAO;
 import model.FornecedorDAO;
 import model.ProdutoDAO;
 import model.UsuarioDAO;
@@ -22,37 +24,32 @@ public class Main {
 
 		SwingUtilities.invokeLater(() -> {
 			try {
-				// Instancia a janela principal que contém o CardLayout e todas as telas
+				// Janela principal 
 				Principal principal = new Principal();
 
 				// DAOs
 				UsuarioDAO usuarioDAO = new UsuarioDAO();
 				ProdutoDAO produtoDAO = new ProdutoDAO();
 				FornecedorDAO fornecedorDAO = new FornecedorDAO();
+				CategoriaDAO categoriaDAO = new CategoriaDAO();
+				
+				categoriaDAO.inicializarCategoriasPadrao();
 
-				// Navegador utilitário
+				// Navegador 
 				Navegador navegador = new Navegador(principal);
 
-				// Inicializa os Controllers
+                // Controllers
 				new LoginController(principal.getLogin(), usuarioDAO, navegador);
 				new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
 				new ProdutoController(principal.getAdicionar(), produtoDAO, navegador, principal.getControle());
-
-				// EstoqueController agora recebe produtoDAO e telaAdicionar
-				// para poder fazer edição e exclusão
-				// referência
-				// à
-				// tela
-				// de
-				// adicionar/editar
-				new EstoqueController(principal.getControle(), navegador, produtoDAO, principal.getAdicionar());
-
+				new EstoqueController(principal.getControle(), navegador, produtoDAO, principal.getAdicionar(),principal.getTelaDetalhesProduto());
+				new DetalhesController(principal.getTelaDetalhesProduto(), principal.getControle(), navegador);
 				new InicioController(principal.getInicio(), navegador);
 				new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
-				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,
-						principal.getAdicionarFor());
+				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,principal.getAdicionarFor());
 				new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
 
+				// Inicialição
 				principal.mostrarTela(Principal.INICIO);
 				principal.setVisible(true);
 				principal.setLocationRelativeTo(null);
