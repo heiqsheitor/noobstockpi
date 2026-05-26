@@ -30,8 +30,8 @@ public class CategoriaDAO {
 				String[] categoriasPadrao = { "Processadores (CPUs)", "Placas-Mãe (Motherboards)",
 						"Placas de Vídeo (GPUs)", "Memória RAM", "Armazenamento (SSDs e HDDs)",
 						"Fontes de Alimentação (PSU)", "Refrigeração (Coolers/Ventoinhas)", "Gabinetes (Cases)",
-						"Monitores", "Teclados", "Ratos (Mouses) e Tapetes", "Áudio (Headsets e Colunas)", "Webcams",
-						"Cabos e Adaptadores", "Equipamento de Rede (Routers/Wi-Fi)",
+						"Monitores", "Teclados", "Mouses e Mousepad", "Áudio", "Webcams",
+						"Cabos e Adaptadores", "Equipamento de Rede (Wi-Fi)",
 						"Energia (Filtros e UPS/Nobreaks)" };
 
 				try (PreparedStatement stmtInsert = con.prepareStatement(sqlInsert)) {
