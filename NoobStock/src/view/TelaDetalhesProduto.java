@@ -320,7 +320,7 @@ public class TelaDetalhesProduto extends JPanel {
 		// Quantidade
 		String qtdStr = (p.getQtd() != null) ? p.getQtd() : "0";
 		lblValorQtd.setText(qtdStr);
-
+ 
 		// Localização
 		lblValorLocal.setText((p.getLocalização() != null && !p.getLocalização().isEmpty())
 				? p.getLocalização() : "Não alocado");
