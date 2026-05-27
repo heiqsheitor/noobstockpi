@@ -9,6 +9,10 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Image;
+import javax.swing.Timer;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -48,28 +52,33 @@ public class TelaSaida extends JPanel {
 		add(lblInicio, "cell 0 2,alignx center");
 		
 		JLabel lblNewLabel = new JLabel("Início");
-		add(lblNewLabel, "cell 1 2");
+		add(lblNewLabel, "cell 1 2,aligny center");
 		
 		JLabel lblControleEstoq = new JLabel("");
 		lblControleEstoq.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png"))); // Placeholder
 		add(lblControleEstoq, "cell 0 3,alignx left");
 		
 		JLabel lblNewLabel_1 = new JLabel("Controle de Estoque");
-		add(lblNewLabel_1, "cell 1 3");
+		add(lblNewLabel_1, "cell 1 3,aligny center");
 		
 		JLabel lblEstatis = new JLabel("");
 		lblEstatis.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/grafico.png"))); // Placeholder
 		add(lblEstatis, "cell 0 4,alignx center");
 		
 		JLabel lblNewLabel_2 = new JLabel("Estatísticas");
-		add(lblNewLabel_2, "cell 1 4");
+		add(lblNewLabel_2, "cell 1 4,aligny center");
+		
+		// --- Produtos Adicionados ao Caminhão ---
+		JLabel lblProdutosAdicionados = new JLabel("Produtos Adicionados ao Caminhão");
+		lblProdutosAdicionados.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
+		add(lblProdutosAdicionados, "cell 4 4,gapy 10 0");
 		
 		JLabel lblEstraSai = new JLabel("");
 		lblEstraSai.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/entradaesaida(1)1.png"))); // Placeholder
 		add(lblEstraSai, "cell 0 5,alignx center");
 		
-		JLabel lblNewLabel_3 = new JLabel("Entrada e Saída");
-		add(lblNewLabel_3, "cell 1 5");
+		JLabel lblNewLabel_3 = new JLabel("Saída de Estoque");
+		add(lblNewLabel_3, "cell 1 5,aligny center");
 		
 		JSeparator separator = new JSeparator();
 		separator.setOrientation(SwingConstants.VERTICAL);
@@ -98,17 +107,23 @@ public class TelaSaida extends JPanel {
 		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		add(lblSubtitulo, "cell 4 1,aligny top, gapleft 30");
 		
-		JLabel lblDataHora = new JLabel("26/05/2025 14:30"); // Placeholder for dynamic date/time
+		JLabel lblDataHora = new JLabel("");
 		lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		add(lblDataHora, "cell 6 0,alignx right,aligny center");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		Timer timer = new Timer(1000, e -> {
+		    lblDataHora.setText(dtf.format(LocalDateTime.now()));
+		});
+		timer.start();
 		
 		// --- Adicionar Produto à Saída ---
 		JPanel panelAdicionarProduto = new JPanel();
 		panelAdicionarProduto.setBackground(new Color(240, 240, 240));
 		panelAdicionarProduto.setLayout(new MigLayout("", "[grow][100px][150px]", "[pref!][pref!]"));
-		add(panelAdicionarProduto, "cell 4 2 3 1,growx,gapy 10 10");
+		add(panelAdicionarProduto, "cell 4 2 3 2,growx,aligny center,gapy 10 10");
 		
-		JLabel lblProduto = new JLabel("Produto");
+		JLabel lblProduto = new JLabel("Adicionar Produto à Saída");
+		lblProduto.setFont(new Font("Segoe UI Semibold", Font.BOLD, 15));
 		panelAdicionarProduto.add(lblProduto, "cell 0 0");
 		
 		JLabel lblQuantidade = new JLabel("Quantidade");
@@ -127,11 +142,6 @@ public class TelaSaida extends JPanel {
 		btnAdicionar.setForeground(new Color(255, 255, 255));
 		panelAdicionarProduto.add(btnAdicionar, "cell 2 1,growx");
 		
-		// --- Produtos Adicionados ao Caminhão ---
-		JLabel lblProdutosAdicionados = new JLabel("Produtos Adicionados ao Caminhão");
-		lblProdutosAdicionados.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
-		add(lblProdutosAdicionados, "cell 4 3 3 1,gapy 10 0");
-		
 		tableProdutos = new JTable();
 		tableProdutos.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -145,55 +155,7 @@ public class TelaSaida extends JPanel {
 			}
 		));
 		JScrollPane scrollPane = new JScrollPane(tableProdutos);
-		add(scrollPane, "cell 4 4 3 2,grow");
-		
-		// --- Cards de Resumo ---
-		JPanel panelResumo = new JPanel();
-		panelResumo.setBackground(new Color(255, 255, 255));
-		panelResumo.setLayout(new MigLayout("", "[grow][grow][grow]", "[pref!]"));
-		add(panelResumo, "cell 4 6 3 1,growx,gapy 10 10");
-		
-		// Card Itens Adicionados
-		JPanel cardItens = new JPanel();
-		cardItens.setBackground(new Color(240, 240, 240));
-		cardItens.setLayout(new MigLayout("", "[grow]", "[pref!][pref!]"));
-		panelResumo.add(cardItens, "cell 0 0,grow");
-		JLabel lblIconeItens = new JLabel("");
-		lblIconeItens.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/box_icon.png"))); // Placeholder
-		cardItens.add(lblIconeItens, "cell 0 0,alignx center");
-		JLabel lblItensAdicionados = new JLabel("Itens adicionados");
-		cardItens.add(lblItensAdicionados, "cell 0 1,alignx center");
-		JLabel lblNumItens = new JLabel("4");
-		lblNumItens.setFont(new Font("Segoe UI Semibold", Font.BOLD, 18));
-		cardItens.add(lblNumItens, "cell 0 2,alignx center");
-		
-		// Card Quantidade Total
-		JPanel cardQuantidade = new JPanel();
-		cardQuantidade.setBackground(new Color(240, 240, 240));
-		cardQuantidade.setLayout(new MigLayout("", "[grow]", "[pref!][pref!]"));
-		panelResumo.add(cardQuantidade, "cell 1 0,grow");
-		JLabel lblIconeQuantidade = new JLabel("");
-		lblIconeQuantidade.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/cart_icon.png"))); // Placeholder
-		cardQuantidade.add(lblIconeQuantidade, "cell 0 0,alignx center");
-		JLabel lblQuantidadeTotal = new JLabel("Quantidade total");
-		cardQuantidade.add(lblQuantidadeTotal, "cell 0 1,alignx center");
-		JLabel lblNumQuantidade = new JLabel("26");
-		lblNumQuantidade.setFont(new Font("Segoe UI Semibold", Font.BOLD, 18));
-		cardQuantidade.add(lblNumQuantidade, "cell 0 2,alignx center");
-		
-		// Card Valor Estimado
-		JPanel cardValor = new JPanel();
-		cardValor.setBackground(new Color(240, 240, 240));
-		cardValor.setLayout(new MigLayout("", "[grow]", "[pref!][pref!]"));
-		panelResumo.add(cardValor, "cell 2 0,grow");
-		JLabel lblIconeValor = new JLabel("");
-		lblIconeValor.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/money_icon.png"))); // Placeholder
-		cardValor.add(lblIconeValor, "cell 0 0,alignx center");
-		JLabel lblValorEstimado = new JLabel("Valor estimado");
-		cardValor.add(lblValorEstimado, "cell 0 1,alignx center");
-		JLabel lblValor = new JLabel("R$ 1.456,90");
-		lblValor.setFont(new Font("Segoe UI Semibold", Font.BOLD, 18));
-		cardValor.add(lblValor, "cell 0 2,alignx center");
+		add(scrollPane, "cell 4 5 3 2,grow");
 		
 		// --- Informações da Saída ---
 		JLabel lblInformacoesSaida = new JLabel("Informações da Saída");
@@ -235,10 +197,11 @@ public class TelaSaida extends JPanel {
 		panelBotoes.setLayout(new MigLayout("", "[grow][grow]", "[pref!]"));
 		add(panelBotoes, "cell 4 9 3 1,growx,aligny bottom,gapy 10 0");
 		
-		JButton btnCancelar = new JButton("X Cancelar");
+		JButton btnCancelar = new JButton("X  Cancelar");
+		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnCancelar.setBackground(new Color(240, 240, 240));
 		btnCancelar.setForeground(new Color(0, 0, 0));
-		panelBotoes.add(btnCancelar, "cell 0 0,alignx right");
+		panelBotoes.add(btnCancelar, "flowx,cell 1 0,alignx right");
 		
 		JButton btnConfirmar = new JButton("✓ Confirmar Saída");
 		btnConfirmar.setBackground(new Color(0, 0, 0));

@@ -21,6 +21,7 @@ public class Principal extends JFrame {
 	private TelaControleEstoque controle;
 	private TelaDeInicio inicio;
 	private TelaAdicionarProduto adicionar;
+	private TelaSaida saida;
 
 	public static final String LOGIN = "LOGIN";
 	public static final String CADASTRO = "CADASTRO";
@@ -29,6 +30,7 @@ public class Principal extends JFrame {
 	public static final String REDEFINIR = "REDEFINIR";
 	public static final String INICIO = "INICIO";
 	public static final String ADICIONAR = "ADICIONAR";
+	public static final String SAIDA = "SAIDA";
 
 	public Principal() {
 		setTitle("NoobStock");
@@ -74,6 +76,11 @@ public class Principal extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		try {
+			saida = new TelaSaida();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		if (login != null)
 			contentPane.add(login, LOGIN);
@@ -89,6 +96,8 @@ public class Principal extends JFrame {
 			contentPane.add(inicio, INICIO);
 		if (adicionar != null)
 			contentPane.add(adicionar, ADICIONAR);
+		if (saida != null)
+			contentPane.add(saida, SAIDA);
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -143,5 +152,9 @@ public class Principal extends JFrame {
 	}
 	public TelaAdicionarProduto getAdicionar() {
 		return adicionar;
+	}
+	
+	public TelaSaida getSaida() {
+		return saida;
 	}
 }

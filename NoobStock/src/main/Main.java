@@ -4,7 +4,7 @@ import javax.swing.SwingUtilities;
 import controller.LoginController;
 import controller.UsuarioController;
 import controller.RedefinirSenhaController;
-import controller.InicioController; // IMPORTANTE: Importe o seu novo controller aqui
+import controller.InicioController;
 import controller.Navegador;
 import controller.ProdutoController;
 import model.ProdutoDAO;
@@ -29,6 +29,9 @@ public class Main {
                 new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
                 new InicioController(principal.getInicio(), navegador);
                 new ProdutoController(principal.getAdicionar(), produtoDAO);
+                
+                // MÉTODO DIRETO: Chama a constante estática da classe Principal
+                principal.mostrarTela(Principal.SAIDA);
                 
                 principal.setVisible(true);
                 principal.setLocationRelativeTo(null);
