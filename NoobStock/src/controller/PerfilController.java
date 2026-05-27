@@ -1,76 +1,88 @@
 package controller;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
+import model.Usuario;
 import model.UsuarioDAO;
-import view.TelaPerfil;
 import view.Principal;
-import view.TelaLogin; // Importando a sua tela de login
+import view.TelaPerfil;
 
 public class PerfilController {
 	private final TelaPerfil view;
 	private final UsuarioDAO model;
 	private final Navegador navegador;
-	
+
 	public PerfilController(TelaPerfil view, UsuarioDAO model, Navegador navegador) {
-		this.model = model;
 		this.view = view;
+		this.model = model;
 		this.navegador = navegador;
-		
-		 view.setInicioAcao(() -> {
-	            navegador.navegarPara(Principal.INICIO);
-	        });
-	    
-	        
-	        view.setControleEstoqueAcao(() -> {
-	            navegador.navegarPara(Principal.ESTOQUE);
-	        });
-	        
-	        view.setPerfilAcao(() -> {
-	            navegador.navegarPara(Principal.PERFIL);
-	        });
-	        
-	        view.setFornecedores(() -> {
-	        	navegador.navegarPara(Principal.FORNECEDOR);
-	        });
-		  
-		this.view.adicionarDeslogar(new ActionListener() {
-			@Override
-			public void actionPerformed (ActionEvent e) {
+
+		view.setInicioAcao(() -> {
+			navegador.navegarPara(Principal.INICIO);
+		});
+
+		view.setEstoqueAcao(() -> {
+			navegador.navegarPara(Principal.ESTOQUE);
+		});
+
+		view.setFornecedorAcao(() -> {
+			navegador.navegarPara(Principal.FORNECEDOR);
+		});
+
+		configurarEventos();
+	}
+
+	private void configurarEventos() {
+		view.adicionarAtualizarListener(e -> atualizar());
+		view.adicionarCancelarListener(e -> view.limparCampos());
+		view.adicionarDeslogar(e -> deslogar());
+		view.adicionarExcluirContaListener(e -> excluir());
+	}
+
+	private void atualizar() {
+		Usuario logado = navegador.getUsuarioLogado();
+		if (logado == null)
+			return;
+
+		String novoNome = view.getNome();
+		String novoEmail = view.getEmail();
+		String novaSenha = view.getSenha();
+
+		if (novoNome.isEmpty() || novoEmail.isEmpty() || novaSenha.isEmpty()) {
+			JOptionPane.showMessageDialog(view, "Preencha todos os campos.");
+			return;
+		}
+
+		if (model.atualizarUsuario(logado.getId_usuario(), novoNome, novoEmail, novaSenha)) {
+			logado.setNome(novoNome);
+			logado.setEmail(novoEmail);
+			logado.setSenha(novaSenha);
+			JOptionPane.showMessageDialog(view, "Dados atualizados com sucesso!");
+		}
+	}
+
+	private void excluir() {
+		Usuario logado = navegador.getUsuarioLogado();
+		String emailDigitado = view.getEmail();
+
+		if (!emailDigitado.equals(logado.getEmail())) {
+			JOptionPane.showMessageDialog(view, "Para excluir, digite seu e-mail atual corretamente no campo E-mail.");
+			return;
+		}
+
+		int confirm = JOptionPane.showConfirmDialog(view, "Tem certeza? Esta ação excluirá sua conta permanentemente.",
+				"Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+		if (confirm == JOptionPane.YES_OPTION) {
+			if (model.excluirUsuario(logado.getEmail())) {
+				JOptionPane.showMessageDialog(view, "Conta excluída.");
 				deslogar();
 			}
-		});
-	}
-	
-	private void deslogar() {
-		// Captura o JFrame principal que está exibindo a TelaPerfil no momento
-		JFrame framePrincipal = (JFrame) SwingUtilities.getWindowAncestor(view);
-		
-		if (framePrincipal != null) {
-			try {
-				// Instancia a TelaLogin (exige try-catch por causa do ImageIO.read na View)
-				TelaLogin telaLogin = new TelaLogin();
-				
-				// Substitui o conteúdo do JFrame (tira o Perfil e coloca o Login)
-				framePrincipal.setContentPane(telaLogin);
-				
-				// Atualiza a janela para renderizar o novo painel
-				framePrincipal.revalidate();
-				framePrincipal.repaint();
-				
-			} catch (IOException ex) {
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(view, 
-						"Erro ao carregar a interface de login.", 
-						"Erro", 
-						JOptionPane.ERROR_MESSAGE);
-			}
 		}
+	}
+
+	private void deslogar() {
+		navegador.setUsuarioLogado(null);
+		navegador.navegarPara(Principal.LOGIN);
 	}
 }

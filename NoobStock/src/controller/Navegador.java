@@ -2,10 +2,12 @@ package controller;
 
 import javax.swing.JPanel;
 
+import model.Usuario;
 import view.Principal;
 
 public class Navegador {
 	private Principal principal;
+	private Usuario usuarioLogado;
 
 	public Navegador(Principal principal) {
 		this.principal = principal;
@@ -13,5 +15,13 @@ public class Navegador {
 
 	public void navegarPara(String tela) {
 		principal.mostrarTela(tela);
+	}
+
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
+	}
+
+	public void setUsuarioLogado(Usuario usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
 	}
 }

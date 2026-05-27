@@ -175,19 +175,19 @@ public class TelaControleEstoque extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 
 		LControleEstoq = new JLabel("Controle de estoque");
-		LControleEstoq.setFont(new Font("Tahoma", Font.BOLD, 13));
+		LControleEstoq.setFont(new Font("Tahoma", Font.BOLD, 15));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
 		LFor = new JLabel("Fornecedores");
-		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		LFor.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LFor, "cell 1 4,alignx left,aligny center");
 
 		LEntraSai = new JLabel("Entrada e saída");
-		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEntraSai, "cell 1 5,alignx left,aligny center");
 
 		carregarTabelaProdutos();
