@@ -41,8 +41,10 @@ public class PerfilController {
 
 	private void atualizar() {
 		Usuario logado = navegador.getUsuarioLogado();
-		if (logado == null)
+		if (logado == null) {
+			JOptionPane.showMessageDialog(view, "Erro: Faça login primeiro para testar esta tela!");
 			return;
+		}
 
 		String novoNome = view.getNome();
 		String novoEmail = view.getEmail();
@@ -58,11 +60,18 @@ public class PerfilController {
 			logado.setEmail(novoEmail);
 			logado.setSenha(novaSenha);
 			JOptionPane.showMessageDialog(view, "Dados atualizados com sucesso!");
+		} else {
+			JOptionPane.showMessageDialog(view, "Erro ao atualizar no banco de dados.");
 		}
 	}
 
 	private void excluir() {
 		Usuario logado = navegador.getUsuarioLogado();
+		if (logado == null) {
+			JOptionPane.showMessageDialog(view, "Erro: Faça login primeiro para testar esta tela!");
+			return;
+		}
+
 		String emailDigitado = view.getEmail();
 
 		if (!emailDigitado.equals(logado.getEmail())) {

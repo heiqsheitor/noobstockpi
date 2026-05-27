@@ -50,7 +50,7 @@ public class Main {
 				new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
 
 				// Inicialição
-				principal.mostrarTela(Principal.INICIO);
+				principal.mostrarTela(Principal.LOGIN);
 				principal.setVisible(true);
 				principal.setLocationRelativeTo(null);
 
