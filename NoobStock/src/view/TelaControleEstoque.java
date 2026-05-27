@@ -179,7 +179,7 @@ public class TelaControleEstoque extends JPanel {
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 
 		LControleEstoq = new JLabel("Controle de estoque");
-		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		LControleEstoq.setFont(new Font("Tahoma", Font.BOLD, 13));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
 		LFor = new JLabel("Fornecedores");

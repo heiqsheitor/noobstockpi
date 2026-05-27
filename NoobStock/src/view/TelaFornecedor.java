@@ -163,7 +163,7 @@ public class TelaFornecedor extends JPanel {
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
 		LFor = new JLabel("Fornecedores");
-		LFor.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		LFor.setFont(new Font("Tahoma", Font.BOLD, 13));
 		add(LFor, "cell 1 4,alignx left,aligny center");
 
 		LEntraSai = new JLabel("Entrada e saída");
