@@ -33,7 +33,11 @@ public class TelaDeInicio extends JPanel {
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
-		add(lblPerfil, "cell 1 0");
+		add(lblPerfil, "cell 0 0 2 1,alignx center");
+		
+		JLabel lblNewLabel_1 = new JLabel("Descubra");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		add(lblNewLabel_1, "cell 0 1 2 1,alignx left");
 
 		JLabel lblNewLabel_11 = new JLabel("Início");
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 16));

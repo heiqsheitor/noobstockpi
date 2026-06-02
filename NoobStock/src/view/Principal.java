@@ -24,11 +24,12 @@ public class Principal extends JFrame {
 	private TelaPerfil perfil;
 	private TelaRedefinirSenha redefinirSenha;
 	private TelaControleEstoque controle;
-	private TelaDeInicio inicio; // Adicionada Tela de Início
+	private TelaDeInicio inicio;
 	private TelaAdicionarProduto adicionar;
 	private TelaFornecedor fornecedor;
 	private TelaAdicionarFornecedor adicionarfor;
 	private TelaDetalhesProduto telaDetalhes;
+	private TelaSaida saida;
 
 	// Constantes de navegação
 	public static final String LOGIN = "LOGIN";
@@ -36,11 +37,12 @@ public class Principal extends JFrame {
 	public static final String PERFIL = "PERFIL";
 	public static final String ESTOQUE = "ESTOQUE";
 	public static final String REDEFINIR = "REDEFINIR";
-	public static final String INICIO = "INICIO"; // Adicionada constante INICIO
+	public static final String INICIO = "INICIO";
 	public static final String ADICIONAR = "ADICIONAR";
 	public static final String FORNECEDOR = "FORNECEDOR";
 	public static final String ADICIONARFOR = "ADICIONARFOR";
 	public static final String DETALHES = "DETALHES";
+	public static final String SAIDA = "SAIDA";
 
 	public Principal() throws IOException {
 		setTitle("NoobStock");
@@ -53,7 +55,6 @@ public class Principal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 
-		// CardLayout
 		cardLayout = new CardLayout();
 		contentPane = new JPanel(cardLayout);
 		contentPane.setPreferredSize(new Dimension(816, 522));
@@ -73,10 +74,17 @@ public class Principal extends JFrame {
 		telaDetalhes = new TelaDetalhesProduto();
 
 		try {
+			saida = new TelaSaida();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
 			login = new TelaLogin();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		try {
 			cadastro = new TelaCadastro();
 		} catch (IOException e) {
@@ -85,13 +93,15 @@ public class Principal extends JFrame {
 
 		perfil = new TelaPerfil();
 		redefinirSenha = new TelaRedefinirSenha();
+
 		try {
 			controle = new TelaControleEstoque();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		try {
-			inicio = new TelaDeInicio(); // Inicializa Tela de Início
+			inicio = new TelaDeInicio();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,24 +115,36 @@ public class Principal extends JFrame {
 		// Adiciona telas
 		if (login != null)
 			contentPane.add(login, LOGIN);
+
 		if (cadastro != null)
 			contentPane.add(cadastro, CADASTRO);
+
 		if (perfil != null)
 			contentPane.add(perfil, PERFIL);
+
 		if (redefinirSenha != null)
 			contentPane.add(redefinirSenha, REDEFINIR);
+
 		if (controle != null)
 			contentPane.add(controle, ESTOQUE);
+
 		if (inicio != null)
-			contentPane.add(inicio, INICIO);// Adiciona ao layout
+			contentPane.add(inicio, INICIO);
+
 		if (adicionar != null)
 			contentPane.add(adicionar, ADICIONAR);
+
 		if (fornecedor != null)
 			contentPane.add(fornecedor, FORNECEDOR);
+
 		if (adicionarfor != null)
 			contentPane.add(adicionarfor, ADICIONARFOR);
+
 		if (telaDetalhes != null)
 			contentPane.add(telaDetalhes, DETALHES);
+
+		if (saida != null)
+			contentPane.add(saida, SAIDA);
 
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
@@ -146,6 +168,7 @@ public class Principal extends JFrame {
 		if (controle != null) {
 			controle.ajustarFonte(largura, altura);
 		}
+
 		if (inicio != null) {
 			inicio.ajustarFonte(largura, altura);
 		}
@@ -155,6 +178,7 @@ public class Principal extends JFrame {
 	}
 
 	// Getters
+
 	public TelaLogin getLogin() {
 		return login;
 	}
@@ -193,5 +217,10 @@ public class Principal extends JFrame {
 
 	public TelaDetalhesProduto getTelaDetalhesProduto() {
 		return telaDetalhes;
+	}
+
+
+	public TelaSaida getSaida() {
+		return saida;
 	}
 }

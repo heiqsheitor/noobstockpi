@@ -12,6 +12,7 @@ import controller.RedefinirSenhaController;
 import controller.Navegador;
 import controller.PerfilController;
 import controller.ProdutoController;
+import controller.SaidaController;
 import model.CategoriaDAO;
 import model.FornecedorDAO;
 import model.ProdutoDAO;
@@ -48,9 +49,10 @@ public class Main {
 				new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
 				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,principal.getAdicionarFor());
 				new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
+				new SaidaController(principal.getSaida(), navegador);
 
 				// Inicialição
-				principal.mostrarTela(Principal.LOGIN);
+				principal.mostrarTela(Principal.INICIO);
 				principal.setVisible(true);
 				principal.setLocationRelativeTo(null);
 

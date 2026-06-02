@@ -1,7 +1,5 @@
 package controller;
 
-import javax.swing.JPanel;
-
 import model.Usuario;
 import view.Principal;
 
@@ -24,4 +22,5 @@ public class Navegador {
 	public void setUsuarioLogado(Usuario usuarioLogado) {
 		this.usuarioLogado = usuarioLogado;
 	}
+	
 }

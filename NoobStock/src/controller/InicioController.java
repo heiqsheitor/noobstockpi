@@ -31,6 +31,10 @@ public class InicioController extends ComponentAdapter {
         view.setFornecedorAcao(() -> {
             navegador.navegarPara(Principal.FORNECEDOR);
         });
+        
+        view.setEntradaSaidaAcao(() -> {
+        	navegador.navegarPara(Principal.SAIDA);
+        });
 
        
     }
