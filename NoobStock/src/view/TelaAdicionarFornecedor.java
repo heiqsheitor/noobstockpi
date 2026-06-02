@@ -93,6 +93,7 @@ public class TelaAdicionarFornecedor extends JPanel {
 		TFCNPJ = new JTextField();
 		add(TFCNPJ, "cell 3 4,growx");
 		TFCNPJ.setColumns(10);
+		ComponentUtils.aplicarMascaraCpfCnpj(TFCNPJ);
 
 		TFEmail = new JTextField();
 		add(TFEmail, "cell 3 5,growx");
