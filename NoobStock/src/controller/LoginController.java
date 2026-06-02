@@ -36,7 +36,7 @@ public class LoginController extends ComponentAdapter {
 		}
 
 		try {
-			// CORREÇÃO: Criar um objeto Usuario com o NOME DE USUÁRIO para autenticar
+			// Criar um objeto Usuario com o NOME DE USUÁRIO para autenticar
 			Usuario credenciais = new Usuario(nomeUsuario, null, senha);
 			Usuario usuario = model.autenticar(credenciais);
 
@@ -44,6 +44,9 @@ public class LoginController extends ComponentAdapter {
 				view.mostrarMensagem("Login realizado com sucesso!");
 				
 				if (navegador != null) {
+					// 👉 ESTA É A LINHA QUE FALTAVA! Agora o sistema sabe quem está logado.
+					navegador.setUsuarioLogado(usuario); 
+					
 					navegador.navegarPara("INICIO"); 
 				}
 			} else {
