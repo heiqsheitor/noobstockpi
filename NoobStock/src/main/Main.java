@@ -9,6 +9,7 @@ import controller.InicioController;
 import controller.LoginController;
 import controller.UsuarioController;
 import controller.RedefinirSenhaController;
+import controller.SaidaController;
 import controller.Navegador;
 import controller.PerfilController;
 import controller.ProdutoController;
@@ -48,6 +49,7 @@ public class Main {
 				new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
 				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,principal.getAdicionarFor());
 				new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
+				new SaidaController(principal.getTelaSaida(), navegador);
 
 				// Inicialição
 				principal.mostrarTela(Principal.LOGIN);

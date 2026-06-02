@@ -31,6 +31,10 @@ public class InicioController extends ComponentAdapter {
 		});
 
 		view.addComponentListener(this);
+		
+		view.setEntradaSaidaAcao(() -> {
+			navegador.navegarPara(Principal.SAIDA);
+		});
 	}
 
 	@Override

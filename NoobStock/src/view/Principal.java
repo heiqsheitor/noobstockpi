@@ -29,6 +29,7 @@ public class Principal extends JFrame {
 	private TelaFornecedor fornecedor;
 	private TelaAdicionarFornecedor adicionarfor;
 	private TelaDetalhesProduto telaDetalhes;
+	private TelaSaida telaSaida;
 
 	// Constantes de navegação
 	public static final String LOGIN = "LOGIN";
@@ -41,6 +42,7 @@ public class Principal extends JFrame {
 	public static final String FORNECEDOR = "FORNECEDOR";
 	public static final String ADICIONARFOR = "ADICIONARFOR";
 	public static final String DETALHES = "DETALHES";
+	public static final String SAIDA = "SAIDA";
 
 	public Principal() throws IOException {
 		setTitle("NoobStock");
@@ -69,6 +71,7 @@ public class Principal extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		telaSaida = new TelaSaida();
 
 		telaDetalhes = new TelaDetalhesProduto();
 
@@ -123,6 +126,8 @@ public class Principal extends JFrame {
 			contentPane.add(adicionarfor, ADICIONARFOR);
 		if (telaDetalhes != null)
 			contentPane.add(telaDetalhes, DETALHES);
+		if (telaSaida != null)
+			contentPane.add(telaSaida, SAIDA);
 
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
@@ -193,5 +198,8 @@ public class Principal extends JFrame {
 
 	public TelaDetalhesProduto getTelaDetalhesProduto() {
 		return telaDetalhes;
+	}
+	public TelaSaida getTelaSaida() {
+		return telaSaida;
 	}
 }

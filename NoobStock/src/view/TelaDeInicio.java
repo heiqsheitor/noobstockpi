@@ -78,7 +78,7 @@ public class TelaDeInicio extends JPanel {
 		lblEntraSai.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
-		LEntraSai = new JLabel("Entrada e saída");
+		LEntraSai = new JLabel("Saída");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEntraSai, "cell 1 5");
 		
