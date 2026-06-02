@@ -32,6 +32,10 @@ public class FornecedorController {
 		view.setPerfilAcao(() -> {
 			navegador.navegarPara(Principal.PERFIL);
 		});
+		
+		view.setSaida(() -> {
+			navegador.navegarPara(Principal.SAIDA);
+		});
 
 		// Vai para a tela de Adicionar (limpa campos garantindo modo cadastro)
 		view.setAdicionar(() -> {

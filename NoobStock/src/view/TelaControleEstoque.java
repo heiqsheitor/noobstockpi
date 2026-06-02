@@ -186,7 +186,7 @@ public class TelaControleEstoque extends JPanel {
 		LFor.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LFor, "cell 1 4,alignx left,aligny center");
 
-		LEntraSai = new JLabel("Entrada e saída");
+		LEntraSai = new JLabel("Saída de Estoque");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEntraSai, "cell 1 5,alignx left,aligny center");
 
@@ -302,6 +302,10 @@ public class TelaControleEstoque extends JPanel {
 
 	public void setFornecedorAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LFor, acao);
+	}
+	
+	public void setSaida(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LEntraSai, acao);
 	}
 
 	public void setAdicionar(Runnable acao) {

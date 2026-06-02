@@ -106,7 +106,7 @@ public class TelaPerfil extends JPanel {
 		lblEntraSai.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
-		JLabel LEntraSai = new JLabel("Entrada e saída");
+		JLabel LEntraSai = new JLabel("Saída de Estoque");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEntraSai, "cell 1 5");
 
