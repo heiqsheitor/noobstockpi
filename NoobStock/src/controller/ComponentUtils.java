@@ -72,4 +72,50 @@ public class ComponentUtils {
 			}
 		});
 	}
+
+	public static void aplicarMascaraMoeda(JTextField textField) {
+		textField.setText("0,00");
+		textField.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		AbstractDocument doc = (AbstractDocument) textField.getDocument();
+		doc.setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+					throws BadLocationException {
+				processar(fb, offset, 0, string, attr);
+			}
+
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+					throws BadLocationException {
+				processar(fb, offset, length, text, attrs);
+			}
+
+			@Override
+			public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
+				processar(fb, offset, length, "", null);
+			}
+
+			private void processar(FilterBypass fb, int offset, int length, String novoTexto, AttributeSet attrs)
+					throws BadLocationException {
+				String textoAtual = fb.getDocument().getText(0, fb.getDocument().getLength());
+				String textoFuturo = textoAtual.substring(0, offset) + novoTexto
+						+ textoAtual.substring(offset + length);
+
+				String apenasNumeros = textoFuturo.replaceAll("[^0-9]", "");
+				if (apenasNumeros.isEmpty())
+					apenasNumeros = "0";
+
+				if (apenasNumeros.length() > 10)
+					return;
+
+				double valor = Double.parseDouble(apenasNumeros) / 100;
+
+				java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
+				String textoFormatado = df.format(valor);
+
+				fb.replace(0, fb.getDocument().getLength(), textoFormatado, attrs);
+			}
+		});
+	}
 }

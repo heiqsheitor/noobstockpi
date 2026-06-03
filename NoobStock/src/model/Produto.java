@@ -9,11 +9,12 @@ public class Produto {
 	private String Localização;
 	private String Fornecedor;
 	private String Categoria;
-	private String dataCriacao; // Atributo para a data de cadastro
+	private String dataCriacao; 
+	private double preco;
 
 	// Construtor completo para uso no DAO
 	public Produto(String id_produto, String sKU, String nome, String qtd, int estoqueMinimo, String localização,
-			String fornecedor, String categoria, String dataCriacao) {
+			String fornecedor, String categoria, String dataCriacao, double preco) {
 		this.id_produto = id_produto;
 		this.SKU = sKU;
 		this.nome = nome;
@@ -23,6 +24,7 @@ public class Produto {
 		this.Fornecedor = fornecedor;
 		this.Categoria = categoria;
 		this.dataCriacao = dataCriacao;
+		this.preco = preco;
 	}
 
 	// Construtor vazio para inicialização flexível
@@ -36,6 +38,14 @@ public class Produto {
 
 	public void setId_produto(String id_produto) {
 		this.id_produto = id_produto;
+	}
+
+	public double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(double preco) {
+		this.preco = preco;
 	}
 
 	public String getSKU() {

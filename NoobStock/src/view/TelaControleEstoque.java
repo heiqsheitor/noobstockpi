@@ -48,7 +48,6 @@ public class TelaControleEstoque extends JPanel {
 	private JButton Adicionar;
 	private JMenuItem mntmDetalhes, mntmEditar, mntmExcluir;
 
-	// Callbacks para o controller
 	private Consumer<Produto> editarAcao;
 	private Consumer<Produto> excluirAcao;
 
@@ -114,18 +113,15 @@ public class TelaControleEstoque extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
-
-		// ── TABELA ────────────────────────────────────────────────────────────
-		// ── TABELA ────────────────────────────────────────────────────────────
+		
 		table = new JTable();
-		// --- Linha ~106: Atualize o modelo da tabela ---
+
 		table.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "ID", "Produto", "SKU", "Fornecedor", "Quantidade", "Data" } // Substituído
-																							// "Disponibilidade" por
-																							// "Fornecedor"
-		) {
+				new String[] { "ID", "Nome do Produto", "SKU", "Fornecedor", "Quantidade", "Preço", "Data Cadastro" }) {
+			
+			// Adicionado um Object.class no final para fechar 7 elementos
 			Class[] columnTypes = new Class[] { String.class, Object.class, Object.class, Object.class, Object.class,
-					Object.class };
+					Object.class, Object.class };
 
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
@@ -139,7 +135,6 @@ public class TelaControleEstoque extends JPanel {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(28);
 
-		// 👉 O SEGREDO AQUI: Esconde a coluna ID visualmente para alinhar os textos!
 		table.getColumnModel().getColumn(0).setMinWidth(0);
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 		table.getColumnModel().getColumn(0).setWidth(0);
@@ -151,7 +146,6 @@ public class TelaControleEstoque extends JPanel {
 //				add(table, "cell 4 4 5 3,grow");
 //		add(table, "cell 4 4 5 3,grow");
 
-		// ── POPUP MENU (CLIQUE DIREITO NA TABELA) ─────────────────────────────
 		configurarPopupMenu();
 
 		JLabel lblEstatis = new JLabel("");
@@ -193,15 +187,12 @@ public class TelaControleEstoque extends JPanel {
 		carregarTabelaProdutos();
 	}
 
-	// ── CONFIGURA O POPUP DE EDITAR / EXCLUIR ─────────────────────────────────
 	private void configurarPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 
-		// 👉 NOVA OPÇÃO: Ver Detalhes
 		mntmDetalhes = new JMenuItem("👁️  Ver Detalhes do Produto");
 		mntmDetalhes.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
-		// Opção de Editar
 		mntmEditar = new JMenuItem("✏️  Editar produto");
 		mntmEditar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		mntmEditar.addActionListener(e -> {
@@ -211,7 +202,6 @@ public class TelaControleEstoque extends JPanel {
 			}
 		});
 
-		// Opção de Excluir
 		mntmExcluir = new JMenuItem("🗑️  Excluir produto");
 		mntmExcluir.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		mntmExcluir.setForeground(new Color(180, 30, 30));
@@ -222,22 +212,20 @@ public class TelaControleEstoque extends JPanel {
 			}
 		});
 
-		// Adicionando os botões na "telinha" flutuante (JPopupMenu)
 		popupMenu.add(mntmDetalhes);
-		popupMenu.addSeparator(); // Linha divisória para ficar organizado
+		popupMenu.addSeparator();
 		popupMenu.add(mntmEditar);
 		popupMenu.add(mntmExcluir);
 
-		// Lógica do clique do Mouse
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int row = table.rowAtPoint(e.getPoint());
 				if (row >= 0) {
-					// Seleciona a linha inteira onde o usuário clicou
+
 					table.setRowSelectionInterval(row, row);
 				}
-				// Se foi o botão direito, mostra o menu!
+
 				if (SwingUtilities.isRightMouseButton(e) && row >= 0) {
 					popupMenu.show(table, e.getX(), e.getY());
 				}
@@ -245,7 +233,6 @@ public class TelaControleEstoque extends JPanel {
 		});
 	}
 
-	// ── RETORNA O PRODUTO DA LINHA SELECIONADA NA TABELA ─────────────────────
 	public Produto getProdutoSelecionado() {
 		int row = table.getSelectedRow();
 		if (row < 0)
@@ -257,7 +244,6 @@ public class TelaControleEstoque extends JPanel {
 		String sku = String.valueOf(model.getValueAt(row, 2));
 		String quantidade = String.valueOf(model.getValueAt(row, 4));
 
-		// Busca dados completos do banco para ter localização, fornecedor e categoria
 		ProdutoDAO dao = new ProdutoDAO();
 		try {
 			Produto completo = dao.buscarPorId(Integer.parseInt(id));
@@ -266,16 +252,13 @@ public class TelaControleEstoque extends JPanel {
 		} catch (NumberFormatException ignored) {
 		}
 
-		// Fallback com os dados da tabela (sem localização/fornecedor/categoria)
-		return new Produto(id, sku, nome, quantidade, 0, "", "", "", "");
+		return new Produto(id, sku, nome, quantidade, 0, "", "", "", "", 0.0);
 	}
 
-	// ── RECARREGA A TABELA DO BANCO ───────────────────────────────────────────
 	public void recarregarTabela() {
 		carregarTabelaProdutos();
 	}
 
-	// ── SETTERS DE CALLBACKS ──────────────────────────────────────────────────
 	public void setEditarAcao(Consumer<Produto> acao) {
 		this.editarAcao = acao;
 	}
@@ -303,7 +286,7 @@ public class TelaControleEstoque extends JPanel {
 	public void setFornecedorAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LFor, acao);
 	}
-	
+
 	public void setSaida(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LEntraSai, acao);
 	}
@@ -324,24 +307,17 @@ public class TelaControleEstoque extends JPanel {
 		// TODO Auto-generated method stub
 	}
 
-	// --- Final do arquivo: Método atualizado ---
 	private void carregarTabelaProdutos() {
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		modelo.setRowCount(0);
 
 		ProdutoDAO dao = new ProdutoDAO();
 		List<Produto> listaProdutos = dao.listarProdutos();
+		java.text.DecimalFormat df = new java.text.DecimalFormat("R$ #,##0.00");
 
 		for (Produto p : listaProdutos) {
-			// Removemos a lógica de cálculo de disponibilidade
-
-			modelo.addRow(new Object[] { p.getId_produto(), // Coluna 0 (ID - Oculta)
-					p.getNome(), // Coluna 1 (Produto)
-					p.getSKU(), // Coluna 2 (SKU)
-					p.getFornecedor(), // Coluna 3 (Agora exibe o Fornecedor)
-					p.getQtd(), // Coluna 4 (Quantidade)
-					p.getDataCriacao() // Coluna 5 (Data)
-			});
+			modelo.addRow(new Object[] { p.getId_produto(), p.getNome(), p.getSKU(), p.getFornecedor(), p.getQtd(),
+					df.format(p.getPreco()), p.getDataCriacao() });
 		}
 	}
 }

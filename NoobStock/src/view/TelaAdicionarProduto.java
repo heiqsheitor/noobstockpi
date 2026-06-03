@@ -15,109 +15,124 @@ import model.ProdutoDAO;
 import model.Fornecedor;
 import model.FornecedorDAO;
 import model.CategoriaDAO;
-import java.awt.event.ActionEvent; // 👉 IMPORTADO
+import java.awt.event.ActionEvent;
 
 public class TelaAdicionarProduto extends JPanel {
-	private JTextField TFProduto, TFSKU, TFQtd, TFLocalizacao;
+	private JTextField TFProduto, TFSKU, TFQtd, TFLocalizacao, TFPreco;
 	private JComboBox<String> cbFornecedor;
-	private JComboBox<String> cbCategoria; // 👉 ALTERADO PARA JComboBox
+	private JComboBox<String> cbCategoria;
 	private JButton btnCancelar, btnAdicionar;
 	private JLabel Voltar;
 	private String produtoIdEmEdicao = null;
+	private JTextField textField;
+	private JTextField textField_1;
 
 	public TelaAdicionarProduto() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[][][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][]"));
-		
+		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[][][grow 1][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][]"));
+
 		Voltar = new JLabel("");
 		Voltar.setFont(new Font("Tahoma", Font.PLAIN, 29));
-		Voltar.addMouseListener(new MouseAdapter() { @Override public void mouseClicked(MouseEvent e) {} });
+		Voltar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
 		Voltar.setIcon(new ImageIcon(TelaAdicionarProduto.class.getResource("/img/button→svg.png")));
 		add(Voltar, "cell 0 0");
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Adicionar Produto");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		add(lblNewLabel_1, "cell 1 0");
-		
+
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(TelaAdicionarProduto.class.getResource("/img/svg.png")));
 		add(lblNewLabel_2, "flowy,cell 2 1");
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Adicionar Produto ao Estoque");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		add(lblNewLabel_3, "flowy,cell 3 1,alignx left");
-		
-		JLabel lblNewLabel_5 = new JLabel("Nome do produto");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblNewLabel_5, "cell 3 3");
-		
+
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		
+
+		JLabel lblNewLabel_5 = new JLabel("Nome do produto");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		add(lblNewLabel_5, "cell 3 3");
+
 		TFProduto = new JTextField();
 		add(TFProduto, "cell 3 4 1 2,grow");
-		
+
 		JLabel lblNewLabel_6 = new JLabel("SKU (Código do Produto)");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(lblNewLabel_6, "cell 3 7");
-		
+
 		TFSKU = new JTextField();
 		add(TFSKU, "cell 3 8 1 2,grow");
-		
+
 		JLabel lblNewLabel_7 = new JLabel("Quantidade");
 		lblNewLabel_7.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(lblNewLabel_7, "cell 3 11,alignx left,aligny bottom");
-		
+
 		TFQtd = new JTextField();
 		add(TFQtd, "cell 3 12 1 2,grow");
-		
+
+		JLabel lblPreco = new JLabel("Preço Unitario");
+		lblPreco.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		add(lblPreco, "cell 3 15");
+
+		TFPreco = new JTextField();
+		TFPreco.setToolTipText("");
+		add(TFPreco, "cell 3 16 1 2,grow");
+		ComponentUtils.aplicarMascaraMoeda(TFPreco);
+
 		JLabel lblNewLabel_8 = new JLabel("Localização no Estoque (Clique para selecionar)");
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblNewLabel_8, "flowy,cell 3 15");
-		
+		add(lblNewLabel_8, "flowy,cell 3 19");
+
 		TFLocalizacao = new JTextField();
 		TFLocalizacao.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		TFLocalizacao.setEditable(false);
 		TFLocalizacao.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		TFLocalizacao.setText("Clique para definir a prateleira...");
 		TFLocalizacao.setBackground(new Color(245, 245, 245));
-		add(TFLocalizacao, "cell 3 16 1 2,grow");
-		
+		add(TFLocalizacao, "cell 3 20 1 2,grow");
+
 		TFLocalizacao.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				mostrarMenuLocalizacao(e.getComponent(), e.getX(), e.getY());
 			}
 		});
-		
+
 		JLabel lblNewLabel_9 = new JLabel("Fornecedor");
 		lblNewLabel_9.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblNewLabel_9, "flowy,cell 3 19,alignx left,aligny bottom");
-		
+		add(lblNewLabel_9, "flowy,cell 3 23,alignx left,aligny bottom");
+
 		cbFornecedor = new JComboBox<>();
-		add(cbFornecedor, "cell 3 20 1 2,grow");
-		
+		add(cbFornecedor, "cell 3 24 1 2,grow");
+
 		JLabel lblNewLabel_10 = new JLabel("Categoria do Produto");
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblNewLabel_10, "flowy,cell 3 23,alignx left,aligny bottom");
-		
+		add(lblNewLabel_10, "flowy,cell 3 27,alignx left,aligny bottom");
+
 		// 👉 INICIALIZAÇÃO DO COMBOBOX DE CATEGORIAS
 		cbCategoria = new JComboBox<>();
-		add(cbCategoria, "cell 3 24 1 2,grow");
-		add(btnCancelar, "flowx,cell 3 27,growx");
-		
+		add(cbCategoria, "cell 3 28 1 2,grow");
+		add(btnCancelar, "flowx,cell 3 31,growx");
+
 		btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnAdicionar.setBackground(Color.BLACK);
 		btnAdicionar.setForeground(new Color(255, 255, 255));
-		add(btnAdicionar, "cell 3 27,growx");
+		add(btnAdicionar, "cell 3 31,growx");
 		btnAdicionar.setOpaque(true);
 		btnAdicionar.setBorderPainted(false);
-		
+
 		JLabel lblNewLabel_4 = new JLabel("Preencha as informações abaixo para adicionar um novo produto");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_4.setForeground(new Color(192, 192, 192));
@@ -137,24 +152,25 @@ public class TelaAdicionarProduto extends JPanel {
 		ProdutoDAO dao = new ProdutoDAO();
 		List<Produto> todosProdutos = dao.listarProdutos();
 		List<String> locaisOcupados = new ArrayList<>();
-		
-		for(Produto p : todosProdutos) {
-			if(p.getLocalização() != null && !p.getLocalização().trim().isEmpty()) {
-				if (isEdicao() && p.getId_produto().equals(this.produtoIdEmEdicao)) continue;
+
+		for (Produto p : todosProdutos) {
+			if (p.getLocalização() != null && !p.getLocalização().trim().isEmpty()) {
+				if (isEdicao() && p.getId_produto().equals(this.produtoIdEmEdicao))
+					continue;
 				locaisOcupados.add(p.getLocalização());
 			}
 		}
 
 		JMenu menuArmazem1 = new JMenu("Armazém 1 - Estoque Principal");
 		JMenu menuArmazem2 = new JMenu("Armazém 2 - Excedentes");
-		String[] corredores = {"Corredor A", "Corredor B", "Corredor C"};
-		
+		String[] corredores = { "Corredor A", "Corredor B", "Corredor C" };
+
 		for (String corredor : corredores) {
 			JMenu menuCorredor = new JMenu(corredor);
 			for (int i = 1; i <= 5; i++) {
 				String nomeLocal = "Arm. 1 - " + corredor + " - Prat. " + i;
 				JMenuItem itemPrateleira = new JMenuItem("Prateleira " + i);
-				
+
 				if (locaisOcupados.contains(nomeLocal)) {
 					itemPrateleira.setText("Prateleira " + i + " (Ocupada)");
 					itemPrateleira.setEnabled(false);
@@ -173,7 +189,7 @@ public class TelaAdicionarProduto extends JPanel {
 
 	public void carregarComboBoxFornecedores() {
 		cbFornecedor.removeAllItems();
-		cbFornecedor.addItem("0 - Selecione um fornecedor..."); 
+		cbFornecedor.addItem("0 - Selecione um fornecedor...");
 		List<Fornecedor> lista = new FornecedorDAO().listar();
 		for (Fornecedor f : lista) {
 			cbFornecedor.addItem(f.getIdfornecedor() + " - " + f.getNome());
@@ -184,7 +200,7 @@ public class TelaAdicionarProduto extends JPanel {
 	public void carregarComboBoxCategorias() {
 		cbCategoria.removeAllItems();
 		cbCategoria.addItem("0 - Selecione uma categoria...");
-		
+
 		CategoriaDAO dao = new CategoriaDAO();
 		List<String> lista = dao.listarCategorias();
 		for (String cat : lista) {
@@ -198,7 +214,9 @@ public class TelaAdicionarProduto extends JPanel {
 		TFSKU.setText(p.getSKU());
 		TFQtd.setText(p.getQtd());
 		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "Clique para definir a prateleira...");
-		
+		java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
+		TFPreco.setText(df.format(p.getPreco()));
+
 		// Fornecedor Seleção
 		cbFornecedor.setSelectedIndex(0);
 		if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
@@ -226,44 +244,78 @@ public class TelaAdicionarProduto extends JPanel {
 		btnAdicionar.setText("Salvar alterações");
 	}
 
-	public boolean isEdicao() { return produtoIdEmEdicao != null; }
-	public String getProdutoIdEmEdicao() { return produtoIdEmEdicao; }
-	public void voltaracaoo(Runnable acao) { ComponentUtils.transformarEmLink(this.Voltar, acao); }
-	public void adicionarproduto(ActionListener actionListener) { this.btnAdicionar.addActionListener(actionListener); }
+	public boolean isEdicao() {
+		return produtoIdEmEdicao != null;
+	}
 
-	public String getNomeProduto() { return TFProduto.getText(); }
-	public String getSKU() { return TFSKU.getText(); }
-	public String getQuantidade() { return TFQtd.getText(); }
-	public String getLocalizacao() { 
-		if(TFLocalizacao.getText().startsWith("Clique")) return "";
-		return TFLocalizacao.getText(); 
+	public String getProdutoIdEmEdicao() {
+		return produtoIdEmEdicao;
+	}
+
+	public void voltaracaoo(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.Voltar, acao);
+	}
+
+	public void adicionarproduto(ActionListener actionListener) {
+		this.btnAdicionar.addActionListener(actionListener);
+	}
+
+	public String getNomeProduto() {
+		return TFProduto.getText();
+	}
+
+	public String getSKU() {
+		return TFSKU.getText();
+	}
+
+	public String getQuantidade() {
+		return TFQtd.getText();
 	}
 	
-	public String getFornecedor() {
-		if (cbFornecedor.getSelectedItem() == null) return "";
-		String selecionado = cbFornecedor.getSelectedItem().toString();
-		if (selecionado.startsWith("0")) return ""; 
-		return selecionado.split(" - ")[0]; 
+	public String getPreco() { 
+		if (TFPreco == null || TFPreco.getText().trim().isEmpty()) {
+			return "0,00";
+		}
+		return TFPreco.getText(); 
 	}
 
-	// 👉 RETORNA APENAS O NÚMERO (ID) DA CATEGORIA PARA O CONTROLLER
+	public String getLocalizacao() {
+		if (TFLocalizacao.getText().startsWith("Clique"))
+			return "";
+		return TFLocalizacao.getText();
+	}
+
+	public String getFornecedor() {
+		if (cbFornecedor.getSelectedItem() == null)
+			return "";
+		String selecionado = cbFornecedor.getSelectedItem().toString();
+		if (selecionado.startsWith("0"))
+			return "";
+		return selecionado.split(" - ")[0];
+	}
+
 	public String getCategoria() {
-		if (cbCategoria.getSelectedItem() == null) return "";
+		if (cbCategoria.getSelectedItem() == null)
+			return "";
 		String selecionado = cbCategoria.getSelectedItem().toString();
-		if (selecionado.startsWith("0")) return "";
-		return selecionado.split(" - ")[0]; // Pega apenas a ID numérica antes do hífen
+		if (selecionado.startsWith("0"))
+			return "";
+		return selecionado.split(" - ")[0];
 	}
 
 	public void limparCampos() {
-	    TFProduto.setText("");
-	    TFSKU.setText("");
-	    TFQtd.setText("");
-	    TFLocalizacao.setText("Clique para definir a prateleira...");
-	    
-	    if (cbFornecedor.getItemCount() > 0) cbFornecedor.setSelectedIndex(0); 
-	    if (cbCategoria.getItemCount() > 0) cbCategoria.setSelectedIndex(0); // 👉 RESETA CATEGORIA
-	    
-	    this.produtoIdEmEdicao = null;
-	    btnAdicionar.setText("Adicionar");
+		TFProduto.setText("");
+		TFSKU.setText("");
+		TFQtd.setText("");
+		TFLocalizacao.setText("Clique para definir a prateleira...");
+		TFPreco.setText("0,00");
+
+		if (cbFornecedor.getItemCount() > 0)
+			cbFornecedor.setSelectedIndex(0);
+		if (cbCategoria.getItemCount() > 0)
+			cbCategoria.setSelectedIndex(0); // 👉 RESETA CATEGORIA
+
+		this.produtoIdEmEdicao = null;
+		btnAdicionar.setText("Adicionar");
 	}
 }

@@ -10,363 +10,337 @@ import java.util.List;
 
 public class ProdutoDAO {
 
-    private static final String URL     = "jdbc:mysql://localhost:3306/db_noobstock";
-    private static final String USUARIO = "root";
-    private static final String SENHA   = "admin";
-
-    private Connection conectar() throws SQLException {
-        return DriverManager.getConnection(URL, USUARIO, SENHA);
-    }
-
-    // ── CADASTRAR ─────────────────────────────────────────────────────────────
-    public boolean cadastrarProduto(Produto produto) {
-    	String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
-    	           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (Connection con = conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, produto.getNome());
-            stmt.setString(2, produto.getSKU());
-            stmt.setString(3, produto.getSKU());
-            stmt.setInt   (4, Integer.parseInt(produto.getQtd()));
-            stmt.setInt   (5, produto.getEstoqueMinimo());
-            stmt.setString(6, produto.getLocalização());
-            
-            try {
-                stmt.setInt(7, Integer.parseInt(produto.getFornecedor()));
-            } catch (Exception e) {
-                stmt.setNull(7, java.sql.Types.INTEGER);
-            }
-            
-            try {
-                stmt.setInt(8, Integer.parseInt(produto.getCategoria()));
-            } catch (Exception e) {
-                stmt.setNull(8, java.sql.Types.INTEGER);
-            }
-
-            stmt.executeUpdate();
-            System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
-            return true;
-
-        } catch (NumberFormatException e) {
-            System.err.println("Quantidade inválida: " + e.getMessage());
-            return false;
-        } catch (SQLException e) {
-            System.err.println("Erro ao cadastrar produto: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // ── ATUALIZAR ─────────────────────────────────────────────────────────────
-    public boolean atualizarProduto(Produto produto) {
-        String sql = "UPDATE produto "
-                   + "SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
-                   + "    fornecedor_id = ?, "
-                   + "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
-                   + "WHERE idproduto = ?";
-
-        try (Connection con = conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setString(1, produto.getNome());
-            stmt.setString(2, produto.getSKU());
-
-            try {
-                stmt.setInt(3, Integer.parseInt(produto.getQtd()));
-            } catch (NumberFormatException e) {
-                stmt.setInt(3, 0);
-            }
-
-            stmt.setString(4, produto.getLocalização());
-
-            // fornecedor vem como ID numérico do ComboBox
-            try {
-                stmt.setInt(5, Integer.parseInt(produto.getFornecedor()));
-            } catch (Exception e) {
-                stmt.setNull(5, java.sql.Types.INTEGER);
-            }
+	private static final String URL = "jdbc:mysql://localhost:3306/db_noobstock";
+	private static final String USUARIO = "root";
+	private static final String SENHA = "admin";
+
+	private Connection conectar() throws SQLException {
+		return DriverManager.getConnection(URL, USUARIO, SENHA);
+	}
+
+	// ── CADASTRAR ─────────────────────────────────────────────────────────────
+	public boolean cadastrarProduto(Produto produto) {
+		String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+
+			stmt.setString(1, produto.getNome());
+			stmt.setString(2, produto.getSKU());
+			stmt.setString(3, produto.getSKU());
+			stmt.setInt(4, Integer.parseInt(produto.getQtd()));
+			stmt.setInt(5, produto.getEstoqueMinimo());
+			stmt.setString(6, produto.getLocalização());
+
+			try {
+				stmt.setInt(7, Integer.parseInt(produto.getFornecedor()));
+			} catch (Exception e) {
+				stmt.setNull(7, java.sql.Types.INTEGER);
+			}
+
+			try {
+				stmt.setInt(8, Integer.parseInt(produto.getCategoria()));
+			} catch (Exception e) {
+				stmt.setNull(8, java.sql.Types.INTEGER);
+			}
+
+			stmt.executeUpdate();
+			System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
+			return true;
+
+		} catch (NumberFormatException e) {
+			System.err.println("Quantidade inválida: " + e.getMessage());
+			return false;
+		} catch (SQLException e) {
+			System.err.println("Erro ao cadastrar produto: " + e.getMessage());
+			return false;
+		}
+	}
+
+	// ── ATUALIZAR ─────────────────────────────────────────────────────────────
+	public boolean atualizarProduto(Produto produto) {
+		String sql = "UPDATE produto " + "SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
+				+ "    fornecedor_id = ?, "
+				+ "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
+				+ "WHERE idproduto = ?";
 
-            stmt.setString(6, produto.getCategoria());
-            stmt.setInt   (7, Integer.parseInt(produto.getId_produto()));
+		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
-            int linhasAfetadas = stmt.executeUpdate();
-            if (linhasAfetadas > 0) {
-                System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
-                return true;
-            } else {
-                System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
-                return false;
-            }
+			stmt.setString(1, produto.getNome());
+			stmt.setString(2, produto.getSKU());
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao atualizar produto: " + e.getMessage());
-            return false;
-        }
-    }
+			try {
+				stmt.setInt(3, Integer.parseInt(produto.getQtd()));
+			} catch (NumberFormatException e) {
+				stmt.setInt(3, 0);
+			}
 
-    // ── BUSCAR POR ID ─────────────────────────────────────────────────────────
-    public Produto buscarPorId(int id) {
-        String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
-                   + "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria "
-                   + "FROM produto p "
-                   + "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
-                   + "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria "
-                   + "WHERE p.idproduto = ?";
+			stmt.setString(4, produto.getLocalização());
 
-        try (Connection con = conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+			// fornecedor vem como ID numérico do ComboBox
+			try {
+				stmt.setInt(5, Integer.parseInt(produto.getFornecedor()));
+			} catch (Exception e) {
+				stmt.setNull(5, java.sql.Types.INTEGER);
+			}
 
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Produto(
-                        String.valueOf(rs.getInt("idproduto")),
-                        rs.getString("SKU"),
-                        rs.getString("nome"),
-                        String.valueOf(rs.getInt("qtdestoque")),
-                        rs.getInt("estoque_minimo"),
-                        rs.getString("localizacao"),
-                        rs.getString("fornecedor"),
-                        rs.getString("categoria"),
-                        null
-                    );
-                }
-            }
+			stmt.setString(6, produto.getCategoria());
+			stmt.setInt(7, Integer.parseInt(produto.getId_produto()));
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar produto: " + e.getMessage());
-        }
-        return null;
-    }
-    
-    public List<Produto> listarProdutos() {
+			int linhasAfetadas = stmt.executeUpdate();
+			if (linhasAfetadas > 0) {
+				System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
+				return true;
+			} else {
+				System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
+				return false;
+			}
 
-        List<Produto> lista = new ArrayList<>();
+		} catch (SQLException e) {
+			System.err.println("Erro ao atualizar produto: " + e.getMessage());
+			return false;
+		}
+	}
 
-        // SQL atualizado para buscar a data formatada
+	// ── BUSCAR POR ID ─────────────────────────────────────────────────────────
+	public Produto buscarPorId(int id) {
+		String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
+				+ "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria " + "FROM produto p "
+				+ "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
+				+ "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria " + "WHERE p.idproduto = ?";
 
-        String sql = "SELECT p.*, f.nome AS fornecedor, c.nome AS categoria, "
+		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
-                   + "DATE_FORMAT(p.data_criacao, '%d/%m/%Y') as data_formatada "
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return new Produto(String.valueOf(rs.getInt("idproduto")), rs.getString("SKU"),
+							rs.getString("nome"), String.valueOf(rs.getInt("qtdestoque")), rs.getInt("estoque_minimo"),
+							rs.getString("localizacao"), rs.getString("fornecedor"), rs.getString("categoria"), null,
+							rs.getDouble("preco"));
+				}
+			}
 
-                   + "FROM produto p "
+		} catch (SQLException e) {
+			System.err.println("Erro ao buscar produto: " + e.getMessage());
+		}
+		return null;
+	}
 
-                   + "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
+	public List<Produto> listarProdutos() {
 
-                   + "LEFT JOIN categoria c ON p.categoria_id  = c.idcategoria";
+		List<Produto> lista = new ArrayList<>();
 
+		// SQL atualizado para buscar a data formatada
 
+		String sql = "SELECT p.*, f.nome AS fornecedor, c.nome AS categoria, "
 
-        try (Connection con = conectar();
+				+ "DATE_FORMAT(p.data_criacao, '%d/%m/%Y') as data_formatada "
 
-             PreparedStatement stmt = con.prepareStatement(sql);
+				+ "FROM produto p "
 
-             ResultSet rs = stmt.executeQuery()) {
+				+ "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
 
+				+ "LEFT JOIN categoria c ON p.categoria_id  = c.idcategoria";
 
+		try (Connection con = conectar();
 
-            while (rs.next()) {
+				PreparedStatement stmt = con.prepareStatement(sql);
 
-                Produto p = new Produto(
+				ResultSet rs = stmt.executeQuery()) {
 
-                    String.valueOf(rs.getInt("idproduto")),
+			while (rs.next()) {
 
-                    rs.getString("SKU"),
+				Produto p = new Produto(
 
-                    rs.getString("nome"),
+						String.valueOf(rs.getInt("idproduto")),
 
-                    String.valueOf(rs.getInt("qtdestoque")),
+						rs.getString("SKU"),
 
-                    rs.getInt("estoque_minimo"),
+						rs.getString("nome"),
 
-                    rs.getString("localizacao"),
+						String.valueOf(rs.getInt("qtdestoque")),
 
-                    rs.getString("fornecedor"),
+						rs.getInt("estoque_minimo"),
 
-                    rs.getString("categoria"),
+						rs.getString("localizacao"),
 
-                    rs.getString("data_formatada") // Pega a data formatada do SQL
+						rs.getString("fornecedor"),
 
-                );
+						rs.getString("categoria"),
 
-                lista.add(p);
+						rs.getString("data_formatada"), 0
 
-            }
+				);
 
-        } catch (SQLException e) {
+				lista.add(p);
 
-            System.err.println("Erro ao listar produtos: " + e.getMessage());
+			}
 
-        }
+		} catch (SQLException e) {
 
-        return lista;
+			System.err.println("Erro ao listar produtos: " + e.getMessage());
 
-    }
+		}
 
-    // ── REGISTRAR ENTRADA ─────────────────────────────────────────────────────
-    public boolean registrarEntrada(int idProduto, int quantidade, int idUsuario) {
-        String sqlEstoque     = "UPDATE produto SET qtdestoque = qtdestoque + ? WHERE idproduto = ?";
-        String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade) "
-                               + "VALUES (?, ?, 'entrada', ?)";
+		return lista;
 
-        try (Connection con = conectar()) {
-            con.setAutoCommit(false);
+	}
 
-            try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
-                 PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
+	// ── REGISTRAR ENTRADA ─────────────────────────────────────────────────────
+	public boolean registrarEntrada(int idProduto, int quantidade, int idUsuario) {
+		String sqlEstoque = "UPDATE produto SET qtdestoque = qtdestoque + ? WHERE idproduto = ?";
+		String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade) "
+				+ "VALUES (?, ?, 'entrada', ?)";
 
-                stmtE.setInt(1, quantidade);
-                stmtE.setInt(2, idProduto);
-                stmtE.executeUpdate();
+		try (Connection con = conectar()) {
+			con.setAutoCommit(false);
 
-                stmtM.setInt(1, idProduto);
-                stmtM.setInt(2, idUsuario);
-                stmtM.setInt(3, quantidade);
-                stmtM.executeUpdate();
+			try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
+					PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
 
-                con.commit();
-                return true;
-            } catch (SQLException e) {
-                con.rollback();
-                System.err.println("Erro na entrada — rollback: " + e.getMessage());
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro de conexão: " + e.getMessage());
-            return false;
-        }
-    }
+				stmtE.setInt(1, quantidade);
+				stmtE.setInt(2, idProduto);
+				stmtE.executeUpdate();
 
-    // ── REGISTRAR SAÍDA ───────────────────────────────────────────────────────
-    public boolean registrarSaida(int idProduto, int quantidade, int idUsuario) {
-        String sqlVerifica    = "SELECT qtdestoque FROM produto WHERE idproduto = ?";
-        String sqlEstoque     = "UPDATE produto SET qtdestoque = qtdestoque - ? WHERE idproduto = ?";
-        String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade) "
-                               + "VALUES (?, ?, 'saida', ?)";
-
-        try (Connection con = conectar()) {
-            con.setAutoCommit(false);
-
-            try (PreparedStatement stmtV = con.prepareStatement(sqlVerifica)) {
-                stmtV.setInt(1, idProduto);
-                ResultSet rs = stmtV.executeQuery();
-                if (rs.next() && rs.getInt("qtdestoque") < quantidade) {
-                    System.err.println("Estoque insuficiente para saída.");
-                    con.rollback();
-                    return false;
-                }
-            }
-
-            try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
-                 PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
-
-                stmtE.setInt(1, quantidade);
-                stmtE.setInt(2, idProduto);
-                stmtE.executeUpdate();
-
-                stmtM.setInt(1, idProduto);
-                stmtM.setInt(2, idUsuario);
-                stmtM.setInt(3, quantidade);
-                stmtM.executeUpdate();
-
-                con.commit();
-                return true;
-            } catch (SQLException e) {
-                con.rollback();
-                System.err.println("Erro na saída — rollback: " + e.getMessage());
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro de conexão: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // ── AJUSTE DE INVENTÁRIO ──────────────────────────────────────────────────
-    public boolean ajustarEstoque(int idProduto, int novaQtd, String motivo, int idUsuario) {
-        String sqlEstoque      = "UPDATE produto SET qtdestoque = ? WHERE idproduto = ?";
-        String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade, motivo) "
-                               + "VALUES (?, ?, 'ajuste', ?, ?)";
-
-        try (Connection con = conectar()) {
-            con.setAutoCommit(false);
-
-            try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
-                 PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
-
-                stmtE.setInt(1, novaQtd);
-                stmtE.setInt(2, idProduto);
-                stmtE.executeUpdate();
-
-                stmtM.setInt   (1, idProduto);
-                stmtM.setInt   (2, idUsuario);
-                stmtM.setInt   (3, novaQtd);
-                stmtM.setString(4, motivo);
-                stmtM.executeUpdate();
-
-                con.commit();
-                return true;
-            } catch (SQLException e) {
-                con.rollback();
-                System.err.println("Erro no ajuste — rollback: " + e.getMessage());
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro de conexão: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // ── VERIFICAR ALERTAS DE ESTOQUE BAIXO ───────────────────────────────────
-    public List<Produto> listarEstoqueBaixo() {
-        List<Produto> lista = new ArrayList<>();
-        String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
-                   + "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria "
-                   + "FROM produto p "
-                   + "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
-                   + "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria "
-                   + "WHERE p.qtdestoque <= p.estoque_minimo";
-
-        try (Connection con = conectar();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Produto p = new Produto(
-                    String.valueOf(rs.getInt("idproduto")),
-                    rs.getString("SKU"),
-                    rs.getString("nome"),
-                    String.valueOf(rs.getInt("qtdestoque")),
-                    rs.getInt("estoque_minimo"),
-                    rs.getString("localizacao"),
-                    rs.getString("fornecedor"),
-                    rs.getString("categoria"),
-                    null
-                );
-                lista.add(p);
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao verificar estoque baixo: " + e.getMessage());
-        }
-        return lista;
-    }
-
-    // ── DELETAR ───────────────────────────────────────────────────────────────
-    public boolean deletarProduto(int id) {
-        String sql = "DELETE FROM produto WHERE idproduto = ?";
-
-        try (Connection con = conectar();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-            return true;
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao deletar produto: " + e.getMessage());
-            return false;
-        }
-    }
+				stmtM.setInt(1, idProduto);
+				stmtM.setInt(2, idUsuario);
+				stmtM.setInt(3, quantidade);
+				stmtM.executeUpdate();
+
+				con.commit();
+				return true;
+			} catch (SQLException e) {
+				con.rollback();
+				System.err.println("Erro na entrada — rollback: " + e.getMessage());
+				return false;
+			}
+		} catch (SQLException e) {
+			System.err.println("Erro de conexão: " + e.getMessage());
+			return false;
+		}
+	}
+
+	// ── REGISTRAR SAÍDA ───────────────────────────────────────────────────────
+	public boolean registrarSaida(int idProduto, int quantidade, int idUsuario) {
+		String sqlVerifica = "SELECT qtdestoque FROM produto WHERE idproduto = ?";
+		String sqlEstoque = "UPDATE produto SET qtdestoque = qtdestoque - ? WHERE idproduto = ?";
+		String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade) "
+				+ "VALUES (?, ?, 'saida', ?)";
+
+		try (Connection con = conectar()) {
+			con.setAutoCommit(false);
+
+			try (PreparedStatement stmtV = con.prepareStatement(sqlVerifica)) {
+				stmtV.setInt(1, idProduto);
+				ResultSet rs = stmtV.executeQuery();
+				if (rs.next() && rs.getInt("qtdestoque") < quantidade) {
+					System.err.println("Estoque insuficiente para saída.");
+					con.rollback();
+					return false;
+				}
+			}
+
+			try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
+					PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
+
+				stmtE.setInt(1, quantidade);
+				stmtE.setInt(2, idProduto);
+				stmtE.executeUpdate();
+
+				stmtM.setInt(1, idProduto);
+				stmtM.setInt(2, idUsuario);
+				stmtM.setInt(3, quantidade);
+				stmtM.executeUpdate();
+
+				con.commit();
+				return true;
+			} catch (SQLException e) {
+				con.rollback();
+				System.err.println("Erro na saída — rollback: " + e.getMessage());
+				return false;
+			}
+		} catch (SQLException e) {
+			System.err.println("Erro de conexão: " + e.getMessage());
+			return false;
+		}
+	}
+
+	// ── AJUSTE DE INVENTÁRIO ──────────────────────────────────────────────────
+	public boolean ajustarEstoque(int idProduto, int novaQtd, String motivo, int idUsuario) {
+		String sqlEstoque = "UPDATE produto SET qtdestoque = ? WHERE idproduto = ?";
+		String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade, motivo) "
+				+ "VALUES (?, ?, 'ajuste', ?, ?)";
+
+		try (Connection con = conectar()) {
+			con.setAutoCommit(false);
+
+			try (PreparedStatement stmtE = con.prepareStatement(sqlEstoque);
+					PreparedStatement stmtM = con.prepareStatement(sqlMovimentacao)) {
+
+				stmtE.setInt(1, novaQtd);
+				stmtE.setInt(2, idProduto);
+				stmtE.executeUpdate();
+
+				stmtM.setInt(1, idProduto);
+				stmtM.setInt(2, idUsuario);
+				stmtM.setInt(3, novaQtd);
+				stmtM.setString(4, motivo);
+				stmtM.executeUpdate();
+
+				con.commit();
+				return true;
+			} catch (SQLException e) {
+				con.rollback();
+				System.err.println("Erro no ajuste — rollback: " + e.getMessage());
+				return false;
+			}
+		} catch (SQLException e) {
+			System.err.println("Erro de conexão: " + e.getMessage());
+			return false;
+		}
+	}
+
+	// ── VERIFICAR ALERTAS DE ESTOQUE BAIXO ───────────────────────────────────
+	public List<Produto> listarEstoqueBaixo() {
+		List<Produto> lista = new ArrayList<>();
+		String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
+				+ "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria " + "FROM produto p "
+				+ "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
+				+ "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria "
+				+ "WHERE p.qtdestoque <= p.estoque_minimo";
+
+		try (Connection con = conectar();
+				PreparedStatement stmt = con.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
+
+			while (rs.next()) {
+				Produto p = new Produto(String.valueOf(rs.getInt("idproduto")), rs.getString("SKU"),
+						rs.getString("nome"), String.valueOf(rs.getInt("qtdestoque")), rs.getInt("estoque_minimo"),
+						rs.getString("localizacao"), rs.getString("fornecedor"), rs.getString("categoria"), null,
+						rs.getDouble("preco"));
+				lista.add(p);
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Erro ao verificar estoque baixo: " + e.getMessage());
+		}
+		return lista;
+	}
+
+	// ── DELETAR ───────────────────────────────────────────────────────────────
+	public boolean deletarProduto(int id) {
+		String sql = "DELETE FROM produto WHERE idproduto = ?";
+
+		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+			return true;
+
+		} catch (SQLException e) {
+			System.err.println("Erro ao deletar produto: " + e.getMessage());
+			return false;
+		}
+	}
 }
