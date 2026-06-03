@@ -17,213 +17,162 @@ import java.util.List;
 
 public class SaidaController {
 
-    private TelaSaida view;
-    private Navegador navegador;
-    private ProdutoDAO produtoDAO;
-    private SaidaDAO saidaDAO;
+	private TelaSaida view;
+	private Navegador navegador;
+	private ProdutoDAO produtoDAO;
+	private SaidaDAO saidaDAO;
 
-    // Lista interna de itens adicionados ao "caminhão" nesta operação
-    private List<ItemSaida> itensAdicionados = new ArrayList<>();
+	private List<ItemSaida> itensAdicionados = new ArrayList<>();
 
-    public SaidaController(TelaSaida view, Navegador navegador,
-                           ProdutoDAO produtoDAO, SaidaDAO saidaDAO) {
-        this.view      = view;
-        this.navegador = navegador;
-        this.produtoDAO = produtoDAO;
-        this.saidaDAO  = saidaDAO;
+	public SaidaController(TelaSaida view, Navegador navegador, ProdutoDAO produtoDAO, SaidaDAO saidaDAO) {
+		this.view = view;
+		this.navegador = navegador;
+		this.produtoDAO = produtoDAO;
+		this.saidaDAO = saidaDAO;
 
-        // ── Navegação da sidebar ──────────────────────────────────────────────
-        view.setPerfil(   () -> navegador.navegarPara(Principal.PERFIL));
-        view.setInicio(   () -> navegador.navegarPara(Principal.INICIO));
-        view.setEstoque(  () -> navegador.navegarPara(Principal.ESTOQUE));
-        view.setFornecedor(() -> navegador.navegarPara(Principal.FORNECEDOR));
+		view.setPerfil(() -> navegador.navegarPara(Principal.PERFIL));
+		view.setInicio(() -> navegador.navegarPara(Principal.INICIO));
+		view.setEstoque(() -> navegador.navegarPara(Principal.ESTOQUE));
+		view.setFornecedor(() -> navegador.navegarPara(Principal.FORNECEDOR));
 
-        // ── Ações dos botões ──────────────────────────────────────────────────
-        view.setAdicionarAcao(e -> adicionarProduto());
-        view.setRemoverAcao(  e -> removerProduto());
-        view.setConfirmarAcao(e -> confirmarSaida());
-        view.setCancelarAcao( e -> cancelar());
+		view.setAdicionarAcao(e -> adicionarProduto());
+		view.setRemoverAcao(e -> removerProduto());
+		view.setConfirmarAcao(e -> confirmarSaida());
+		view.setCancelarAcao(e -> cancelar());
 
-        // ── Carrega os produtos do banco no ComboBox ──────────────────────────
-        carregarProdutos();
-    }
+		carregarProdutos();
+	}
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Ações privadas
-    // ════════════════════════════════════════════════════════════════════════
+	private void carregarProdutos() {
+		try {
+			List<Produto> produtos = produtoDAO.listarProdutos();
+			LinkedHashMap<String, Produto> mapa = new LinkedHashMap<>();
+			for (Produto p : produtos) {
+				String label = p.getNome() + "  |  SKU: " + p.getSKU() + "  |  Estoque: " + p.getQtd();
+				mapa.put(label, p);
+			}
+			view.popularComboBoxProdutos(mapa);
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(view, "Erro ao carregar produtos do banco:\n" + ex.getMessage(), "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
-    /**
-     * Busca todos os produtos no banco e popula o ComboBox da view.
-     * O label exibido mostra nome, SKU e estoque para facilitar a escolha.
-     */
-    private void carregarProdutos() {
-        try {
-            List<Produto> produtos = produtoDAO.listarProdutos();
-            LinkedHashMap<String, Produto> mapa = new LinkedHashMap<>();
-            for (Produto p : produtos) {
-                String label = p.getNome()
-                        + "  |  SKU: " + p.getSKU()
-                        + "  |  Estoque: " + p.getQtd();
-                mapa.put(label, p);
-            }
-            view.popularComboBoxProdutos(mapa);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(view,
-                    "Erro ao carregar produtos do banco:\n" + ex.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+	private void adicionarProduto() {
+		Produto produto = view.getProdutoSelecionado();
+		if (produto == null) {
+			JOptionPane.showMessageDialog(view, "Selecione um produto antes de adicionar.", "Atenção",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-    /**
-     * Valida a seleção e a quantidade, e adiciona o produto à lista/tabela.
-     * Se o produto já estiver na lista, apenas soma a quantidade.
-     */
-    private void adicionarProduto() {
-        Produto produto = view.getProdutoSelecionado();
-        if (produto == null) {
-            JOptionPane.showMessageDialog(view,
-                    "Selecione um produto antes de adicionar.",
-                    "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+		int quantidade = view.getQuantidadeInserida();
+		if (quantidade <= 0) {
+			JOptionPane.showMessageDialog(view, "Informe uma quantidade válida (maior que zero).", "Atenção",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-        int quantidade = view.getQuantidadeInserida();
-        if (quantidade <= 0) {
-            JOptionPane.showMessageDialog(view,
-                    "Informe uma quantidade válida (maior que zero).",
-                    "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+		int estoqueAtual = Integer.parseInt(produto.getQtd());
 
-        // Parseia o estoque UMA vez — getQtd() retorna String
-        int estoqueAtual = Integer.parseInt(produto.getQtd());
+		for (int i = 0; i < itensAdicionados.size(); i++) {
+			ItemSaida itemExistente = itensAdicionados.get(i);
+			if (itemExistente.getProduto().getId_produto().equals(produto.getId_produto())) {
 
-        // Verifica se o produto já está na lista do caminhão
-        for (int i = 0; i < itensAdicionados.size(); i++) {
-            ItemSaida itemExistente = itensAdicionados.get(i);
-            if (itemExistente.getProduto().getId_produto()
-                             .equals(produto.getId_produto())) {
+				int novaQtd = itemExistente.getQuantidade() + quantidade;
+				if (novaQtd > estoqueAtual) {
+					JOptionPane.showMessageDialog(
+							view, "A quantidade total (" + novaQtd + ") excede o estoque disponível" + " ("
+									+ estoqueAtual + " unidades).",
+							"Estoque insuficiente", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 
-                int novaQtd = itemExistente.getQuantidade() + quantidade;
-                if (novaQtd > estoqueAtual) {
-                    JOptionPane.showMessageDialog(view,
-                            "A quantidade total (" + novaQtd + ") excede o estoque disponível"
-                            + " (" + estoqueAtual + " unidades).",
-                            "Estoque insuficiente", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+				itemExistente.setQuantidade(novaQtd);
+				view.atualizarQuantidadeNaTabela(i, novaQtd);
+				view.limparCampos();
+				return;
+			}
+		}
 
-                itemExistente.setQuantidade(novaQtd);
-                view.atualizarQuantidadeNaTabela(i, novaQtd);
-                view.limparCampos();
-                return;
-            }
-        }
+		if (quantidade > estoqueAtual) {
+			JOptionPane.showMessageDialog(view,
+					"Quantidade (" + quantidade + ") excede o estoque disponível" + " (" + estoqueAtual + " unidades).",
+					"Estoque insuficiente", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-        // Produto novo — valida estoque
-        if (quantidade > estoqueAtual) {
-            JOptionPane.showMessageDialog(view,
-                    "Quantidade (" + quantidade + ") excede o estoque disponível"
-                    + " (" + estoqueAtual + " unidades).",
-                    "Estoque insuficiente", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+		ItemSaida novoItem = new ItemSaida(produto, quantidade);
+		itensAdicionados.add(novoItem);
+		view.adicionarItemNaTabela(novoItem);
+		view.limparCampos();
+	}
 
-        ItemSaida novoItem = new ItemSaida(produto, quantidade);
-        itensAdicionados.add(novoItem);
-        view.adicionarItemNaTabela(novoItem);
-        view.limparCampos();
-    }
+	private void removerProduto() {
+		int linha = view.getLinhaSelecionada();
+		if (linha < 0) {
+			JOptionPane.showMessageDialog(view, "Selecione um item na tabela para remover.", "Atenção",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		itensAdicionados.remove(linha);
+		view.removerLinhaDaTabela(linha);
+	}
 
-    /**
-     * Remove o item selecionado na tabela da lista interna e da tabela.
-     */
-    private void removerProduto() {
-        int linha = view.getLinhaSelecionada();
-        if (linha < 0) {
-            JOptionPane.showMessageDialog(view,
-                    "Selecione um item na tabela para remover.",
-                    "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        itensAdicionados.remove(linha);
-        view.removerLinhaDaTabela(linha);
-    }
+	private void confirmarSaida() {
+		if (itensAdicionados.isEmpty()) {
+			JOptionPane.showMessageDialog(view, "Adicione ao menos um produto ao caminhão antes de confirmar.",
+					"Atenção", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-    /**
-     * Valida os dados, registra a saída no banco via SaidaDAO (transação),
-     * exibe o comprovante e limpa a tela para uma nova operação.
-     */
-    private void confirmarSaida() {
-        if (itensAdicionados.isEmpty()) {
-            JOptionPane.showMessageDialog(view,
-                    "Adicione ao menos um produto ao caminhão antes de confirmar.",
-                    "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+		String responsavel = view.getResponsavel();
+		if (responsavel.isEmpty()) {
+			JOptionPane.showMessageDialog(view, "Informe o nome do responsável pela saída.", "Atenção",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-        String responsavel = view.getResponsavel();
-        if (responsavel.isEmpty()) {
-            JOptionPane.showMessageDialog(view,
-                    "Informe o nome do responsável pela saída.",
-                    "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+		String observacao = view.getObservacao();
 
-        String observacao = view.getObservacao();
+		SaidaEstoque saida = new SaidaEstoque(0, responsavel, observacao, new ArrayList<>(itensAdicionados));
 
-        // Cria o objeto com id=0 (o banco gerará o ID real)
-        SaidaEstoque saida = new SaidaEstoque(0, responsavel, observacao,
-                                              new ArrayList<>(itensAdicionados));
+		int idGerado = saidaDAO.registrarSaida(saida);
 
-        int idGerado = saidaDAO.registrarSaida(saida);
+		if (idGerado > 0) {
 
-        if (idGerado > 0) {
-            // Reconstrói com o ID real gerado pelo banco
-            SaidaEstoque saidaFinal = new SaidaEstoque(
-                    idGerado, responsavel, observacao,
-                    new ArrayList<>(itensAdicionados));
+			SaidaEstoque saidaFinal = new SaidaEstoque(idGerado, responsavel, observacao,
+					new ArrayList<>(itensAdicionados));
 
-            // Exibe o comprovante
-            mostrarComprovante(saidaFinal);
+			mostrarComprovante(saidaFinal);
 
-            // Limpa tela e recarrega estoques atualizados
-            itensAdicionados.clear();
-            view.limparTabela();
-            view.limparCampos();
-            carregarProdutos();
-        } else {
-            JOptionPane.showMessageDialog(view,
-                    "Erro ao registrar a saída no banco de dados.\n"
-                    + "Verifique a conexão e tente novamente.",
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+			itensAdicionados.clear();
+			view.limparTabela();
+			view.limparCampos();
+			carregarProdutos();
+		} else {
+			JOptionPane.showMessageDialog(view,
+					"Erro ao registrar a saída no banco de dados.\n" + "Verifique a conexão e tente novamente.", "Erro",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
-    /**
-     * Cancela a operação atual, com confirmação caso haja itens na lista.
-     */
-    private void cancelar() {
-        if (!itensAdicionados.isEmpty()) {
-            int resp = JOptionPane.showConfirmDialog(view,
-                    "Deseja cancelar? Os itens adicionados serão removidos.",
-                    "Cancelar operação",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if (resp != JOptionPane.YES_OPTION) return;
-        }
-        itensAdicionados.clear();
-        view.limparTabela();
-        view.limparCampos();
-    }
+	private void cancelar() {
+		if (!itensAdicionados.isEmpty()) {
+			int resp = JOptionPane.showConfirmDialog(view, "Deseja cancelar? Os itens adicionados serão removidos.",
+					"Cancelar operação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (resp != JOptionPane.YES_OPTION)
+				return;
+		}
+		itensAdicionados.clear();
+		view.limparTabela();
+		view.limparCampos();
+	}
 
-    /**
-     * Abre o diálogo de comprovante de saída (modal).
-     */
-    private void mostrarComprovante(SaidaEstoque saida) {
-        Window janelaPai = SwingUtilities.getWindowAncestor(view);
-        JFrame frame = (janelaPai instanceof JFrame) ? (JFrame) janelaPai : null;
-        TelaComprovante comprovante = new TelaComprovante(frame, saida);
-        comprovante.setVisible(true);
-    }
+	private void mostrarComprovante(SaidaEstoque saida) {
+		Window janelaPai = SwingUtilities.getWindowAncestor(view);
+		JFrame frame = (janelaPai instanceof JFrame) ? (JFrame) janelaPai : null;
+		TelaComprovante comprovante = new TelaComprovante(frame, saida);
+		comprovante.setVisible(true);
+	}
 }

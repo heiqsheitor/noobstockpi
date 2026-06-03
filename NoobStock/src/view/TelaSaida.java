@@ -17,14 +17,14 @@ public class TelaSaida extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    // ── Componentes do formulário ───────────────────────────────────────────
+   
     private JTextField txtQuantidade;
     private JTextField txtDataSaida;
     private JTextArea txtAreaObservacao;
     private JTextField txtResponsavel;
     private JTable tableProdutos;
 
-    // ── Campos NOVOS (expostos ao controller) ────────────────────────────────
+    
     private JComboBox<String> cmbProduto;
     private DefaultTableModel tableModel;
     private JButton btnAdicionar;
@@ -32,10 +32,10 @@ public class TelaSaida extends JPanel {
     private JButton btnCancelar;
     private JButton btnRemover;
 
-    // ── Navegação ────────────────────────────────────────────────────────────
+    
     private JLabel LInicio, LEstoque, LFor, LSaida, lblPerfil;
 
-    // ── Mapa nome-display → Produto (preenchido pelo controller) ─────────────
+   
     private LinkedHashMap<String, Produto> mapaProdutos = new LinkedHashMap<>();
 
     public TelaSaida() {
@@ -44,7 +44,7 @@ public class TelaSaida extends JPanel {
                 "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 7][grow 11][grow 1]",
                 "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
 
-        // ── Sidebar esquerda ─────────────────────────────────────────────────
+        
         lblPerfil = new JLabel("");
         lblPerfil.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/image8.png")));
         lblPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -86,20 +86,20 @@ public class TelaSaida extends JPanel {
         LSaida.setFont(new Font("Tahoma", Font.BOLD, 15));
         add(LSaida, "cell 1 5,aligny center");
 
-        // Separador vertical
+        
         JSeparator separator = new JSeparator();
         separator.setOrientation(SwingConstants.VERTICAL);
         separator.setForeground(new Color(0, 0, 0));
         add(separator, "cell 2 0 1 10,gapx 2 2,growy");
 
-        // Logo no rodapé da sidebar
+        
         ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/logopng.png"));
         Image imgRedimensionada = icon.getImage().getScaledInstance(70, 35, Image.SCALE_SMOOTH);
         JLabel lblLogo = new JLabel("");
         lblLogo.setIcon(new ImageIcon(imgRedimensionada));
         add(lblLogo, "cell 0 9 2 1,alignx center,aligny bottom");
 
-        // ── Cabeçalho do conteúdo principal ─────────────────────────────────
+        
         JLabel lblVoltar = new JLabel("");
         lblVoltar.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/button→svg.png")));
         add(lblVoltar, "cell 4 0,aligny center");
@@ -112,7 +112,7 @@ public class TelaSaida extends JPanel {
         lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         add(lblSubtitulo, "cell 4 1,aligny top,gapleft 30");
 
-        // Relógio no canto direito
+        
         JLabel lblDataHora = new JLabel("");
         lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         add(lblDataHora, "cell 6 0,alignx right,aligny center");
@@ -121,7 +121,7 @@ public class TelaSaida extends JPanel {
         timer.start();
         lblDataHora.setText(dtf.format(LocalDateTime.now()));
 
-        // ── Painel "Adicionar Produto à Saída" ───────────────────────────────
+        
         JPanel panelAdicionarProduto = new JPanel();
         panelAdicionarProduto.setBackground(new Color(240, 240, 240));
         panelAdicionarProduto.setLayout(new MigLayout("insets 10", "[grow][100px][160px]", "[pref!][pref!]"));
@@ -134,7 +134,7 @@ public class TelaSaida extends JPanel {
         JLabel lblQuantidadeHeader = new JLabel("Quantidade");
         panelAdicionarProduto.add(lblQuantidadeHeader, "cell 1 0");
 
-        // ComboBox de produtos (campo de instância — será populado pelo controller)
+        
         cmbProduto = new JComboBox<>();
         cmbProduto.addItem("Carregando produtos...");
         panelAdicionarProduto.add(cmbProduto, "cell 0 1,growx");
@@ -150,17 +150,17 @@ public class TelaSaida extends JPanel {
         btnAdicionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         panelAdicionarProduto.add(btnAdicionar, "cell 2 1,growx");
 
-        // ── Título acima da tabela ────────────────────────────────────────────
+        
         JLabel lblProdutosAdicionados = new JLabel("Produtos Adicionados ao Caminhão");
         lblProdutosAdicionados.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
         add(lblProdutosAdicionados, "cell 4 4,gapy 10 0");
 
-        // ── Tabela de itens adicionados (dinâmica, sem dados fixos) ──────────
+        
         String[] colunas = {"Produto", "SKU", "Qtd. Saída", "Estoque Disponível"};
         tableModel = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
-                return false; // tabela somente-leitura
+                return false;
             }
         };
         tableProdutos = new JTable(tableModel);
@@ -171,13 +171,12 @@ public class TelaSaida extends JPanel {
         tableProdutos.getTableHeader().setForeground(Color.WHITE);
         tableProdutos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         tableProdutos.setGridColor(new Color(220, 220, 220));
-        // Coluna "Qtd. Saída" mais estreita
         tableProdutos.getColumnModel().getColumn(2).setMaxWidth(100);
         tableProdutos.getColumnModel().getColumn(3).setMaxWidth(150);
         JScrollPane scrollPane = new JScrollPane(tableProdutos);
         add(scrollPane, "cell 4 5 3 2,grow");
 
-        // ── Informações da Saída ──────────────────────────────────────────────
+    
         JLabel lblInformacoesSaida = new JLabel("Informações da Saída");
         lblInformacoesSaida.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
         add(lblInformacoesSaida, "cell 4 7 3 1,gapy 10 0");
@@ -202,8 +201,6 @@ public class TelaSaida extends JPanel {
         txtResponsavel = new JTextField();
         txtResponsavel.setColumns(10);
         panelInfoSaida.add(txtResponsavel, "cell 0 1,growx");
-
-        // Data preenchida automaticamente (somente-leitura)
         txtDataSaida = new JTextField(dtf.format(LocalDateTime.now()));
         txtDataSaida.setEditable(false);
         txtDataSaida.setBackground(new Color(230, 230, 230));
@@ -218,7 +215,7 @@ public class TelaSaida extends JPanel {
         JScrollPane scrollObs = new JScrollPane(txtAreaObservacao);
         panelInfoSaida.add(scrollObs, "cell 2 1,grow");
 
-        // ── Painel de botões de ação ──────────────────────────────────────────
+
         JPanel panelBotoes = new JPanel();
         panelBotoes.setBackground(new Color(255, 255, 255));
         panelBotoes.setLayout(new MigLayout("insets 5 0 5 0", "[grow][][]", "[pref!]"));
@@ -249,11 +246,8 @@ public class TelaSaida extends JPanel {
         panelBotoes.add(btnConfirmar, "cell 2 0");
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  Métodos públicos — usados pelo SaidaController
-    // ════════════════════════════════════════════════════════════════════════
 
-    /** Preenche o ComboBox com os produtos vindos do banco. */
+
     public void popularComboBoxProdutos(LinkedHashMap<String, Produto> mapa) {
         this.mapaProdutos = mapa;
         cmbProduto.removeAllItems();
@@ -263,14 +257,13 @@ public class TelaSaida extends JPanel {
         }
     }
 
-    /** Retorna o Produto atualmente selecionado no ComboBox, ou null se nenhum. */
     public Produto getProdutoSelecionado() {
         String selecionado = (String) cmbProduto.getSelectedItem();
         if (selecionado == null || selecionado.startsWith("Selecione")) return null;
         return mapaProdutos.get(selecionado);
     }
 
-    /** Retorna a quantidade digitada, ou -1 se inválida. */
+
     public int getQuantidadeInserida() {
         try {
             return Integer.parseInt(txtQuantidade.getText().trim());
@@ -283,48 +276,44 @@ public class TelaSaida extends JPanel {
     public String getObservacao()   { return txtAreaObservacao.getText().trim(); }
     public DefaultTableModel getTableModel() { return tableModel; }
 
-    /** Adiciona uma linha na tabela do caminhão. */
     public void adicionarItemNaTabela(ItemSaida item) {
         Produto p = item.getProduto();
         tableModel.addRow(new Object[]{
             p.getNome(),
             p.getSKU(),
             item.getQuantidade(),
-            p.getQtd()          // estoque atual antes da baixa
+            p.getQtd()         
         });
     }
 
-    /** Atualiza a quantidade de uma linha já existente (produto duplicado). */
     public void atualizarQuantidadeNaTabela(int linha, int novaQtd) {
         tableModel.setValueAt(novaQtd, linha, 2);
     }
 
-    /** Remove a linha indicada da tabela. */
+
     public void removerLinhaDaTabela(int linha) {
         if (linha >= 0 && linha < tableModel.getRowCount()) {
             tableModel.removeRow(linha);
         }
     }
 
-    /** Retorna o índice da linha selecionada na tabela (-1 se nenhuma). */
+
     public int getLinhaSelecionada() { return tableProdutos.getSelectedRow(); }
 
-    /** Limpa todos os itens da tabela. */
+   
     public void limparTabela() { tableModel.setRowCount(0); }
 
-    /** Reseta o combo e a quantidade para o estado inicial. */
+ 
     public void limparCampos() {
         if (cmbProduto.getItemCount() > 0) cmbProduto.setSelectedIndex(0);
         txtQuantidade.setText("1");
     }
 
-    // ── Setters de eventos dos botões ────────────────────────────────────────
+
     public void setAdicionarAcao(ActionListener a)  { btnAdicionar.addActionListener(a); }
     public void setConfirmarAcao(ActionListener a)  { btnConfirmar.addActionListener(a); }
     public void setCancelarAcao(ActionListener a)   { btnCancelar.addActionListener(a);  }
     public void setRemoverAcao(ActionListener a)    { btnRemover.addActionListener(a);   }
-
-    // ── Setters de navegação (sidebar) ───────────────────────────────────────
     public void setInicio(Runnable acao)     { ComponentUtils.transformarEmLink(LInicio,  acao); }
     public void setEstoque(Runnable acao)    { ComponentUtils.transformarEmLink(LEstoque, acao); }
     public void setFornecedor(Runnable acao) { ComponentUtils.transformarEmLink(LFor,     acao); }

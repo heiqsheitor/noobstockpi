@@ -26,7 +26,7 @@ public class Main {
 
 		SwingUtilities.invokeLater(() -> {
 			try {
-				// Janela principal 
+				// Janela principal
 				Principal principal = new Principal();
 
 				// DAOs
@@ -35,21 +35,23 @@ public class Main {
 				FornecedorDAO fornecedorDAO = new FornecedorDAO();
 				CategoriaDAO categoriaDAO = new CategoriaDAO();
 				SaidaDAO saidaDAO = new SaidaDAO();
-				
+
 				categoriaDAO.inicializarCategoriasPadrao();
 
-				// Navegador 
+				// Navegador
 				Navegador navegador = new Navegador(principal);
 
-                // Controllers
+				// Controllers
 				new LoginController(principal.getLogin(), usuarioDAO, navegador);
 				new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
 				new ProdutoController(principal.getAdicionar(), produtoDAO, navegador, principal.getControle());
-				new EstoqueController(principal.getControle(), navegador, produtoDAO, principal.getAdicionar(),principal.getTelaDetalhesProduto());
+				new EstoqueController(principal.getControle(), navegador, produtoDAO, principal.getAdicionar(),
+						principal.getTelaDetalhesProduto());
 				new DetalhesController(principal.getTelaDetalhesProduto(), principal.getControle(), navegador);
 				new InicioController(principal.getInicio(), navegador);
 				new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
-				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,principal.getAdicionarFor());
+				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,
+						principal.getAdicionarFor());
 				new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
 				new SaidaController(principal.getTelaSaida(), navegador, produtoDAO, saidaDAO);
 

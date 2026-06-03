@@ -29,8 +29,7 @@ public class UsuarioController extends ComponentAdapter {
 
 				this.view.limparFormulario();
 				JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
-				
-				// CORREÇÃO: Usar a chave de navegação correta definida em Principal.java
+
 				if (this.navegador != null) {
 					this.navegador.navegarPara("LOGIN");
 				}
