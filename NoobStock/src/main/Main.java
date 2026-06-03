@@ -56,7 +56,7 @@ public class Main {
 				new SaidaController(principal.getTelaSaida(), navegador, produtoDAO, saidaDAO);
 
 				// Inicialição
-				principal.mostrarTela(Principal.ADICIONAR);
+				principal.mostrarTela(Principal.LOGIN);
 				principal.setVisible(true);
 				principal.setLocationRelativeTo(null);
 
