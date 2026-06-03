@@ -16,6 +16,7 @@ import controller.ProdutoController;
 import model.CategoriaDAO;
 import model.FornecedorDAO;
 import model.ProdutoDAO;
+import model.SaidaDAO;
 import model.UsuarioDAO;
 import view.Principal;
 
@@ -33,6 +34,7 @@ public class Main {
 				ProdutoDAO produtoDAO = new ProdutoDAO();
 				FornecedorDAO fornecedorDAO = new FornecedorDAO();
 				CategoriaDAO categoriaDAO = new CategoriaDAO();
+				SaidaDAO saidaDAO = new SaidaDAO();
 				
 				categoriaDAO.inicializarCategoriasPadrao();
 
@@ -49,10 +51,10 @@ public class Main {
 				new PerfilController(principal.getPerfil(), usuarioDAO, navegador);
 				new FornecedorController(principal.getFornecedor(), navegador, fornecedorDAO,principal.getAdicionarFor());
 				new RedefinirSenhaController(principal.getRedefinirSenha(), usuarioDAO, navegador);
-				new SaidaController(principal.getTelaSaida(), navegador);
+				new SaidaController(principal.getTelaSaida(), navegador, produtoDAO, saidaDAO);
 
 				// Inicialição
-				principal.mostrarTela(Principal.INICIO);
+				principal.mostrarTela(Principal.LOGIN);
 				principal.setVisible(true);
 				principal.setLocationRelativeTo(null);
 

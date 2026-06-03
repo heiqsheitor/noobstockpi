@@ -1,236 +1,333 @@
 package view;
 
-import javax.swing.JPanel;
+import controller.ComponentUtils;
+import model.ItemSaida;
+import model.Produto;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import java.awt.Color;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import java.awt.Font;
-import java.awt.Image;
-import javax.swing.Timer;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.table.DefaultTableModel;
-
-import controller.ComponentUtils;
-
-import javax.swing.JButton;
-import javax.swing.JTextArea;
+import java.util.LinkedHashMap;
 
 public class TelaSaida extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private JTextField txtQuantidade;
-	private JTable tableProdutos;
-	private JTextField txtResponsavel;
-	private JTextField txtDataSaida;
-	private JTextArea txtAreaObservacao;
-	private JLabel LInicio, LEstoque, LFor, LSaida, lblPerfil;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Create the panel.
-	 */
-	public TelaSaida() {
-		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 7][grow 11][grow 1]",
-				"[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
+    // ── Componentes do formulário ───────────────────────────────────────────
+    private JTextField txtQuantidade;
+    private JTextField txtDataSaida;
+    private JTextArea txtAreaObservacao;
+    private JTextField txtResponsavel;
+    private JTable tableProdutos;
 
-		// --- Dashboard da Esquerda ---
-		lblPerfil = new JLabel("");
-		lblPerfil.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/image8.png"))); // Placeholder
-		add(lblPerfil, "cell 0 0 2 1,alignx center,aligny center");
+    // ── Campos NOVOS (expostos ao controller) ────────────────────────────────
+    private JComboBox<String> cmbProduto;
+    private DefaultTableModel tableModel;
+    private JButton btnAdicionar;
+    private JButton btnConfirmar;
+    private JButton btnCancelar;
+    private JButton btnRemover;
 
-		JLabel lblNewLabel_4 = new JLabel("Descubra");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 15));
-		add(lblNewLabel_4, "cell 0 1 2 1");
+    // ── Navegação ────────────────────────────────────────────────────────────
+    private JLabel LInicio, LEstoque, LFor, LSaida, lblPerfil;
 
-		JLabel lblInicio = new JLabel("");
-		lblInicio.setForeground(new Color(255, 255, 255));
-		lblInicio.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/home.png"))); // Placeholder
-		add(lblInicio, "cell 0 2,alignx center");
+    // ── Mapa nome-display → Produto (preenchido pelo controller) ─────────────
+    private LinkedHashMap<String, Produto> mapaProdutos = new LinkedHashMap<>();
 
-		LInicio = new JLabel("Início");
-		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		add(LInicio, "cell 1 2,aligny center");
+    public TelaSaida() {
+        setBackground(new Color(255, 255, 255));
+        setLayout(new MigLayout("",
+                "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 7][grow 11][grow 1]",
+                "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
 
-		JLabel lblControleEstoq = new JLabel("");
-		lblControleEstoq.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png"))); // Placeholder
-		add(lblControleEstoq, "cell 0 3,alignx left");
+        // ── Sidebar esquerda ─────────────────────────────────────────────────
+        lblPerfil = new JLabel("");
+        lblPerfil.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/image8.png")));
+        lblPerfil.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        add(lblPerfil, "cell 0 0 2 1,alignx center,aligny center");
 
-		LEstoque = new JLabel("Controle de Estoque");
-		LEstoque.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		add(LEstoque, "cell 1 3,aligny center");
+        JLabel lblDescubra = new JLabel("Descubra");
+        lblDescubra.setFont(new Font("Tahoma", Font.BOLD, 15));
+        add(lblDescubra, "cell 0 1 2 1");
 
-		JLabel lblEstatis = new JLabel("");
-		lblEstatis.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/grafico.png"))); // Placeholder
-		add(lblEstatis, "cell 0 4,alignx center");
+        JLabel lblIconInicio = new JLabel("");
+        lblIconInicio.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/home.png")));
+        add(lblIconInicio, "cell 0 2,alignx center");
 
-		LFor = new JLabel("Fornecedores");
-		LFor.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		add(LFor, "cell 1 4,aligny center");
+        LInicio = new JLabel("Início");
+        LInicio.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        add(LInicio, "cell 1 2,aligny center");
 
-		// --- Produtos Adicionados ao Caminhão ---
-		JLabel lblProdutosAdicionados = new JLabel("Produtos Adicionados ao Caminhão");
-		lblProdutosAdicionados.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
-		add(lblProdutosAdicionados, "cell 4 4,gapy 10 0");
+        JLabel lblIconEstoque = new JLabel("");
+        lblIconEstoque.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png")));
+        add(lblIconEstoque, "cell 0 3,alignx left");
 
-		JLabel lblEstraSai = new JLabel("");
-		lblEstraSai.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/entradaesaida(1)1.png"))); // Placeholder
-		add(lblEstraSai, "cell 0 5,alignx center");
+        LEstoque = new JLabel("Controle de Estoque");
+        LEstoque.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        add(LEstoque, "cell 1 3,aligny center");
 
-		LSaida = new JLabel("Saída de Estoque");
-		LSaida.setFont(new Font("Tahoma", Font.BOLD, 15));
-		add(LSaida, "cell 1 5,aligny center");
+        JLabel lblIconFor = new JLabel("");
+        lblIconFor.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/grafico.png")));
+        add(lblIconFor, "cell 0 4,alignx center");
 
-		JSeparator separator = new JSeparator();
-		separator.setOrientation(SwingConstants.VERTICAL);
-		separator.setForeground(new Color(0, 0, 0));
-		add(separator, "cell 2 0 1 10,gapx 2 2,growy");
+        LFor = new JLabel("Fornecedores");
+        LFor.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        add(LFor, "cell 1 4,aligny center");
 
-		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/logopng.png")); // Placeholder
-		Image img = icon.getImage();
-		Image imgRedimensionada = img.getScaledInstance(70, 35, Image.SCALE_SMOOTH);
+        JLabel lblIconSaida = new JLabel("");
+        lblIconSaida.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/entradaesaida(1)1.png")));
+        add(lblIconSaida, "cell 0 5,alignx center");
 
-		JLabel lblLogo = new JLabel("");
-		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
-		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		add(lblLogo, "cell 0 9 2 1,alignx center,aligny bottom");
+        LSaida = new JLabel("Saída de Estoque");
+        LSaida.setFont(new Font("Tahoma", Font.BOLD, 15));
+        add(LSaida, "cell 1 5,aligny center");
 
-		// --- Conteúdo da Nova Tela (Saída de Estoque) ---
-		JLabel lblVoltar = new JLabel("");
-		lblVoltar.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/button→svg.png"))); // Placeholder
-		add(lblVoltar, "cell 4 0,aligny center");
+        // Separador vertical
+        JSeparator separator = new JSeparator();
+        separator.setOrientation(SwingConstants.VERTICAL);
+        separator.setForeground(new Color(0, 0, 0));
+        add(separator, "cell 2 0 1 10,gapx 2 2,growy");
 
-		JLabel lblTitulo = new JLabel("Saída de Estoque");
-		lblTitulo.setFont(new Font("Segoe UI Semibold", Font.BOLD, 26));
-		add(lblTitulo, "cell 4 0,aligny center, gapleft 30");
+        // Logo no rodapé da sidebar
+        ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/logopng.png"));
+        Image imgRedimensionada = icon.getImage().getScaledInstance(70, 35, Image.SCALE_SMOOTH);
+        JLabel lblLogo = new JLabel("");
+        lblLogo.setIcon(new ImageIcon(imgRedimensionada));
+        add(lblLogo, "cell 0 9 2 1,alignx center,aligny bottom");
 
-		JLabel lblSubtitulo = new JLabel("Registre uma nova saída de produtos do estoque");
-		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		add(lblSubtitulo, "cell 4 1,aligny top, gapleft 30");
+        // ── Cabeçalho do conteúdo principal ─────────────────────────────────
+        JLabel lblVoltar = new JLabel("");
+        lblVoltar.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/button→svg.png")));
+        add(lblVoltar, "cell 4 0,aligny center");
 
-		JLabel lblDataHora = new JLabel("");
-		lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		add(lblDataHora, "cell 6 0,alignx right,aligny center");
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-		Timer timer = new Timer(1000, e -> {
-			lblDataHora.setText(dtf.format(LocalDateTime.now()));
-		});
-		timer.start();
+        JLabel lblTitulo = new JLabel("Saída de Estoque");
+        lblTitulo.setFont(new Font("Segoe UI Semibold", Font.BOLD, 26));
+        add(lblTitulo, "cell 4 0,aligny center,gapleft 30");
 
-		// --- Adicionar Produto à Saída ---
-		JPanel panelAdicionarProduto = new JPanel();
-		panelAdicionarProduto.setBackground(new Color(240, 240, 240));
-		panelAdicionarProduto.setLayout(new MigLayout("", "[grow][100px][150px]", "[pref!][pref!]"));
-		add(panelAdicionarProduto, "cell 4 2 3 2,growx,aligny center,gapy 10 10");
+        JLabel lblSubtitulo = new JLabel("Registre uma nova saída de produtos do estoque");
+        lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        add(lblSubtitulo, "cell 4 1,aligny top,gapleft 30");
 
-		JLabel lblProduto = new JLabel("Adicionar Produto à Saída");
-		lblProduto.setFont(new Font("Segoe UI Semibold", Font.BOLD, 15));
-		panelAdicionarProduto.add(lblProduto, "cell 0 0");
+        // Relógio no canto direito
+        JLabel lblDataHora = new JLabel("");
+        lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        add(lblDataHora, "cell 6 0,alignx right,aligny center");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        Timer timer = new Timer(1000, e -> lblDataHora.setText(dtf.format(LocalDateTime.now())));
+        timer.start();
+        lblDataHora.setText(dtf.format(LocalDateTime.now()));
 
-		JLabel lblQuantidade = new JLabel("Quantidade");
-		panelAdicionarProduto.add(lblQuantidade, "cell 1 0");
+        // ── Painel "Adicionar Produto à Saída" ───────────────────────────────
+        JPanel panelAdicionarProduto = new JPanel();
+        panelAdicionarProduto.setBackground(new Color(240, 240, 240));
+        panelAdicionarProduto.setLayout(new MigLayout("insets 10", "[grow][100px][160px]", "[pref!][pref!]"));
+        add(panelAdicionarProduto, "cell 4 2 3 2,growx,aligny center,gapy 10 10");
 
-		JComboBox<String> cmbProduto = new JComboBox<>();
-		cmbProduto.addItem("Selecione um produto...");
-		panelAdicionarProduto.add(cmbProduto, "cell 0 1,growx");
+        JLabel lblProdutoHeader = new JLabel("Adicionar Produto à Saída");
+        lblProdutoHeader.setFont(new Font("Segoe UI Semibold", Font.BOLD, 15));
+        panelAdicionarProduto.add(lblProdutoHeader, "cell 0 0");
 
-		txtQuantidade = new JTextField("0");
-		panelAdicionarProduto.add(txtQuantidade, "cell 1 1,growx");
-		txtQuantidade.setColumns(10);
+        JLabel lblQuantidadeHeader = new JLabel("Quantidade");
+        panelAdicionarProduto.add(lblQuantidadeHeader, "cell 1 0");
 
-		JButton btnAdicionar = new JButton("+ Adicionar ao Caminhão");
-		btnAdicionar.setBackground(new Color(0, 0, 0));
-		btnAdicionar.setForeground(new Color(255, 255, 255));
-		panelAdicionarProduto.add(btnAdicionar, "cell 2 1,growx");
+        // ComboBox de produtos (campo de instância — será populado pelo controller)
+        cmbProduto = new JComboBox<>();
+        cmbProduto.addItem("Carregando produtos...");
+        panelAdicionarProduto.add(cmbProduto, "cell 0 1,growx");
 
-		tableProdutos = new JTable();
-		tableProdutos.setModel(new DefaultTableModel(new Object[][] {
-				{ "Mouse Gamer Logitech G203", "MS001", "10", "45",
-						new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png")) }, // Placeholder
-				{ "Teclado Mecânico Redragon K552", "TC009", "5", "28",
-						new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png")) }, // Placeholder
-				{ "Headset HyperX Cloud Stinger", "HD007", "3", "12",
-						new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png")) }, // Placeholder
-				{ "Mousepad Speed Large", "MP003", "8", "30",
-						new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png")) }, // Placeholder
-		}, new String[] { "Produto", "SKU", "Quantidade", "Estoque Atual", "Ação" }));
-		JScrollPane scrollPane = new JScrollPane(tableProdutos);
-		add(scrollPane, "cell 4 5 3 2,grow");
+        txtQuantidade = new JTextField("1");
+        txtQuantidade.setColumns(5);
+        panelAdicionarProduto.add(txtQuantidade, "cell 1 1,growx");
 
-		// --- Informações da Saída ---
-		JLabel lblInformacoesSaida = new JLabel("Informações da Saída");
-		lblInformacoesSaida.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
-		add(lblInformacoesSaida, "cell 4 7 3 1,gapy 10 0");
+        btnAdicionar = new JButton("+ Adicionar ao Caminhão");
+        btnAdicionar.setBackground(new Color(30, 30, 30));
+        btnAdicionar.setForeground(Color.WHITE);
+        btnAdicionar.setFocusPainted(false);
+        btnAdicionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panelAdicionarProduto.add(btnAdicionar, "cell 2 1,growx");
 
-		JPanel panelInfoSaida = new JPanel();
-		panelInfoSaida.setBackground(new Color(255, 255, 255));
-		panelInfoSaida.setLayout(new MigLayout("", "[grow][grow][grow]", "[pref!][pref!]"));
-		add(panelInfoSaida, "cell 4 8 3 1,growx");
+        // ── Título acima da tabela ────────────────────────────────────────────
+        JLabel lblProdutosAdicionados = new JLabel("Produtos Adicionados ao Caminhão");
+        lblProdutosAdicionados.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
+        add(lblProdutosAdicionados, "cell 4 4,gapy 10 0");
 
-		JLabel lblResponsavel = new JLabel("Responsável");
-		panelInfoSaida.add(lblResponsavel, "cell 0 0");
+        // ── Tabela de itens adicionados (dinâmica, sem dados fixos) ──────────
+        String[] colunas = {"Produto", "SKU", "Qtd. Saída", "Estoque Disponível"};
+        tableModel = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false; // tabela somente-leitura
+            }
+        };
+        tableProdutos = new JTable(tableModel);
+        tableProdutos.setRowHeight(26);
+        tableProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableProdutos.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tableProdutos.getTableHeader().setBackground(new Color(30, 30, 30));
+        tableProdutos.getTableHeader().setForeground(Color.WHITE);
+        tableProdutos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        tableProdutos.setGridColor(new Color(220, 220, 220));
+        // Coluna "Qtd. Saída" mais estreita
+        tableProdutos.getColumnModel().getColumn(2).setMaxWidth(100);
+        tableProdutos.getColumnModel().getColumn(3).setMaxWidth(150);
+        JScrollPane scrollPane = new JScrollPane(tableProdutos);
+        add(scrollPane, "cell 4 5 3 2,grow");
 
-		JLabel lblData = new JLabel("Data da Saída");
-		panelInfoSaida.add(lblData, "cell 1 0");
+        // ── Informações da Saída ──────────────────────────────────────────────
+        JLabel lblInformacoesSaida = new JLabel("Informações da Saída");
+        lblInformacoesSaida.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
+        add(lblInformacoesSaida, "cell 4 7 3 1,gapy 10 0");
 
-		JLabel lblObservacao = new JLabel("Observação (opcional)");
-		panelInfoSaida.add(lblObservacao, "cell 2 0");
+        JPanel panelInfoSaida = new JPanel();
+        panelInfoSaida.setBackground(new Color(255, 255, 255));
+        panelInfoSaida.setLayout(new MigLayout("insets 0", "[grow][grow][grow]", "[pref!][pref!]"));
+        add(panelInfoSaida, "cell 4 8 3 1,growx");
 
-		txtResponsavel = new JTextField("Ian");
-		panelInfoSaida.add(txtResponsavel, "cell 0 1,growx");
-		txtResponsavel.setColumns(10);
+        JLabel lblResponsavel = new JLabel("Responsável *");
+        lblResponsavel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        panelInfoSaida.add(lblResponsavel, "cell 0 0");
 
-		txtDataSaida = new JTextField("26/05/2025 14:30");
-		panelInfoSaida.add(txtDataSaida, "cell 1 1,growx");
-		txtDataSaida.setColumns(10);
+        JLabel lblData = new JLabel("Data da Saída");
+        lblData.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        panelInfoSaida.add(lblData, "cell 1 0");
 
-		txtAreaObservacao = new JTextArea("Digite uma observação...");
-		txtAreaObservacao.setRows(3);
-		txtAreaObservacao.setLineWrap(true);
-		txtAreaObservacao.setWrapStyleWord(true);
-		JScrollPane scrollPaneObservacao = new JScrollPane(txtAreaObservacao);
-		panelInfoSaida.add(scrollPaneObservacao, "cell 2 1,grow");
+        JLabel lblObservacao = new JLabel("Observação (opcional)");
+        lblObservacao.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        panelInfoSaida.add(lblObservacao, "cell 2 0");
 
-		// --- Botões de Ação ---
-		JPanel panelBotoes = new JPanel();
-		panelBotoes.setBackground(new Color(255, 255, 255));
-		panelBotoes.setLayout(new MigLayout("", "[grow][grow]", "[pref!]"));
-		add(panelBotoes, "cell 4 9 3 1,growx,aligny bottom,gapy 10 0");
+        txtResponsavel = new JTextField();
+        txtResponsavel.setColumns(10);
+        panelInfoSaida.add(txtResponsavel, "cell 0 1,growx");
 
-		JButton btnCancelar = new JButton("X  Cancelar");
-		btnCancelar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnCancelar.setBackground(new Color(240, 240, 240));
-		btnCancelar.setForeground(new Color(0, 0, 0));
-		panelBotoes.add(btnCancelar, "flowx,cell 1 0,alignx right");
+        // Data preenchida automaticamente (somente-leitura)
+        txtDataSaida = new JTextField(dtf.format(LocalDateTime.now()));
+        txtDataSaida.setEditable(false);
+        txtDataSaida.setBackground(new Color(230, 230, 230));
+        txtDataSaida.setColumns(10);
+        panelInfoSaida.add(txtDataSaida, "cell 1 1,growx");
 
-		JButton btnConfirmar = new JButton("✓ Confirmar Saída");
-		btnConfirmar.setBackground(new Color(0, 0, 0));
-		btnConfirmar.setForeground(new Color(255, 255, 255));
-		panelBotoes.add(btnConfirmar, "cell 1 0,alignx right");
-	}
+        txtAreaObservacao = new JTextArea();
+        txtAreaObservacao.setRows(2);
+        txtAreaObservacao.setLineWrap(true);
+        txtAreaObservacao.setWrapStyleWord(true);
+        txtAreaObservacao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JScrollPane scrollObs = new JScrollPane(txtAreaObservacao);
+        panelInfoSaida.add(scrollObs, "cell 2 1,grow");
 
-	public void setInicio(Runnable acao) {
-		ComponentUtils.transformarEmLink(this.LInicio, acao);
-	}
+        // ── Painel de botões de ação ──────────────────────────────────────────
+        JPanel panelBotoes = new JPanel();
+        panelBotoes.setBackground(new Color(255, 255, 255));
+        panelBotoes.setLayout(new MigLayout("insets 5 0 5 0", "[grow][][]", "[pref!]"));
+        add(panelBotoes, "cell 4 9 3 1,growx,aligny bottom,gapy 8 0");
 
-	public void setEstoque(Runnable acao) {
-		ComponentUtils.transformarEmLink(this.LFor, acao);
-	}
+        btnRemover = new JButton("🗑 Remover Selecionado");
+        btnRemover.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        btnRemover.setBackground(new Color(200, 50, 50));
+        btnRemover.setForeground(Color.WHITE);
+        btnRemover.setFocusPainted(false);
+        btnRemover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panelBotoes.add(btnRemover, "cell 0 0,alignx left");
 
-	public void setFornecedor(Runnable acao) {
-		ComponentUtils.transformarEmLink(this.LFor, acao);
-	}
+        btnCancelar = new JButton("✕  Cancelar");
+        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnCancelar.setBackground(new Color(220, 220, 220));
+        btnCancelar.setForeground(new Color(30, 30, 30));
+        btnCancelar.setFocusPainted(false);
+        btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panelBotoes.add(btnCancelar, "cell 1 0,gapx 6 6");
 
-	public void setPerfil(Runnable acao) {
-		ComponentUtils.transformarEmLink(this.lblPerfil, acao);
-	}
+        btnConfirmar = new JButton("✓  Confirmar Saída");
+        btnConfirmar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnConfirmar.setBackground(new Color(20, 20, 20));
+        btnConfirmar.setForeground(Color.WHITE);
+        btnConfirmar.setFocusPainted(false);
+        btnConfirmar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panelBotoes.add(btnConfirmar, "cell 2 0");
+    }
 
+    // ════════════════════════════════════════════════════════════════════════
+    //  Métodos públicos — usados pelo SaidaController
+    // ════════════════════════════════════════════════════════════════════════
+
+    /** Preenche o ComboBox com os produtos vindos do banco. */
+    public void popularComboBoxProdutos(LinkedHashMap<String, Produto> mapa) {
+        this.mapaProdutos = mapa;
+        cmbProduto.removeAllItems();
+        cmbProduto.addItem("Selecione um produto...");
+        for (String label : mapa.keySet()) {
+            cmbProduto.addItem(label);
+        }
+    }
+
+    /** Retorna o Produto atualmente selecionado no ComboBox, ou null se nenhum. */
+    public Produto getProdutoSelecionado() {
+        String selecionado = (String) cmbProduto.getSelectedItem();
+        if (selecionado == null || selecionado.startsWith("Selecione")) return null;
+        return mapaProdutos.get(selecionado);
+    }
+
+    /** Retorna a quantidade digitada, ou -1 se inválida. */
+    public int getQuantidadeInserida() {
+        try {
+            return Integer.parseInt(txtQuantidade.getText().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    public String getResponsavel()  { return txtResponsavel.getText().trim(); }
+    public String getObservacao()   { return txtAreaObservacao.getText().trim(); }
+    public DefaultTableModel getTableModel() { return tableModel; }
+
+    /** Adiciona uma linha na tabela do caminhão. */
+    public void adicionarItemNaTabela(ItemSaida item) {
+        Produto p = item.getProduto();
+        tableModel.addRow(new Object[]{
+            p.getNome(),
+            p.getSKU(),
+            item.getQuantidade(),
+            p.getQtd()          // estoque atual antes da baixa
+        });
+    }
+
+    /** Atualiza a quantidade de uma linha já existente (produto duplicado). */
+    public void atualizarQuantidadeNaTabela(int linha, int novaQtd) {
+        tableModel.setValueAt(novaQtd, linha, 2);
+    }
+
+    /** Remove a linha indicada da tabela. */
+    public void removerLinhaDaTabela(int linha) {
+        if (linha >= 0 && linha < tableModel.getRowCount()) {
+            tableModel.removeRow(linha);
+        }
+    }
+
+    /** Retorna o índice da linha selecionada na tabela (-1 se nenhuma). */
+    public int getLinhaSelecionada() { return tableProdutos.getSelectedRow(); }
+
+    /** Limpa todos os itens da tabela. */
+    public void limparTabela() { tableModel.setRowCount(0); }
+
+    /** Reseta o combo e a quantidade para o estado inicial. */
+    public void limparCampos() {
+        if (cmbProduto.getItemCount() > 0) cmbProduto.setSelectedIndex(0);
+        txtQuantidade.setText("1");
+    }
+
+    // ── Setters de eventos dos botões ────────────────────────────────────────
+    public void setAdicionarAcao(ActionListener a)  { btnAdicionar.addActionListener(a); }
+    public void setConfirmarAcao(ActionListener a)  { btnConfirmar.addActionListener(a); }
+    public void setCancelarAcao(ActionListener a)   { btnCancelar.addActionListener(a);  }
+    public void setRemoverAcao(ActionListener a)    { btnRemover.addActionListener(a);   }
+
+    // ── Setters de navegação (sidebar) ───────────────────────────────────────
+    public void setInicio(Runnable acao)     { ComponentUtils.transformarEmLink(LInicio,  acao); }
+    public void setEstoque(Runnable acao)    { ComponentUtils.transformarEmLink(LEstoque, acao); }
+    public void setFornecedor(Runnable acao) { ComponentUtils.transformarEmLink(LFor,     acao); }
+    public void setSaida(Runnable acao)      { ComponentUtils.transformarEmLink(LSaida,   acao); }
+    public void setPerfil(Runnable acao)     { ComponentUtils.transformarEmLink(lblPerfil,acao); }
 }
