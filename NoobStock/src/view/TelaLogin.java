@@ -4,23 +4,18 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Container;
-
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.JPasswordField;
 
 public class TelaLogin extends JPanel {
@@ -34,124 +29,77 @@ public class TelaLogin extends JPanel {
 	private BufferedImage imagemOriginal;
 	private JPasswordField pFSenha;
 
-	/**
-	 * Create the panel.
-	 * 
-	 * @throws IOException
-	 */
 	public TelaLogin() throws IOException {
 		setToolTipText("");
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[grow 30][grow 0][grow][grow 30]", "[grow 60][][grow 10][grow 30][grow 5][grow 5][grow 5][grow 15][grow 15][grow][]"));
+		// PADRÃO: Adicionado insets (margem) e gap (espaçamento) uniformes
+		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 30][grow 0][grow][grow 30]", "[grow 60][][grow 10][][][][][][][grow][]"));
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
-		lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/img/logopng.png")));
-		Image scaled = imagemOriginal.getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-
+		// PADRÃO: Logo cravada em 120x120 para formulários centrais
+		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));
-
-		// lblLogo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
-		add(lblLogo, "cell 2 0,alignx center,aligny top");
+		add(lblLogo, "cell 2 0,alignx center,aligny top, gapy 20px 10px");
 
 		lblFacaLogin = new JLabel("Faça seu Login");
-		add(lblFacaLogin, "flowy,cell 2 2,alignx center,aligny bottom");
-		lblFacaLogin.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFacaLogin.setFont(new Font("Tahoma", Font.BOLD, 18));
+		add(lblFacaLogin, "cell 2 2,alignx center,aligny bottom");
 
 		lblDigiteCredenciais = new JLabel("Digite suas credenciais para entrar no aplicativo");
+		lblDigiteCredenciais.setForeground(new Color(120, 120, 120));
 		add(lblDigiteCredenciais, "cell 2 3,alignx center,aligny top");
 
 		JLabel lblUsuario = new JLabel("Usuário:");
-		add(lblUsuario, "cell 1 4,alignx right,growy");
+		lblUsuario.setFont(new Font("Tahoma", Font.BOLD, 12));
+		add(lblUsuario, "cell 1 4,alignx right");
 
 		tFUsuario = new JTextField();
-		add(tFUsuario, "cell 2 4,growx");
+		// PADRÃO: Altura cravada em 35px (h 35!)
+		add(tFUsuario, "cell 2 4,growx, h 35!");
 		tFUsuario.setColumns(10);
 
 		JLabel lblSenha = new JLabel("Senha:");
-		add(lblSenha, "cell 1 6,alignx trailing,aligny top");
+		lblSenha.setFont(new Font("Tahoma", Font.BOLD, 12));
+		add(lblSenha, "cell 1 6,alignx right");
 		
 		pFSenha = new JPasswordField();
-		add(pFSenha, "cell 2 6,growx,aligny top");
+		// PADRÃO: Altura cravada em 35px (h 35!)
+		add(pFSenha, "cell 2 6,growx, h 35!");
 
 		btnEsqueciASenha = new JButton("Esqueci a senha");
-		btnEsqueciASenha.setForeground(new Color(255, 255, 255));
-		btnEsqueciASenha.setBackground(new Color(0, 0, 0));
-		add(btnEsqueciASenha, "cell 2 7,alignx center,aligny bottom");
+		btnEsqueciASenha.setForeground(new Color(100, 100, 100));
+		btnEsqueciASenha.setBackground(new Color(255, 255, 255));
+		btnEsqueciASenha.setBorderPainted(false);
+		btnEsqueciASenha.setContentAreaFilled(false);
+		add(btnEsqueciASenha, "cell 2 7,alignx right");
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
-		add(panel, "cell 2 8,grow");
+		panel.setLayout(new MigLayout("insets 0, gap 15px", "[grow][grow]", "[]"));
+		add(panel, "cell 2 8,growx");
 
 		btnEntrar = new JButton("Entrar");
 		btnEntrar.setBackground(new Color(0, 0, 0));
 		btnEntrar.setForeground(new Color(255, 255, 255));
-		panel.add(btnEntrar);
+		btnEntrar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		panel.add(btnEntrar, "cell 0 0, growx, h 35!");
 
 		btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setForeground(new Color(255, 255, 255));
-		btnCadastrar.setBackground(new Color(0, 0, 0));
-		panel.add(btnCadastrar);
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		btnCadastrar.setBackground(new Color(220, 220, 220));
+		btnCadastrar.setForeground(new Color(0, 0, 0));
+		btnCadastrar.setFont(new Font("Tahoma", Font.BOLD, 12));
+		panel.add(btnCadastrar, "cell 1 0, growx, h 35!");
 	}
 
-	public String getUsuario() {
-		return tFUsuario.getText().trim();
-	}
-
-	public String getSenha() {
-		return new String(pFSenha.getPassword());
-	}
-
-	public void mostrarMensagem(String msg) {
-		JOptionPane.showMessageDialog(null, msg);
-	}
-
-	public void adicionarListenerLogin(ActionListener listener) {
-		btnEntrar.addActionListener(listener);
-	}
-
-	public void adicionarListenerCadastro(ActionListener Cadastro) {
-		btnCadastrar.addActionListener(Cadastro);
-	}
+	public String getUsuario() { return tFUsuario.getText().trim(); }
+	public String getSenha() { return new String(pFSenha.getPassword()); }
+	public void mostrarMensagem(String msg) { JOptionPane.showMessageDialog(null, msg); }
+	public void adicionarListenerLogin(ActionListener listener) { btnEntrar.addActionListener(listener); }
+	public void adicionarListenerCadastro(ActionListener Cadastro) { btnCadastrar.addActionListener(Cadastro); }
+	public void adicionarListenerEsqueciSenha(ActionListener EsqueciSenha) { btnEsqueciASenha.addActionListener(EsqueciSenha); }
 	
-	public void adicionarListenerEsqueciSenha(ActionListener EsqueciSenha) {
-		btnEsqueciASenha.addActionListener(EsqueciSenha);
-	}
-
 	public void ajustarFonte(int largura, int altura) {
-		// Calcula a escala com base na mudança de tamanho da janela
-		int tamAjuste = 8;
-		// ajustarFonteContainer(largura, altura, lblLogo, tamAjuste);
-		tamAjuste = 45;
-		ajustarFonteContainer(largura, altura, lblFacaLogin, tamAjuste);
-		tamAjuste = 70;
-		ajustarFonteContainer(largura, altura, lblDigiteCredenciais, tamAjuste);
-		redimensionarImagem(largura, altura);
-
-	}
-
-	private void redimensionarImagem(int largura, int altura) {
-		largura /= 4;
-		altura /= 4;
-		System.out.println(largura);
-		if (largura <= 0 || altura <= 0)
-			return;
-
-		// Escala a imagem mantendo a proporção
-		Image scaled = imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
-		lblLogo.setIcon(new ImageIcon(scaled));
-	}
-
-	private void ajustarFonteContainer(int largura, int altura, Container lblLabel, int tamAjuste) {
-		int tamanhoFonte = Math.min(largura, altura) / tamAjuste;
-		tamanhoFonte = Math.max(tamanhoFonte, 8);
-		tamanhoFonte = Math.min(tamanhoFonte, 72);
-
-		// Aplica a nova fonte
-		lblLabel.setFont(lblLabel.getFont().deriveFont((float) tamanhoFonte));
+		// Mantido para compatibilidade com sua classe Principal
 	}
 }
