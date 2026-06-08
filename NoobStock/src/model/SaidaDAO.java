@@ -13,7 +13,7 @@ public class SaidaDAO {
     private static final String SENHA   = "admin";
 
     private Connection conectar() throws Exception {
-        return DriverManager.getConnection(URL, USUARIO, SENHA);
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/db_noobstock");
     }
 
     /**

@@ -15,7 +15,7 @@ public class UsuarioDAO {
         // Ajustado para a tabela 'usuarios' e coluna 'nome_usuario'
         String sql = "insert into usuarios (nome_usuario, email, senha) values (?, ?, ?)";
 
-        try (Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
+        try (Connection conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_noobstock");
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             // Como o ID é auto_increment, não precisamos enviar ele no INSERT
