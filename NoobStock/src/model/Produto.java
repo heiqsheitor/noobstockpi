@@ -111,4 +111,12 @@ public class Produto {
 	public void setDataCriacao(String dataCriacao) {
 		this.dataCriacao = dataCriacao;
 	}
+
+	/**
+	 * Alias para getDataCriacao().
+	 * Utilizado por TelaDetalhesProduto para exibir a data de cadastro do produto.
+	 */
+	public String getDataAtualizacao() {
+		return dataCriacao;
+	}
 }

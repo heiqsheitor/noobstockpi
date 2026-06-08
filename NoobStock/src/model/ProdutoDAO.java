@@ -15,7 +15,7 @@ public class ProdutoDAO {
 	private static final String SENHA = "admin";
 
 	private Connection conectar() throws SQLException {
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/db_noobstock");
+		return DriverManager.getConnection(URL, USUARIO, SENHA);
 	}
 
 	// ── CADASTRAR ─────────────────────────────────────────────────────────────
@@ -105,7 +105,9 @@ public class ProdutoDAO {
 	// ── BUSCAR POR ID ─────────────────────────────────────────────────────────
 	public Produto buscarPorId(int id) {
 		String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
-				+ "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria " + "FROM produto p "
+				+ "       p.localizacao, p.preco, "
+				+ "       DATE_FORMAT(p.data_criacao, '%d/%m/%Y') AS data_formatada, "
+				+ "       f.nome AS fornecedor, c.nome AS categoria " + "FROM produto p "
 				+ "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
 				+ "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria " + "WHERE p.idproduto = ?";
 
@@ -116,8 +118,8 @@ public class ProdutoDAO {
 				if (rs.next()) {
 					return new Produto(String.valueOf(rs.getInt("idproduto")), rs.getString("SKU"),
 							rs.getString("nome"), String.valueOf(rs.getInt("qtdestoque")), rs.getInt("estoque_minimo"),
-							rs.getString("localizacao"), rs.getString("fornecedor"), rs.getString("categoria"), null,
-							rs.getDouble("preco"));
+							rs.getString("localizacao"), rs.getString("fornecedor"), rs.getString("categoria"),
+							rs.getString("data_formatada"), rs.getDouble("preco"));
 				}
 			}
 
@@ -169,7 +171,7 @@ public class ProdutoDAO {
 
 						rs.getString("categoria"),
 
-						rs.getString("data_formatada"), 0
+						rs.getString("data_formatada"), rs.getDouble("preco")
 
 				);
 
@@ -305,7 +307,7 @@ public class ProdutoDAO {
 	public List<Produto> listarEstoqueBaixo() {
 		List<Produto> lista = new ArrayList<>();
 		String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
-				+ "       p.localizacao, f.nome AS fornecedor, c.nome AS categoria " + "FROM produto p "
+				+ "       p.localizacao, p.preco, f.nome AS fornecedor, c.nome AS categoria " + "FROM produto p "
 				+ "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
 				+ "LEFT JOIN categoria  c ON p.categoria_id  = c.idcategoria "
 				+ "WHERE p.qtdestoque <= p.estoque_minimo";

@@ -14,7 +14,7 @@ import model.Produto;
 public class TelaDetalhesProduto extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private JLabel lblValorNome, lblValorSKU, lblValorID, lblValorQtd, lblValorLocal, lblValorFornecedor, lblValorCategoria;
+	private JLabel lblValorNome, lblValorSKU, lblValorID, lblValorQtd, lblValorLocal, lblValorFornecedor, lblValorCategoria, lblValorPreco;
 	// Agora exposta como campo para poder ser preenchida em preencherDados()
 	private JLabel lblValorAtualizacao;
 	private JLabel Voltar;
@@ -108,7 +108,7 @@ public class TelaDetalhesProduto extends JPanel {
 		// ── Mini-cards: Fornecedor | Última Atualização | Quantidade ──────
 		JPanel linhaMiniCards = new JPanel(new MigLayout(
 			"insets 0, fillx",
-			"[grow, fill]15[grow, fill]15[grow, fill]",
+			"[grow, fill]15[grow, fill]15[grow, fill]15[grow, fill]",
 			"[fill]"
 		));
 		linhaMiniCards.setOpaque(false);
@@ -130,7 +130,7 @@ public class TelaDetalhesProduto extends JPanel {
 		JPanel miniAtualizacao = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
 		miniAtualizacao.setBackground(new Color(248, 249, 250));
 		miniAtualizacao.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
-		JLabel lblTitMiniAtu = new JLabel("Última Atualização");
+		JLabel lblTitMiniAtu = new JLabel("Data de Cadastro");
 		lblTitMiniAtu.setFont(fonteMiniTit);
 		lblTitMiniAtu.setForeground(corTextoMuted);
 		miniAtualizacao.add(lblTitMiniAtu, "cell 0 0");
@@ -162,9 +162,23 @@ public class TelaDetalhesProduto extends JPanel {
 		linhaNumero.add(lblUnidMini, "aligny bottom, gapbottom 1");
 		miniQuantidade.add(linhaNumero, "cell 0 1, growx");
 
+		// Mini Card Preço
+		JPanel miniPreco = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
+		miniPreco.setBackground(new Color(248, 249, 250));
+		miniPreco.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
+		JLabel lblTitMiniPreco = new JLabel("Preço Unitário");
+		lblTitMiniPreco.setFont(fonteMiniTit);
+		lblTitMiniPreco.setForeground(corTextoMuted);
+		miniPreco.add(lblTitMiniPreco, "cell 0 0");
+		lblValorPreco = new JLabel("R$ -");
+		lblValorPreco.setFont(fonteMiniVal);
+		lblValorPreco.setForeground(new Color(40, 167, 69));
+		miniPreco.add(lblValorPreco, "cell 0 1, growx");
+
 		linhaMiniCards.add(miniFornecedor, "cell 0 0, grow");
 		linhaMiniCards.add(miniAtualizacao, "cell 1 0, grow");
 		linhaMiniCards.add(miniQuantidade, "cell 2 0, grow");
+		linhaMiniCards.add(miniPreco, "cell 3 0, grow");
 		cardPrincipal.add(linhaMiniCards, "cell 0 2, span 2, growx");
 		add(cardPrincipal, "cell 0 1 2 1, growx, gapbottom 20");
 
@@ -333,6 +347,11 @@ public class TelaDetalhesProduto extends JPanel {
 		lblValorCategoria.setText((p.getCategoria() != null && !p.getCategoria().isEmpty())
 				? p.getCategoria() : "Não categorizado");
 
+		// Preço
+		java.text.DecimalFormatSymbols simbolos = new java.text.DecimalFormatSymbols(new java.util.Locale("pt", "BR"));
+		java.text.DecimalFormat dfPreco = new java.text.DecimalFormat("R$ #,##0.00", simbolos);
+		lblValorPreco.setText(dfPreco.format(p.getPreco()));
+
 		// FIX: Última Atualização — agora preenche o campo correto (era variável local antes)
 		// p.getDataAtualizacao() deve retornar String já formatada (ex: "27/05/2026 14:30")
 		// Se o model ainda não tiver esse getter, adicione conforme o banco.sql atualizado.
@@ -340,7 +359,4 @@ public class TelaDetalhesProduto extends JPanel {
 		lblValorAtualizacao.setText((dataAtu != null && !dataAtu.isEmpty()) ? dataAtu : "Não atualizado");
 	}
 
-	public void acaoVoltar(Object acao) {
-		// Mantido para compatibilidade
-	}
 }
