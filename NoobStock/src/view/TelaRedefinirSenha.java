@@ -3,6 +3,8 @@ package view;
 import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
@@ -83,5 +85,29 @@ public class TelaRedefinirSenha extends JPanel {
 		add(panelBotoes, "cell 2 8,growx, gapy 10px");
 	}
 	
-	// Cole seus getters, setters e listeners aqui embaixo
+	public String getEmail() {
+		return tfEmail.getText().trim();
+	}
+
+	public String getNovaSenha() {
+		return new String(pfNovaSenha.getPassword());
+	}
+
+	public String getConfirmarNovaSenha() {
+		return new String(pfConfirmarSenha.getPassword());
+	}
+
+	public void adicionarListenerSalvar(ActionListener listener) {
+		btnSalvar.addActionListener(listener);
+	}
+
+	public void mostrarMensagem(String msg) {
+		JOptionPane.showMessageDialog(null, msg);
+	}
+
+	public void limparCampos() {
+		tfEmail.setText("");
+		pfNovaSenha.setText("");
+		pfConfirmarSenha.setText("");
+	}
 }

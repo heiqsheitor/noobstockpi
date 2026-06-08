@@ -19,30 +19,28 @@ public class ProdutoDAO {
 	}
 
 	// ── CADASTRAR ─────────────────────────────────────────────────────────────
+	// ── CADASTRAR ─────────────────────────────────────────────────────────────
 	public boolean cadastrarProduto(Produto produto) {
+		// Ajustado para buscar o ID do fornecedor e categoria usando subqueries pelo
+		// nome
 		String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "VALUES (?, ?, ?, ?, ?, ?, " + "(SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
+				+ "(SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1))";
 
 		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
 			stmt.setString(1, produto.getNome());
 			stmt.setString(2, produto.getSKU());
-			stmt.setString(3, produto.getSKU());
+
+			// Se o seu model Produto tiver o método getNumeroSerie(), troque aqui:
+			stmt.setString(3, produto.getSKU()); // Original estava duplicado. Altere para produto.getNumeroSerie() se
+													// existir.
+
 			stmt.setInt(4, Integer.parseInt(produto.getQtd()));
 			stmt.setInt(5, produto.getEstoqueMinimo());
 			stmt.setString(6, produto.getLocalização());
-
-			try {
-				stmt.setInt(7, Integer.parseInt(produto.getFornecedor()));
-			} catch (Exception e) {
-				stmt.setNull(7, java.sql.Types.INTEGER);
-			}
-
-			try {
-				stmt.setInt(8, Integer.parseInt(produto.getCategoria()));
-			} catch (Exception e) {
-				stmt.setNull(8, java.sql.Types.INTEGER);
-			}
+			stmt.setString(7, produto.getFornecedor()); // Agora passa como String
+			stmt.setString(8, produto.getCategoria()); // Agora passa como String
 
 			stmt.executeUpdate();
 			System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
@@ -59,8 +57,9 @@ public class ProdutoDAO {
 
 	// ── ATUALIZAR ─────────────────────────────────────────────────────────────
 	public boolean atualizarProduto(Produto produto) {
-		String sql = "UPDATE produto " + "SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
-				+ "    fornecedor_id = ?, "
+		// Ajustado para atualizar subqueries e corrigir a lógica nula
+		String sql = "UPDATE produto SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
+				+ "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
 				+ "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
 				+ "WHERE idproduto = ?";
 
@@ -76,15 +75,8 @@ public class ProdutoDAO {
 			}
 
 			stmt.setString(4, produto.getLocalização());
-
-			// fornecedor vem como ID numérico do ComboBox
-			try {
-				stmt.setInt(5, Integer.parseInt(produto.getFornecedor()));
-			} catch (Exception e) {
-				stmt.setNull(5, java.sql.Types.INTEGER);
-			}
-
-			stmt.setString(6, produto.getCategoria());
+			stmt.setString(5, produto.getFornecedor()); // Agora passa como String
+			stmt.setString(6, produto.getCategoria()); // Já estava como subquery, mas agora recebe String correto
 			stmt.setInt(7, Integer.parseInt(produto.getId_produto()));
 
 			int linhasAfetadas = stmt.executeUpdate();

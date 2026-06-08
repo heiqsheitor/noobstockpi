@@ -40,9 +40,7 @@ public class TelaSaida extends JPanel {
 
     public TelaSaida() {
         setBackground(new Color(255, 255, 255));
-        setLayout(new MigLayout("",
-                "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 7][grow 11][grow 1]",
-                "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
+        setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 7][grow 11][grow 1]", "[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
 
         
         lblPerfil = new JLabel("");
@@ -143,7 +141,7 @@ public class TelaSaida extends JPanel {
         txtQuantidade.setColumns(5);
         panelAdicionarProduto.add(txtQuantidade, "cell 1 1,growx");
 
-        btnAdicionar = new JButton("+ Adicionar ao Caminhão");
+        btnAdicionar = new JButton("Adicionar ao Caminhão");
         btnAdicionar.setBackground(new Color(30, 30, 30));
         btnAdicionar.setForeground(Color.WHITE);
         btnAdicionar.setFocusPainted(false);
@@ -184,7 +182,7 @@ public class TelaSaida extends JPanel {
         JPanel panelInfoSaida = new JPanel();
         panelInfoSaida.setBackground(new Color(255, 255, 255));
         panelInfoSaida.setLayout(new MigLayout("insets 0", "[grow][grow][grow]", "[pref!][pref!]"));
-        add(panelInfoSaida, "cell 4 8 3 1,growx");
+        add(panelInfoSaida, "cell 4 8 2 1");
 
         JLabel lblResponsavel = new JLabel("Responsável *");
         lblResponsavel.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -200,20 +198,21 @@ public class TelaSaida extends JPanel {
 
         txtResponsavel = new JTextField();
         txtResponsavel.setColumns(10);
-        panelInfoSaida.add(txtResponsavel, "cell 0 1,growx");
+        panelInfoSaida.add(txtResponsavel, "cell 0 1,alignx left");
         txtDataSaida = new JTextField(dtf.format(LocalDateTime.now()));
         txtDataSaida.setEditable(false);
         txtDataSaida.setBackground(new Color(230, 230, 230));
         txtDataSaida.setColumns(10);
-        panelInfoSaida.add(txtDataSaida, "cell 1 1,growx");
-
-        txtAreaObservacao = new JTextArea();
-        txtAreaObservacao.setRows(2);
-        txtAreaObservacao.setLineWrap(true);
-        txtAreaObservacao.setWrapStyleWord(true);
-        txtAreaObservacao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        JScrollPane scrollObs = new JScrollPane(txtAreaObservacao);
-        panelInfoSaida.add(scrollObs, "cell 2 1,grow");
+        panelInfoSaida.add(txtDataSaida, "cell 1 1,alignx left");
+        JScrollPane scrollObs = new JScrollPane();
+        panelInfoSaida.add(scrollObs, "flowx,cell 2 1,grow");
+        
+                txtAreaObservacao = new JTextArea();
+                scrollObs.setViewportView(txtAreaObservacao);
+                txtAreaObservacao.setRows(2);
+                txtAreaObservacao.setLineWrap(true);
+                txtAreaObservacao.setWrapStyleWord(true);
+                txtAreaObservacao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
 
         JPanel panelBotoes = new JPanel();
@@ -221,7 +220,7 @@ public class TelaSaida extends JPanel {
         panelBotoes.setLayout(new MigLayout("insets 5 0 5 0", "[grow][][]", "[pref!]"));
         add(panelBotoes, "cell 4 9 3 1,growx,aligny bottom,gapy 8 0");
 
-        btnRemover = new JButton("🗑 Remover Selecionado");
+        btnRemover = new JButton("Remover Selecionado");
         btnRemover.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         btnRemover.setBackground(new Color(200, 50, 50));
         btnRemover.setForeground(Color.WHITE);
@@ -229,7 +228,7 @@ public class TelaSaida extends JPanel {
         btnRemover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         panelBotoes.add(btnRemover, "cell 0 0,alignx left");
 
-        btnCancelar = new JButton("✕  Cancelar");
+        btnCancelar = new JButton(" Cancelar");
         btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnCancelar.setBackground(new Color(220, 220, 220));
         btnCancelar.setForeground(new Color(30, 30, 30));
@@ -237,7 +236,7 @@ public class TelaSaida extends JPanel {
         btnCancelar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         panelBotoes.add(btnCancelar, "cell 1 0,gapx 6 6");
 
-        btnConfirmar = new JButton("✓  Confirmar Saída");
+        btnConfirmar = new JButton(" Confirmar Saída");
         btnConfirmar.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnConfirmar.setBackground(new Color(20, 20, 20));
         btnConfirmar.setForeground(Color.WHITE);
