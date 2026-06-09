@@ -117,7 +117,6 @@ public class TelaAdicionarProduto extends JPanel {
 		// 👉 INICIALIZAÇÃO DO COMBOBOX DE CATEGORIAS
 		cbCategoria = new JComboBox<>();
 		add(cbCategoria, "cell 3 28 1 2,grow");
-		add(btnCancelar, "flowx,cell 3 31,growx");
 
 		btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -204,6 +203,12 @@ public class TelaAdicionarProduto extends JPanel {
 
 	public void preencherParaEdicao(Produto p) {
 		this.produtoIdEmEdicao = p.getId_produto();
+		
+		// 1. FORÇAR O CARREGAMENTO DAS LISTAS PRIMEIRO!
+		carregarComboBoxFornecedores();
+		carregarComboBoxCategorias();
+
+		// Preencher os campos de texto
 		TFProduto.setText(p.getNome());
 		TFSKU.setText(p.getSKU());
 		TFQtd.setText(p.getQtd());
@@ -211,26 +216,30 @@ public class TelaAdicionarProduto extends JPanel {
 		java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
 		TFPreco.setText(df.format(p.getPreco()));
 
-		// Fornecedor Seleção
-		cbFornecedor.setSelectedIndex(0);
-		if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
-			for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
-				String item = cbFornecedor.getItemAt(i);
-				if (item.contains(" - " + p.getFornecedor()) || item.startsWith(p.getFornecedor() + " -")) {
-					cbFornecedor.setSelectedIndex(i);
-					break;
+		// 2. FORNECEDOR (Com proteção contra lista vazia)
+		if (cbFornecedor.getItemCount() > 0) {
+			cbFornecedor.setSelectedIndex(0);
+			if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
+				for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
+					String item = cbFornecedor.getItemAt(i);
+					if (item.contains(" - " + p.getFornecedor()) || item.startsWith(p.getFornecedor() + " -")) {
+						cbFornecedor.setSelectedIndex(i);
+						break;
+					}
 				}
 			}
 		}
 
-		// 👉 Categoria Seleção Automática na Edição
-		cbCategoria.setSelectedIndex(0);
-		if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
-			for (int i = 0; i < cbCategoria.getItemCount(); i++) {
-				String item = cbCategoria.getItemAt(i);
-				if (item.contains(" - " + p.getCategoria()) || item.startsWith(p.getCategoria() + " -")) {
-					cbCategoria.setSelectedIndex(i);
-					break;
+		// 3. CATEGORIA (Com proteção contra lista vazia)
+		if (cbCategoria.getItemCount() > 0) {
+			cbCategoria.setSelectedIndex(0);
+			if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
+				for (int i = 0; i < cbCategoria.getItemCount(); i++) {
+					String item = cbCategoria.getItemAt(i);
+					if (item.contains(" - " + p.getCategoria()) || item.startsWith(p.getCategoria() + " -")) {
+						cbCategoria.setSelectedIndex(i);
+						break;
+					}
 				}
 			}
 		}
