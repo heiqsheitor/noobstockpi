@@ -2,361 +2,377 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
+
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
+
 import controller.ComponentUtils;
+import model.HistoricoMovimentacao;
 import model.Produto;
 
 public class TelaDetalhesProduto extends JPanel {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JLabel lblValorNome, lblValorSKU, lblValorID, lblValorQtd, lblValorLocal, lblValorFornecedor, lblValorCategoria, lblValorPreco;
-	// Agora exposta como campo para poder ser preenchida em preencherDados()
-	private JLabel lblValorAtualizacao;
-	private JLabel Voltar;
+    // ── CAMPOS DE DADOS DO PRODUTO ────────────────────────────────────────────
+    private JLabel lblValorNome, lblValorSKU, lblValorID, lblValorQtd;
+    private JLabel lblValorLocal, lblValorFornecedor, lblValorCategoria;
+    private JLabel lblValorPreco, lblValorAtualizacao;
+    private JLabel Voltar;
 
-	public TelaDetalhesProduto() {
-		setBackground(new Color(245, 246, 248));
-		setLayout(new MigLayout(
-			"fill, insets 25 35 25 35",
-			"[grow, fill]20[grow, fill]",
-			"[pref!][pref!][grow, fill]"
-		));
+    // ── HISTÓRICO (painel dinâmico) ───────────────────────────────────────────
+    private JPanel listaMovimentacoes;
 
-		Font fonteTituloTela    = new Font("Segoe UI", Font.BOLD, 22);
-		Font fonteNomeProduto   = new Font("Segoe UI", Font.BOLD, 24);
-		Font fonteSecao         = new Font("Segoe UI", Font.BOLD, 15);
-		Font fonteValoresGerais = new Font("Segoe UI", Font.PLAIN, 14);
-		Font fonteMuted         = new Font("Segoe UI", Font.PLAIN, 13);
-		Font fonteMiniTit       = new Font("Segoe UI", Font.PLAIN, 12);
-		Font fonteMiniVal       = new Font("Segoe UI", Font.BOLD, 14);
-		Font fonteHistQtd       = new Font("Segoe UI", Font.BOLD, 13);
-		Font fonteHistMotivo    = new Font("Segoe UI", Font.PLAIN, 13);
-		Font fonteHistUser      = new Font("Segoe UI", Font.PLAIN, 11);
-		Font fonteHistData      = new Font("Segoe UI", Font.BOLD, 12);
+    // ── CONSTANTES DE ESTILO (reutilizadas em carregarHistorico) ─────────────
+    private static final Font FONTE_HIST_QTD    = new Font("Segoe UI", Font.BOLD,  13);
+    private static final Font FONTE_HIST_MOTIVO = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font FONTE_HIST_USER   = new Font("Segoe UI", Font.PLAIN, 11);
+    private static final Font FONTE_HIST_DATA   = new Font("Segoe UI", Font.BOLD,  12);
+    private static final Font FONTE_MINI_VAL    = new Font("Segoe UI", Font.BOLD,  14);
 
-		Color corTextoPrincipal = new Color(33, 37, 41);
-		Color corTextoMuted     = new Color(110, 117, 124);
-		Color corVerde          = new Color(40, 167, 69);
-		Color corVermelho       = new Color(220, 53, 69);
+    private static final Color COR_PRINCIPAL  = new Color(33, 37, 41);
+    private static final Color COR_MUTED      = new Color(110, 117, 124);
+    private static final Color COR_VERMELHO   = new Color(220, 53, 69);
+    private static final Color COR_VERDE      = new Color(40, 167, 69);
 
-		Border bordaCard = BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(222, 226, 230), 1),
-			BorderFactory.createEmptyBorder(5, 5, 5, 5)
-		);
+    public TelaDetalhesProduto() {
+        setBackground(new Color(245, 246, 248));
+        setLayout(new MigLayout(
+            "fill, insets 25 35 25 35",
+            "[grow, fill]20[grow, fill]",
+            "[pref!][pref!][grow, fill]"
+        ));
 
-		// ── 1. HEADER ─────────────────────────────────────────────────────
-		JPanel painelHeader = new JPanel(new MigLayout("insets 0, fillx", "[pref!][grow]", "[]"));
-		painelHeader.setOpaque(false);
+        Font fonteTituloTela    = new Font("Segoe UI", Font.BOLD,  22);
+        Font fonteNomeProduto   = new Font("Segoe UI", Font.BOLD,  24);
+        Font fonteSecao         = new Font("Segoe UI", Font.BOLD,  15);
+        Font fonteValoresGerais = new Font("Segoe UI", Font.PLAIN, 14);
+        Font fonteMuted         = new Font("Segoe UI", Font.PLAIN, 13);
+        Font fonteMiniTit       = new Font("Segoe UI", Font.PLAIN, 12);
 
-		Voltar = new JLabel("");
-		Voltar.setIcon(new ImageIcon(TelaAdicionarFornecedor.class.getResource("/img/button→svg.png")));
-		painelHeader.add(Voltar, "cell 0 0, aligny center, gapright 10");
+        Border bordaCard = BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(222, 226, 230), 1),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        );
 
-		JLabel lblTitulo = new JLabel("Detalhes do Produto");
-		lblTitulo.setFont(fonteTituloTela);
-		lblTitulo.setForeground(corTextoPrincipal);
-		painelHeader.add(lblTitulo, "cell 1 0, aligny center");
+        // ── 1. HEADER ─────────────────────────────────────────────────────────
+        JPanel painelHeader = new JPanel(new MigLayout("insets 0, fillx", "[pref!][grow]", "[]"));
+        painelHeader.setOpaque(false);
 
-		add(painelHeader, "cell 0 0 2 1, growx, gapbottom 15");
+        Voltar = new JLabel("");
+        Voltar.setIcon(new ImageIcon(TelaAdicionarFornecedor.class.getResource("/img/button→svg.png")));
+        painelHeader.add(Voltar, "cell 0 0, aligny center, gapright 10");
 
-		// ── 2. CARD SUPERIOR ──────────────────────────────────────────────
-		JPanel cardPrincipal = new JPanel();
-		cardPrincipal.setBackground(Color.WHITE);
-		cardPrincipal.setBorder(bordaCard);
-		cardPrincipal.setLayout(new MigLayout("fillx, insets 20", "[grow][pref!]", "[][][pref!]"));
+        JLabel lblTitulo = new JLabel("Detalhes do Produto");
+        lblTitulo.setFont(fonteTituloTela);
+        lblTitulo.setForeground(COR_PRINCIPAL);
+        painelHeader.add(lblTitulo, "cell 1 0, aligny center");
 
-		lblValorNome = new JLabel("-");
-		lblValorNome.setFont(fonteNomeProduto);
-		lblValorNome.setForeground(corTextoPrincipal);
-		cardPrincipal.add(lblValorNome, "cell 0 0, alignx left");
+        add(painelHeader, "cell 0 0 2 1, growx, gapbottom 15");
 
-		// Badge Categoria
-		JPanel badgeCategoria = new JPanel(new MigLayout("insets 4 12 4 12"));
-		badgeCategoria.setBackground(new Color(241, 243, 245));
-		lblValorCategoria = new JLabel("-");
-		lblValorCategoria.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		lblValorCategoria.setForeground(new Color(73, 80, 87));
-		badgeCategoria.add(lblValorCategoria);
-		cardPrincipal.add(badgeCategoria, "cell 1 0, alignx right, aligny top");
+        // ── 2. CARD PRINCIPAL ─────────────────────────────────────────────────
+        JPanel cardPrincipal = new JPanel();
+        cardPrincipal.setBackground(Color.WHITE);
+        cardPrincipal.setBorder(bordaCard);
+        cardPrincipal.setLayout(new MigLayout("fillx, insets 20", "[grow][pref!]", "[][][pref!]"));
 
-		// SKU e ID
-		JPanel painelSubInfo = new JPanel(new MigLayout("insets 0"));
-		painelSubInfo.setOpaque(false);
-		JLabel lblTxtSKU = new JLabel("SKU: ");
-		lblTxtSKU.setFont(fonteValoresGerais);
-		lblTxtSKU.setForeground(corTextoMuted);
-		lblValorSKU = new JLabel("-");
-		lblValorSKU.setFont(fonteValoresGerais);
-		lblValorSKU.setForeground(corTextoMuted);
-		painelSubInfo.add(lblTxtSKU);
-		painelSubInfo.add(lblValorSKU, "gapright 15");
-		JLabel lblTxtID = new JLabel("ID: ");
-		lblTxtID.setFont(fonteValoresGerais);
-		lblTxtID.setForeground(corTextoMuted);
-		lblValorID = new JLabel("-");
-		lblValorID.setFont(fonteValoresGerais);
-		lblValorID.setForeground(corTextoMuted);
-		painelSubInfo.add(lblTxtID);
-		painelSubInfo.add(lblValorID);
-		cardPrincipal.add(painelSubInfo, "cell 0 1, span 2, gapbottom 15");
+        lblValorNome = new JLabel("-");
+        lblValorNome.setFont(fonteNomeProduto);
+        lblValorNome.setForeground(COR_PRINCIPAL);
+        cardPrincipal.add(lblValorNome, "cell 0 0, alignx left");
 
-		// ── Mini-cards: Fornecedor | Última Atualização | Quantidade ──────
-		JPanel linhaMiniCards = new JPanel(new MigLayout(
-			"insets 0, fillx",
-			"[grow, fill]15[grow, fill]15[grow, fill]15[grow, fill]",
-			"[fill]"
-		));
-		linhaMiniCards.setOpaque(false);
+        // Badge Categoria
+        JPanel badgeCategoria = new JPanel(new MigLayout("insets 4 12 4 12"));
+        badgeCategoria.setBackground(new Color(241, 243, 245));
+        lblValorCategoria = new JLabel("-");
+        lblValorCategoria.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblValorCategoria.setForeground(new Color(73, 80, 87));
+        badgeCategoria.add(lblValorCategoria);
+        cardPrincipal.add(badgeCategoria, "cell 1 0, alignx right, aligny top");
 
-		// Mini Card Fornecedor
-		JPanel miniFornecedor = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
-		miniFornecedor.setBackground(new Color(248, 249, 250));
-		miniFornecedor.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
-		JLabel lblTitMiniForn = new JLabel("Fornecedor");
-		lblTitMiniForn.setFont(fonteMiniTit);
-		lblTitMiniForn.setForeground(corTextoMuted);
-		miniFornecedor.add(lblTitMiniForn, "cell 0 0");
-		lblValorFornecedor = new JLabel("-");
-		lblValorFornecedor.setFont(fonteMiniVal);
-		lblValorFornecedor.setForeground(corTextoPrincipal);
-		miniFornecedor.add(lblValorFornecedor, "cell 0 1, growx");
+        // SKU e ID
+        JPanel painelSubInfo = new JPanel(new MigLayout("insets 0"));
+        painelSubInfo.setOpaque(false);
+        JLabel lblTxtSKU = new JLabel("SKU: ");
+        lblTxtSKU.setFont(fonteValoresGerais);
+        lblTxtSKU.setForeground(COR_MUTED);
+        lblValorSKU = new JLabel("-");
+        lblValorSKU.setFont(fonteValoresGerais);
+        lblValorSKU.setForeground(COR_MUTED);
+        painelSubInfo.add(lblTxtSKU);
+        painelSubInfo.add(lblValorSKU, "gapright 15");
+        JLabel lblTxtID = new JLabel("ID: ");
+        lblTxtID.setFont(fonteValoresGerais);
+        lblTxtID.setForeground(COR_MUTED);
+        lblValorID = new JLabel("-");
+        lblValorID.setFont(fonteValoresGerais);
+        lblValorID.setForeground(COR_MUTED);
+        painelSubInfo.add(lblTxtID);
+        painelSubInfo.add(lblValorID);
+        cardPrincipal.add(painelSubInfo, "cell 0 1, span 2, gapbottom 15");
 
-		// Mini Card Última Atualização
-		JPanel miniAtualizacao = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
-		miniAtualizacao.setBackground(new Color(248, 249, 250));
-		miniAtualizacao.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
-		JLabel lblTitMiniAtu = new JLabel("Data de Cadastro");
-		lblTitMiniAtu.setFont(fonteMiniTit);
-		lblTitMiniAtu.setForeground(corTextoMuted);
-		miniAtualizacao.add(lblTitMiniAtu, "cell 0 0");
-		// FIX: campo agora é instância de campo (antes era variável local, nunca preenchida)
-		lblValorAtualizacao = new JLabel("-");
-		lblValorAtualizacao.setFont(fonteMiniVal);
-		lblValorAtualizacao.setForeground(corTextoPrincipal);
-		miniAtualizacao.add(lblValorAtualizacao, "cell 0 1, growx");
+        // Mini-cards: Fornecedor | Data Cadastro | Quantidade | Preço
+        JPanel linhaMiniCards = new JPanel(new MigLayout(
+            "insets 0, fillx",
+            "[grow, fill]15[grow, fill]15[grow, fill]15[grow, fill]",
+            "[fill]"
+        ));
+        linhaMiniCards.setOpaque(false);
 
-		// Mini Card Quantidade
-		JPanel miniQuantidade = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow, fill]", "[]4[]"));
-		miniQuantidade.setBackground(new Color(248, 249, 250));
-		miniQuantidade.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
+        linhaMiniCards.add(criarMiniCard("Fornecedor",          fonteMiniTit, bordaCard, true),  "cell 0 0, grow");
+        linhaMiniCards.add(criarMiniCard("Data de Cadastro",    fonteMiniTit, bordaCard, false), "cell 1 0, grow");
+        linhaMiniCards.add(criarMiniCardQtd(fonteMiniTit, bordaCard),                           "cell 2 0, grow");
+        linhaMiniCards.add(criarMiniCardPreco(fonteMiniTit, bordaCard),                         "cell 3 0, grow");
 
-		JLabel lblTitMiniQtd = new JLabel("Quantidade em Estoque");
-		lblTitMiniQtd.setFont(fonteMiniTit);
-		lblTitMiniQtd.setForeground(corTextoMuted);
-		miniQuantidade.add(lblTitMiniQtd, "cell 0 0");
+        cardPrincipal.add(linhaMiniCards, "cell 0 2, span 2, growx");
+        add(cardPrincipal, "cell 0 1 2 1, growx, gapbottom 20");
 
-		JPanel linhaNumero = new JPanel(new MigLayout("insets 0", "[pref!][pref!]", "[]"));
-		linhaNumero.setOpaque(false);
-		lblValorQtd = new JLabel("-");
-		lblValorQtd.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		lblValorQtd.setForeground(corTextoPrincipal);
-		JLabel lblUnidMini = new JLabel(" unidades");
-		lblUnidMini.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblUnidMini.setForeground(corTextoMuted);
-		linhaNumero.add(lblValorQtd);
-		linhaNumero.add(lblUnidMini, "aligny bottom, gapbottom 1");
-		miniQuantidade.add(linhaNumero, "cell 0 1, growx");
+        // ── 3. LINHA INFERIOR: LOCALIZAÇÃO (esq) + HISTÓRICO (dir) ───────────
 
-		// Mini Card Preço
-		JPanel miniPreco = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
-		miniPreco.setBackground(new Color(248, 249, 250));
-		miniPreco.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
-		JLabel lblTitMiniPreco = new JLabel("Preço Unitário");
-		lblTitMiniPreco.setFont(fonteMiniTit);
-		lblTitMiniPreco.setForeground(corTextoMuted);
-		miniPreco.add(lblTitMiniPreco, "cell 0 0");
-		lblValorPreco = new JLabel("R$ -");
-		lblValorPreco.setFont(fonteMiniVal);
-		lblValorPreco.setForeground(new Color(40, 167, 69));
-		miniPreco.add(lblValorPreco, "cell 0 1, growx");
+        // Card Localização
+        JPanel cardLocalizacao = new JPanel();
+        cardLocalizacao.setBackground(Color.WHITE);
+        cardLocalizacao.setBorder(bordaCard);
+        cardLocalizacao.setLayout(new MigLayout("fill, insets 20", "[grow][right]", "[pref!][][][]"));
 
-		linhaMiniCards.add(miniFornecedor, "cell 0 0, grow");
-		linhaMiniCards.add(miniAtualizacao, "cell 1 0, grow");
-		linhaMiniCards.add(miniQuantidade, "cell 2 0, grow");
-		linhaMiniCards.add(miniPreco, "cell 3 0, grow");
-		cardPrincipal.add(linhaMiniCards, "cell 0 2, span 2, growx");
-		add(cardPrincipal, "cell 0 1 2 1, growx, gapbottom 20");
+        JLabel lblTitLocal = new JLabel("Localização no Estoque");
+        lblTitLocal.setFont(fonteSecao);
+        lblTitLocal.setForeground(COR_PRINCIPAL);
+        cardLocalizacao.add(lblTitLocal, "cell 0 0, span 2, gapbottom 10");
 
-		// ── 3. LINHA INFERIOR: LOCALIZAÇÃO (esq) + HISTÓRICO (dir) ───────
+        JLabel lblArmazemTxt = new JLabel("Armazém:");
+        lblArmazemTxt.setFont(fonteMuted);
+        lblArmazemTxt.setForeground(COR_MUTED);
+        cardLocalizacao.add(lblArmazemTxt, "cell 0 1, gapy 6 6");
+        JLabel lblArmazemVal = new JLabel("Armazém A");
+        lblArmazemVal.setFont(fonteValoresGerais);
+        cardLocalizacao.add(lblArmazemVal, "cell 1 1, gapy 6 6");
 
-		// Card Localização
-		JPanel cardLocalizacao = new JPanel();
-		cardLocalizacao.setBackground(Color.WHITE);
-		cardLocalizacao.setBorder(bordaCard);
-		cardLocalizacao.setLayout(new MigLayout("fill, insets 20", "[grow][right]", "[pref!][][][]"));
+        JLabel lblCorredorTxt = new JLabel("Corredor:");
+        lblCorredorTxt.setFont(fonteMuted);
+        lblCorredorTxt.setForeground(COR_MUTED);
+        cardLocalizacao.add(lblCorredorTxt, "cell 0 2, gapy 6 6");
+        JLabel lblCorredorVal = new JLabel("Corredor 3");
+        lblCorredorVal.setFont(fonteValoresGerais);
+        cardLocalizacao.add(lblCorredorVal, "cell 1 2, gapy 6 6");
 
-		JLabel lblTitLocal = new JLabel("Localização no Estoque");
-		lblTitLocal.setFont(fonteSecao);
-		lblTitLocal.setForeground(corTextoPrincipal);
-		cardLocalizacao.add(lblTitLocal, "cell 0 0, span 2, gapbottom 10");
+        JLabel lblPrateleiraTxt = new JLabel("Prateleira:");
+        lblPrateleiraTxt.setFont(fonteMuted);
+        lblPrateleiraTxt.setForeground(COR_MUTED);
+        cardLocalizacao.add(lblPrateleiraTxt, "cell 0 3, gapy 6 6");
+        lblValorLocal = new JLabel("-");
+        lblValorLocal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        cardLocalizacao.add(lblValorLocal, "cell 1 3, gapy 6 6");
 
-		JLabel lblArmazemTxt = new JLabel("Armazém:");
-		lblArmazemTxt.setFont(fonteMuted);
-		lblArmazemTxt.setForeground(corTextoMuted);
-		cardLocalizacao.add(lblArmazemTxt, "cell 0 1, gapy 6 6");
-		JLabel lblArmazemVal = new JLabel("Armazém A");
-		lblArmazemVal.setFont(fonteValoresGerais);
-		cardLocalizacao.add(lblArmazemVal, "cell 1 1, gapy 6 6");
+        add(cardLocalizacao, "cell 0 2, grow");
 
-		JLabel lblCorredorTxt = new JLabel("Corredor:");
-		lblCorredorTxt.setFont(fonteMuted);
-		lblCorredorTxt.setForeground(corTextoMuted);
-		cardLocalizacao.add(lblCorredorTxt, "cell 0 2, gapy 6 6");
-		JLabel lblCorredorVal = new JLabel("Corredor 3");
-		lblCorredorVal.setFont(fonteValoresGerais);
-		cardLocalizacao.add(lblCorredorVal, "cell 1 2, gapy 6 6");
+        // ── Card Histórico (dinâmico) ─────────────────────────────────────────
+        JPanel cardHistorico = new JPanel();
+        cardHistorico.setBackground(Color.WHITE);
+        cardHistorico.setBorder(bordaCard);
+        cardHistorico.setLayout(new MigLayout("fill, insets 20", "[grow, fill]", "[pref!][grow, fill]"));
 
-		JLabel lblPrateleiraTxt = new JLabel("Prateleira:");
-		lblPrateleiraTxt.setFont(fonteMuted);
-		lblPrateleiraTxt.setForeground(corTextoMuted);
-		cardLocalizacao.add(lblPrateleiraTxt, "cell 0 3, gapy 6 6");
-		lblValorLocal = new JLabel("-");
-		lblValorLocal.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		cardLocalizacao.add(lblValorLocal, "cell 1 3, gapy 6 6");
+        JLabel lblTitHist = new JLabel("Histórico de Saídas");
+        lblTitHist.setFont(fonteSecao);
+        lblTitHist.setForeground(COR_PRINCIPAL);
+        cardHistorico.add(lblTitHist, "cell 0 0, growx, gapbottom 15");
 
-		add(cardLocalizacao, "cell 0 2, grow");
+        // listaMovimentacoes é o painel dinâmico — começa vazio com placeholder
+        listaMovimentacoes = new JPanel(new MigLayout(
+            "insets 0, fillx, wrap 1, gapy 10",
+            "[grow, fill]",
+            ""
+        ));
+        listaMovimentacoes.setOpaque(false);
 
-		// Card Histórico
-		JPanel cardHistorico = new JPanel();
-		cardHistorico.setBackground(Color.WHITE);
-		cardHistorico.setBorder(bordaCard);
-		cardHistorico.setLayout(new MigLayout("fill, insets 20", "[grow, fill]", "[pref!][grow, fill]"));
+        JLabel lblPlaceholder = new JLabel("Carregando histórico...");
+        lblPlaceholder.setFont(FONTE_HIST_MOTIVO);
+        lblPlaceholder.setForeground(COR_MUTED);
+        listaMovimentacoes.add(lblPlaceholder);
 
-		JPanel headerHistorico = new JPanel(new MigLayout("insets 0, fillx", "[grow]", "[]"));
-		headerHistorico.setOpaque(false);
-		JLabel lblTitHist = new JLabel("Histórico de Movimentações");
-		lblTitHist.setFont(fonteSecao);
-		lblTitHist.setForeground(corTextoPrincipal);
-		headerHistorico.add(lblTitHist, "cell 0 0, aligny center");
-		cardHistorico.add(headerHistorico, "cell 0 0, growx, gapbottom 15");
+        JScrollPane scrollHistorico = new JScrollPane(listaMovimentacoes);
+        scrollHistorico.setBorder(BorderFactory.createEmptyBorder());
+        scrollHistorico.getVerticalScrollBar().setUnitIncrement(10);
+        cardHistorico.add(scrollHistorico, "cell 0 1, grow");
 
-		JPanel listaMovimentacoes = new JPanel(new MigLayout("insets 0, fillx, wrap 1", "[grow, fill]", "[]12[]12[]"));
-		listaMovimentacoes.setOpaque(false);
+        add(cardHistorico, "cell 1 2, grow");
+    }
 
-		// Item 1
-		JPanel item1 = new JPanel(new MigLayout("insets 2 0 2 0, fillx", "[pref!][grow][right]", "[]"));
-		item1.setOpaque(false);
-		JLabel lblQtd1 = new JLabel("+50 unidades");
-		lblQtd1.setFont(fonteHistQtd);
-		lblQtd1.setForeground(corVerde);
-		JPanel painelTextos1 = new JPanel(new MigLayout("insets 0 12 0 0", "[grow]", "[][]"));
-		painelTextos1.setOpaque(false);
-		JLabel lblMotivo1 = new JLabel("Recebimento fornecedor");
-		lblMotivo1.setFont(fonteHistMotivo);
-		lblMotivo1.setForeground(corTextoPrincipal);
-		JLabel lblUser1 = new JLabel("João Silva");
-		lblUser1.setFont(fonteHistUser);
-		lblUser1.setForeground(corTextoMuted);
-		painelTextos1.add(lblMotivo1, "wrap");
-		painelTextos1.add(lblUser1);
-		JLabel lblData1 = new JLabel("28 Nov");
-		lblData1.setFont(fonteHistData);
-		lblData1.setForeground(corTextoMuted);
-		item1.add(lblQtd1, "cell 0 0, aligny center");
-		item1.add(painelTextos1, "cell 1 0, growx, aligny center");
-		item1.add(lblData1, "cell 2 0, aligny center");
-		listaMovimentacoes.add(item1);
+    // ── HELPERS PARA MINI-CARDS ───────────────────────────────────────────────
 
-		// Item 2
-		JPanel item2 = new JPanel(new MigLayout("insets 2 0 2 0, fillx", "[pref!][grow][right]", "[]"));
-		item2.setOpaque(false);
-		JLabel lblQtd2 = new JLabel("-25 unidades");
-		lblQtd2.setFont(fonteHistQtd);
-		lblQtd2.setForeground(corVermelho);
-		JPanel painelTextos2 = new JPanel(new MigLayout("insets 0 12 0 0", "[grow]", "[][]"));
-		painelTextos2.setOpaque(false);
-		JLabel lblMotivo2 = new JLabel("Venda direta balcão");
-		lblMotivo2.setFont(fonteHistMotivo);
-		lblMotivo2.setForeground(corTextoPrincipal);
-		JLabel lblUser2 = new JLabel("Maria Santos");
-		lblUser2.setFont(fonteHistUser);
-		lblUser2.setForeground(corTextoMuted);
-		painelTextos2.add(lblMotivo2, "wrap");
-		painelTextos2.add(lblUser2);
-		JLabel lblData2 = new JLabel("29 Nov");
-		lblData2.setFont(fonteHistData);
-		lblData2.setForeground(corTextoMuted);
-		item2.add(lblQtd2, "cell 0 0, aligny center");
-		item2.add(painelTextos2, "cell 1 0, growx, aligny center");
-		item2.add(lblData2, "cell 2 0, aligny center");
-		listaMovimentacoes.add(item2);
+    private JPanel criarMiniCard(String titulo, Font fonteMiniTit, Border borda, boolean isFornecedor) {
+        JPanel card = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
+        card.setBackground(new Color(248, 249, 250));
+        card.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
 
-		// Item 3
-		JPanel item3 = new JPanel(new MigLayout("insets 2 0 2 0, fillx", "[pref!][grow][right]", "[]"));
-		item3.setOpaque(false);
-		JLabel lblQtd3 = new JLabel("-15 unidades");
-		lblQtd3.setFont(fonteHistQtd);
-		lblQtd3.setForeground(corVermelho);
-		JPanel painelTextos3 = new JPanel(new MigLayout("insets 0 12 0 0", "[grow]", "[][]"));
-		painelTextos3.setOpaque(false);
-		JLabel lblMotivo3 = new JLabel("Ajuste de inventário");
-		lblMotivo3.setFont(fonteHistMotivo);
-		lblMotivo3.setForeground(corTextoPrincipal);
-		JLabel lblUser3 = new JLabel("Carlos Lima");
-		lblUser3.setFont(fonteHistUser);
-		lblUser3.setForeground(corTextoMuted);
-		painelTextos3.add(lblMotivo3, "wrap");
-		painelTextos3.add(lblUser3);
-		JLabel lblData3 = new JLabel("01 Dez");
-		lblData3.setFont(fonteHistData);
-		lblData3.setForeground(corTextoMuted);
-		item3.add(lblQtd3, "cell 0 0, aligny center");
-		item3.add(painelTextos3, "cell 1 0, growx, aligny center");
-		item3.add(lblData3, "cell 2 0, aligny center");
-		listaMovimentacoes.add(item3);
+        JLabel lblTit = new JLabel(titulo);
+        lblTit.setFont(fonteMiniTit);
+        lblTit.setForeground(COR_MUTED);
+        card.add(lblTit, "cell 0 0");
 
-		cardHistorico.add(listaMovimentacoes, "cell 0 1, grow, aligny top");
-		add(cardHistorico, "cell 1 2, grow");
-	}
+        if (isFornecedor) {
+            lblValorFornecedor = new JLabel("-");
+            lblValorFornecedor.setFont(FONTE_MINI_VAL);
+            lblValorFornecedor.setForeground(COR_PRINCIPAL);
+            card.add(lblValorFornecedor, "cell 0 1, growx");
+        } else {
+            lblValorAtualizacao = new JLabel("-");
+            lblValorAtualizacao.setFont(FONTE_MINI_VAL);
+            lblValorAtualizacao.setForeground(COR_PRINCIPAL);
+            card.add(lblValorAtualizacao, "cell 0 1, growx");
+        }
+        return card;
+    }
 
-	public void acaoVoltar(Runnable acao) {
-		ComponentUtils.transformarEmLink(this.Voltar, acao);
-	}
+    private JPanel criarMiniCardQtd(Font fonteMiniTit, Border borda) {
+        JPanel card = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow, fill]", "[]4[]"));
+        card.setBackground(new Color(248, 249, 250));
+        card.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
 
-	/**
-	 * Preenche todos os dados da tela com base no objeto Produto recebido.
-	 *
-	 * CORREÇÕES E MELHORIAS:
-	 * 1. lblValorAtualizacao agora é campo de instância → a data é exibida corretamente.
-	 * 2. Fornecedor preenchido via p.getFornecedor() — garante que o valor volta ao editar.
-	 * 3. Data de atualização vinda de p.getDataAtualizacao() (campo novo no model/banco).
-	 */
-	public void preencherDados(Produto p) {
-		lblValorNome.setText(p.getNome() != null ? p.getNome() : "Não informado");
-		lblValorSKU.setText(p.getSKU() != null ? p.getSKU() : "Não informado");
-		lblValorID.setText(String.valueOf(p.getId_produto()));
+        JLabel lblTit = new JLabel("Quantidade em Estoque");
+        lblTit.setFont(fonteMiniTit);
+        lblTit.setForeground(COR_MUTED);
+        card.add(lblTit, "cell 0 0");
 
-		// Quantidade
-		String qtdStr = (p.getQtd() != null) ? p.getQtd() : "0";
-		lblValorQtd.setText(qtdStr);
+        JPanel linhaNum = new JPanel(new MigLayout("insets 0", "[pref!][pref!]", "[]"));
+        linhaNum.setOpaque(false);
+        lblValorQtd = new JLabel("-");
+        lblValorQtd.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblValorQtd.setForeground(COR_PRINCIPAL);
+        JLabel lblUnid = new JLabel(" unidades");
+        lblUnid.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblUnid.setForeground(COR_MUTED);
+        linhaNum.add(lblValorQtd);
+        linhaNum.add(lblUnid, "aligny bottom, gapbottom 1");
+        card.add(linhaNum, "cell 0 1, growx");
+        return card;
+    }
 
-		// Localização
-		lblValorLocal.setText((p.getLocalização() != null && !p.getLocalização().isEmpty())
-				? p.getLocalização() : "Não alocado");
+    private JPanel criarMiniCardPreco(Font fonteMiniTit, Border borda) {
+        JPanel card = new JPanel(new MigLayout("insets 10 14 10 14, fill", "[grow]", "[]4[]"));
+        card.setBackground(new Color(248, 249, 250));
+        card.setBorder(BorderFactory.createLineBorder(new Color(233, 236, 239), 1));
 
-		// FIX: Fornecedor — antes nunca era preenchido pois o campo era local no construtor
-		lblValorFornecedor.setText((p.getFornecedor() != null && !p.getFornecedor().isEmpty())
-				? p.getFornecedor() : "Sem fornecedor");
+        JLabel lblTit = new JLabel("Preço Unitário");
+        lblTit.setFont(fonteMiniTit);
+        lblTit.setForeground(COR_MUTED);
+        card.add(lblTit, "cell 0 0");
 
-		// Categoria
-		lblValorCategoria.setText((p.getCategoria() != null && !p.getCategoria().isEmpty())
-				? p.getCategoria() : "Não categorizado");
+        lblValorPreco = new JLabel("R$ -");
+        lblValorPreco.setFont(FONTE_MINI_VAL);
+        lblValorPreco.setForeground(COR_VERDE);
+        card.add(lblValorPreco, "cell 0 1, growx");
+        return card;
+    }
 
-		// Preço
-		java.text.DecimalFormatSymbols simbolos = new java.text.DecimalFormatSymbols(new java.util.Locale("pt", "BR"));
-		java.text.DecimalFormat dfPreco = new java.text.DecimalFormat("R$ #,##0.00", simbolos);
-		lblValorPreco.setText(dfPreco.format(p.getPreco()));
+    // ── PREENCHER DADOS DO PRODUTO ────────────────────────────────────────────
+    public void preencherDados(Produto p) {
+        lblValorNome.setText(p.getNome() != null ? p.getNome() : "Não informado");
+        lblValorSKU .setText(p.getSKU()  != null ? p.getSKU()  : "Não informado");
+        lblValorID  .setText(String.valueOf(p.getId_produto()));
 
-		// FIX: Última Atualização — agora preenche o campo correto (era variável local antes)
-		// p.getDataAtualizacao() deve retornar String já formatada (ex: "27/05/2026 14:30")
-		// Se o model ainda não tiver esse getter, adicione conforme o banco.sql atualizado.
-		String dataAtu = p.getDataAtualizacao();
-		lblValorAtualizacao.setText((dataAtu != null && !dataAtu.isEmpty()) ? dataAtu : "Não atualizado");
-	}
+        lblValorQtd.setText((p.getQtd() != null) ? p.getQtd() : "0");
 
+        lblValorLocal.setText(
+            (p.getLocalização() != null && !p.getLocalização().isEmpty())
+            ? p.getLocalização() : "Não alocado"
+        );
+
+        lblValorFornecedor.setText(
+            (p.getFornecedor() != null && !p.getFornecedor().isEmpty())
+            ? p.getFornecedor() : "Sem fornecedor"
+        );
+
+        lblValorCategoria.setText(
+            (p.getCategoria() != null && !p.getCategoria().isEmpty())
+            ? p.getCategoria() : "Não categorizado"
+        );
+
+        java.text.DecimalFormatSymbols simbolos =
+            new java.text.DecimalFormatSymbols(new java.util.Locale("pt", "BR"));
+        java.text.DecimalFormat dfPreco = new java.text.DecimalFormat("R$ #,##0.00", simbolos);
+        lblValorPreco.setText(dfPreco.format(p.getPreco()));
+
+        String dataAtu = p.getDataAtualizacao();
+        lblValorAtualizacao.setText(
+            (dataAtu != null && !dataAtu.isEmpty()) ? dataAtu : "Não informado"
+        );
+    }
+
+    // ── CARREGAR HISTÓRICO REAL DO BANCO ─────────────────────────────────────
+    /**
+     * Recebe a lista de movimentações vindas do SaidaDAO e popula o painel
+     * dinâmico de histórico. Chamado pelo EstoqueController após preencherDados().
+     */
+    public void carregarHistorico(List<HistoricoMovimentacao> historico) {
+        listaMovimentacoes.removeAll();
+
+        if (historico == null || historico.isEmpty()) {
+            JLabel lblVazio = new JLabel("Nenhuma saída registrada para este produto.");
+            lblVazio.setFont(FONTE_HIST_MOTIVO);
+            lblVazio.setForeground(COR_MUTED);
+            listaMovimentacoes.add(lblVazio);
+        } else {
+            for (HistoricoMovimentacao h : historico) {
+                listaMovimentacoes.add(criarItemHistorico(h));
+            }
+        }
+
+        listaMovimentacoes.revalidate();
+        listaMovimentacoes.repaint();
+    }
+
+    /** Constrói uma linha visual para um único registro de saída. */
+    private JPanel criarItemHistorico(HistoricoMovimentacao h) {
+        JPanel item = new JPanel(new MigLayout(
+            "insets 6 0 6 0, fillx",
+            "[pref!][grow][right]",
+            "[]"
+        ));
+        item.setOpaque(false);
+
+        // Quantidade (sempre negativa = saída)
+        JLabel lblQtd = new JLabel("-" + h.getQuantidade() + " un.");
+        lblQtd.setFont(FONTE_HIST_QTD);
+        lblQtd.setForeground(COR_VERMELHO);
+
+        // Textos: motivo/observação + responsável
+        JPanel painelTextos = new JPanel(new MigLayout("insets 0 10 0 0", "[grow]", "[][]"));
+        painelTextos.setOpaque(false);
+
+        String descricao = h.getObservacao().isEmpty()
+            ? "Saída de estoque"
+            : h.getObservacao();
+        JLabel lblMotivo = new JLabel(descricao);
+        lblMotivo.setFont(FONTE_HIST_MOTIVO);
+        lblMotivo.setForeground(COR_PRINCIPAL);
+
+        JLabel lblResponsavel = new JLabel("Responsável: " + h.getResponsavel());
+        lblResponsavel.setFont(FONTE_HIST_USER);
+        lblResponsavel.setForeground(COR_MUTED);
+
+        painelTextos.add(lblMotivo,      "wrap");
+        painelTextos.add(lblResponsavel);
+
+        // Data
+        JLabel lblData = new JLabel(h.getDatahora());
+        lblData.setFont(FONTE_HIST_DATA);
+        lblData.setForeground(COR_MUTED);
+
+        item.add(lblQtd,        "cell 0 0, aligny center");
+        item.add(painelTextos,  "cell 1 0, growx, aligny center");
+        item.add(lblData,       "cell 2 0, aligny center");
+
+        return item;
+    }
+
+    // ── AÇÃO VOLTAR ───────────────────────────────────────────────────────────
+    public void acaoVoltar(Runnable acao) {
+        ComponentUtils.transformarEmLink(this.Voltar, acao);
+    }
 }

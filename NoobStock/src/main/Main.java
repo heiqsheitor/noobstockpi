@@ -46,7 +46,7 @@ public class Main {
 				new UsuarioController(principal.getCadastro(), usuarioDAO, navegador);
 				new ProdutoController(principal.getAdicionar(), produtoDAO, navegador, principal.getControle());
 				new EstoqueController(principal.getControle(), navegador, produtoDAO, principal.getAdicionar(),
-						principal.getTelaDetalhesProduto());
+						principal.getTelaDetalhesProduto(), saidaDAO);
 				new DetalhesController(principal.getTelaDetalhesProduto(), principal.getControle(), navegador);
 				new InicioController(principal.getInicio(), navegador);
 				new PerfilController(principal.getPerfil(), usuarioDAO, navegador);

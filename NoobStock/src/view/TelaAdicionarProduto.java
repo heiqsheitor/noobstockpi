@@ -256,24 +256,34 @@ public class TelaAdicionarProduto extends JPanel {
 		java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
 		TFPreco.setText(df.format(p.getPreco()));
 
-		cbFornecedor.setSelectedIndex(0);
-		if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
-			for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
-				String item = cbFornecedor.getItemAt(i);
-				if (item.contains(" - " + p.getFornecedor()) || item.startsWith(p.getFornecedor() + " -")) {
-					cbFornecedor.setSelectedIndex(i);
-					break;
+		// Carrega os fornecedores antes de tentar selecionar o índice
+		carregarComboBoxFornecedores();
+		
+		if (cbFornecedor.getItemCount() > 0) {
+			cbFornecedor.setSelectedIndex(0);
+			if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
+				for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
+					String item = cbFornecedor.getItemAt(i);
+					if (item.contains(" - " + p.getFornecedor()) || item.startsWith(p.getFornecedor() + " -")) {
+						cbFornecedor.setSelectedIndex(i);
+						break;
+					}
 				}
 			}
 		}
 
-		cbCategoria.setSelectedIndex(0);
-		if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
-			for (int i = 0; i < cbCategoria.getItemCount(); i++) {
-				String item = cbCategoria.getItemAt(i);
-				if (item.contains(" - " + p.getCategoria()) || item.startsWith(p.getCategoria() + " -")) {
-					cbCategoria.setSelectedIndex(i);
-					break;
+		// Carrega as categorias antes de tentar selecionar o índice
+		carregarComboBoxCategorias();
+		
+		if (cbCategoria.getItemCount() > 0) {
+			cbCategoria.setSelectedIndex(0);
+			if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
+				for (int i = 0; i < cbCategoria.getItemCount(); i++) {
+					String item = cbCategoria.getItemAt(i);
+					if (item.contains(" - " + p.getCategoria()) || item.startsWith(p.getCategoria() + " -")) {
+						cbCategoria.setSelectedIndex(i);
+						break;
+					}
 				}
 			}
 		}

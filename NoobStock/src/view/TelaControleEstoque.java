@@ -25,9 +25,13 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import controller.ComponentUtils;
 
@@ -50,6 +54,7 @@ public class TelaControleEstoque extends JPanel {
 
 	private Consumer<Produto> editarAcao;
 	private Consumer<Produto> excluirAcao;
+	private TableRowSorter<DefaultTableModel> sorter;
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
@@ -90,6 +95,11 @@ public class TelaControleEstoque extends JPanel {
 		};
 		add(txtPesquisar, "cell 4 2 3 1,grow");
 		txtPesquisar.setColumns(10);
+		txtPesquisar.getDocument().addDocumentListener(new DocumentListener() {
+			public void insertUpdate(DocumentEvent e)  { filtrarTabela(); }
+			public void removeUpdate(DocumentEvent e)  { filtrarTabela(); }
+			public void changedUpdate(DocumentEvent e) { filtrarTabela(); }
+		});
 
 		Adicionar = new JButton("Adicionar");
 		add(Adicionar, "cell 8 2,grow");
@@ -139,6 +149,9 @@ public class TelaControleEstoque extends JPanel {
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 		table.getColumnModel().getColumn(0).setWidth(0);
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
+		
+		sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
+		table.setRowSorter(sorter);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, "cell 4 4 4 3,grow");
@@ -305,6 +318,21 @@ public class TelaControleEstoque extends JPanel {
 
 	public void ajustarFonte(int largura, int altura) {
 		// TODO Auto-generated method stub
+	}
+	
+	private void filtrarTabela() {
+		String texto = txtPesquisar.getText().trim();
+		if (texto.isEmpty()) {
+			sorter.setRowFilter(null);
+		} else {
+			try {
+				// Busca case-insensitive nas colunas: Nome (1), SKU (2), Fornecedor (3)
+				sorter.setRowFilter(RowFilter.regexFilter(
+						"(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
+			} catch (java.util.regex.PatternSyntaxException ex) {
+				// padrão inválido — ignora
+			}
+		}
 	}
 
 	private void carregarTabelaProdutos() {
