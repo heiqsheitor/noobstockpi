@@ -41,6 +41,8 @@ public class SaidaController {
 		view.setCancelarAcao(e -> cancelar());
 
 		carregarProdutos();
+		
+		view.setAoExibir(() -> carregarProdutos());
 	}
 
 	private void carregarProdutos() {

@@ -331,4 +331,13 @@ public class TelaSaida extends JPanel {
 	public void setPerfil(Runnable acao) {
 		ComponentUtils.transformarEmLink(lblPerfil, acao);
 	}
+	
+		public void setAoExibir(Runnable acao) {
+			this.addComponentListener(new java.awt.event.ComponentAdapter() {
+				@Override
+				public void componentShown(java.awt.event.ComponentEvent e) {
+					acao.run();
+				}
+			});
+		}
 }
