@@ -323,17 +323,41 @@ public class ProdutoDAO {
 	}
 
 	// ── DELETAR ───────────────────────────────────────────────────────────────
+	/**
+	 * BUG CORRIGIDO: antes executava um DELETE simples e falhava silenciosamente
+	 * quando o produto possuía registros em item_saida (FK constraint).
+	 * Agora exclui os itens de saída relacionados primeiro (dentro de transação)
+	 * e só então remove o produto.
+	 */
 	public boolean deletarProduto(int id) {
-		String sql = "DELETE FROM produto WHERE idproduto = ?";
+		String sqlItens   = "DELETE FROM item_saida WHERE produto_id = ?";
+		String sqlProduto = "DELETE FROM produto WHERE idproduto = ?";
 
-		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+		try (Connection con = conectar()) {
+			con.setAutoCommit(false);
 
-			stmt.setInt(1, id);
-			stmt.executeUpdate();
-			return true;
+			try (PreparedStatement stmtItens   = con.prepareStatement(sqlItens);
+			     PreparedStatement stmtProduto = con.prepareStatement(sqlProduto)) {
+
+				// 1. Remove itens de saída vinculados
+				stmtItens.setInt(1, id);
+				stmtItens.executeUpdate();
+
+				// 2. Remove o produto
+				stmtProduto.setInt(1, id);
+				stmtProduto.executeUpdate();
+
+				con.commit();
+				return true;
+
+			} catch (SQLException e) {
+				con.rollback();
+				System.err.println("Erro ao deletar produto (rollback): " + e.getMessage());
+				return false;
+			}
 
 		} catch (SQLException e) {
-			System.err.println("Erro ao deletar produto: " + e.getMessage());
+			System.err.println("Erro de conexão ao deletar produto: " + e.getMessage());
 			return false;
 		}
 	}

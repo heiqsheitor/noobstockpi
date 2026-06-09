@@ -12,8 +12,9 @@ public class CategoriaDAO {
 	private static final String USUARIO = "root";
 	private static final String SENHA = "admin";
 
+	// BUG CORRIGIDO: agora passa USUARIO e SENHA corretamente.
 	private Connection conectar() throws SQLException {
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/db_noobstock");
+		return DriverManager.getConnection(URL, USUARIO, SENHA);
 	}
 
 	public void inicializarCategoriasPadrao() {

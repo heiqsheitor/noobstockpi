@@ -29,7 +29,8 @@ public class TelaAdicionarProduto extends JPanel {
 
 	public TelaAdicionarProduto() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[][][grow 1][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][]"));
+		setLayout(new MigLayout("", "[][][][grow][grow 30]",
+				"[][][grow 1][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][]"));
 
 		Voltar = new JLabel("");
 		Voltar.setFont(new Font("Tahoma", Font.PLAIN, 29));
@@ -52,13 +53,6 @@ public class TelaAdicionarProduto extends JPanel {
 		JLabel lblNewLabel_3 = new JLabel("Adicionar Produto ao Estoque");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		add(lblNewLabel_3, "flowy,cell 3 1,alignx left");
-
-		btnCancelar = new JButton("Cancelar");
-		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 
 		JLabel lblNewLabel_5 = new JLabel("Nome do produto");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -271,12 +265,12 @@ public class TelaAdicionarProduto extends JPanel {
 	public String getQuantidade() {
 		return TFQtd.getText();
 	}
-	
-	public String getPreco() { 
+
+	public String getPreco() {
 		if (TFPreco == null || TFPreco.getText().trim().isEmpty()) {
 			return "0,00";
 		}
-		return TFPreco.getText(); 
+		return TFPreco.getText();
 	}
 
 	public String getLocalizacao() {
