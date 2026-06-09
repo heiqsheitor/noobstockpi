@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TelaRedefinirSenha extends JPanel {
 
@@ -103,6 +104,10 @@ public class TelaRedefinirSenha extends JPanel {
 
 	public void mostrarMensagem(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
+	}
+	
+	public void adicionarListenerCancelar(ActionListener listener) {
+	    btnCancelar.addActionListener(listener);
 	}
 
 	public void limparCampos() {

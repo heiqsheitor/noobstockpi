@@ -15,7 +15,8 @@ public class FornecedorDAO {
     private static final String SENHA   = "admin";
 
     private Connection conectar() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/db_noobstock");
+        // CORREÇÃO: Utilizando as constantes de usuário e senha
+        return DriverManager.getConnection(URL, USUARIO, SENHA);
     }
 
     // ── ADICIONAR FORNECEDOR ──────────────────────────────────────────────────

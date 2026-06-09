@@ -19,10 +19,7 @@ public class ProdutoDAO {
 	}
 
 	// ── CADASTRAR ─────────────────────────────────────────────────────────────
-	// ── CADASTRAR ─────────────────────────────────────────────────────────────
 	public boolean cadastrarProduto(Produto produto) {
-		// Ajustado para buscar o ID do fornecedor e categoria usando subqueries pelo
-		// nome
 		String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, " + "(SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
 				+ "(SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1))";
@@ -31,16 +28,12 @@ public class ProdutoDAO {
 
 			stmt.setString(1, produto.getNome());
 			stmt.setString(2, produto.getSKU());
-
-			// Se o seu model Produto tiver o método getNumeroSerie(), troque aqui:
-			stmt.setString(3, produto.getSKU()); // Original estava duplicado. Altere para produto.getNumeroSerie() se
-													// existir.
-
+			stmt.setString(3, produto.getSKU()); 
 			stmt.setInt(4, Integer.parseInt(produto.getQtd()));
 			stmt.setInt(5, produto.getEstoqueMinimo());
 			stmt.setString(6, produto.getLocalização());
-			stmt.setString(7, produto.getFornecedor()); // Agora passa como String
-			stmt.setString(8, produto.getCategoria()); // Agora passa como String
+			stmt.setString(7, produto.getFornecedor()); 
+			stmt.setString(8, produto.getCategoria()); 
 
 			stmt.executeUpdate();
 			System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
@@ -57,7 +50,6 @@ public class ProdutoDAO {
 
 	// ── ATUALIZAR ─────────────────────────────────────────────────────────────
 	public boolean atualizarProduto(Produto produto) {
-		// Ajustado para atualizar subqueries e corrigir a lógica nula
 		String sql = "UPDATE produto SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
 				+ "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
 				+ "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
@@ -75,8 +67,8 @@ public class ProdutoDAO {
 			}
 
 			stmt.setString(4, produto.getLocalização());
-			stmt.setString(5, produto.getFornecedor()); // Agora passa como String
-			stmt.setString(6, produto.getCategoria()); // Já estava como subquery, mas agora recebe String correto
+			stmt.setString(5, produto.getFornecedor()); 
+			stmt.setString(6, produto.getCategoria()); 
 			stmt.setInt(7, Integer.parseInt(produto.getId_produto()));
 
 			int linhasAfetadas = stmt.executeUpdate();
@@ -122,63 +114,36 @@ public class ProdutoDAO {
 	}
 
 	public List<Produto> listarProdutos() {
-
 		List<Produto> lista = new ArrayList<>();
-
-		// SQL atualizado para buscar a data formatada
-
 		String sql = "SELECT p.*, f.nome AS fornecedor, c.nome AS categoria, "
-
 				+ "DATE_FORMAT(p.data_criacao, '%d/%m/%Y') as data_formatada "
-
 				+ "FROM produto p "
-
 				+ "LEFT JOIN fornecedor f ON p.fornecedor_id = f.idfornecedor "
-
 				+ "LEFT JOIN categoria c ON p.categoria_id  = c.idcategoria";
 
 		try (Connection con = conectar();
-
 				PreparedStatement stmt = con.prepareStatement(sql);
-
 				ResultSet rs = stmt.executeQuery()) {
 
 			while (rs.next()) {
-
 				Produto p = new Produto(
-
 						String.valueOf(rs.getInt("idproduto")),
-
 						rs.getString("SKU"),
-
 						rs.getString("nome"),
-
 						String.valueOf(rs.getInt("qtdestoque")),
-
 						rs.getInt("estoque_minimo"),
-
 						rs.getString("localizacao"),
-
 						rs.getString("fornecedor"),
-
 						rs.getString("categoria"),
-
 						rs.getString("data_formatada"), rs.getDouble("preco")
-
 				);
-
 				lista.add(p);
-
 			}
 
 		} catch (SQLException e) {
-
 			System.err.println("Erro ao listar produtos: " + e.getMessage());
-
 		}
-
 		return lista;
-
 	}
 
 	// ── REGISTRAR ENTRADA ─────────────────────────────────────────────────────

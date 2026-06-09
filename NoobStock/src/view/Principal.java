@@ -130,6 +130,17 @@ public class Principal extends JFrame {
 		if (telaSaida != null)
 			contentPane.add(telaSaida, SAIDA);
 
+		// Configuração das ações das telas (Adicione isto no construtor da classe Principal)
+		if (redefinirSenha != null) {
+		    redefinirSenha.adicionarListenerCancelar(new java.awt.event.ActionListener() {
+		        @Override
+		        public void actionPerformed(java.awt.event.ActionEvent e) {
+		            redefinirSenha.limparCampos(); // Opcional: Limpa o e-mail/senha digitados ao cancelar
+		            mostrarTela(Principal.LOGIN);
+		        }
+		    });
+		}
+		
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
 			@Override
