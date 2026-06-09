@@ -33,7 +33,7 @@ public class TelaPerfil extends JPanel {
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
 	private JButton btnExcluirConta;
-	private JLabel LInicio, LControleEstoq, LFor;
+	private JLabel LInicio, LControleEstoq, LFor, LEntraSai;
 
 	public TelaPerfil() {
 		setBackground(new Color(255, 255, 255));
@@ -106,7 +106,7 @@ public class TelaPerfil extends JPanel {
 		lblEntraSai.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
-		JLabel LEntraSai = new JLabel("Saída de Estoque");
+		LEntraSai = new JLabel("Saída de Estoque");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEntraSai, "cell 1 5");
 
@@ -183,6 +183,10 @@ public class TelaPerfil extends JPanel {
 	
 	public void setFornecedorAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LFor, acao);
+	}
+	
+	public void setSaidaAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LEntraSai, acao);
 	}
 
 	// MÉTODOS PARA O CONTROLLER

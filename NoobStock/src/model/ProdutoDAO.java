@@ -12,7 +12,7 @@ public class ProdutoDAO {
 
 	private static final String URL = "jdbc:mysql://localhost:3306/db_noobstock";
 	private static final String USUARIO = "root";
-	private static final String SENHA = "admin";
+	private static final String SENHA = "aluno";
 
 	private Connection conectar() throws SQLException {
 		return DriverManager.getConnection(URL, USUARIO, SENHA);
@@ -21,77 +21,82 @@ public class ProdutoDAO {
 	// ── CADASTRAR ─────────────────────────────────────────────────────────────
 	// ── CADASTRAR ─────────────────────────────────────────────────────────────
 	public boolean cadastrarProduto(Produto produto) {
-		// Ajustado para buscar o ID do fornecedor e categoria usando subqueries pelo
-		// nome
-		String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, fornecedor_id, categoria_id) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, " + "(SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
-				+ "(SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1))";
+	    // SQL ajustado para incluir a coluna 'preco'
+	    String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, preco, fornecedor_id, categoria_id) "
+	            + "VALUES (?, ?, ?, ?, ?, ?, ?, " + "(SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
+	            + "(SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1))";
 
-		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+	    try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
-			stmt.setString(1, produto.getNome());
-			stmt.setString(2, produto.getSKU());
+	        stmt.setString(1, produto.getNome());
+	        stmt.setString(2, produto.getSKU());
+	        stmt.setString(3, produto.getSKU()); 
+	        stmt.setInt(4, Integer.parseInt(produto.getQtd()));
+	        stmt.setInt(5, produto.getEstoqueMinimo());
+	        stmt.setString(6, produto.getLocalização());
+	        
+	        // Novo parâmetro de preço (7)
+	        stmt.setDouble(7, produto.getPreco()); 
+	        
+	        // Fornecedor e Categoria agora são os parâmetros 8 e 9
+	        stmt.setString(8, produto.getFornecedor()); 
+	        stmt.setString(9, produto.getCategoria()); 
 
-			// Se o seu model Produto tiver o método getNumeroSerie(), troque aqui:
-			stmt.setString(3, produto.getSKU()); // Original estava duplicado. Altere para produto.getNumeroSerie() se
-													// existir.
+	        stmt.executeUpdate();
+	        System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
+	        return true;
 
-			stmt.setInt(4, Integer.parseInt(produto.getQtd()));
-			stmt.setInt(5, produto.getEstoqueMinimo());
-			stmt.setString(6, produto.getLocalização());
-			stmt.setString(7, produto.getFornecedor()); // Agora passa como String
-			stmt.setString(8, produto.getCategoria()); // Agora passa como String
-
-			stmt.executeUpdate();
-			System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
-			return true;
-
-		} catch (NumberFormatException e) {
-			System.err.println("Quantidade inválida: " + e.getMessage());
-			return false;
-		} catch (SQLException e) {
-			System.err.println("Erro ao cadastrar produto: " + e.getMessage());
-			return false;
-		}
+	    } catch (NumberFormatException e) {
+	        System.err.println("Quantidade inválida: " + e.getMessage());
+	        return false;
+	    } catch (SQLException e) {
+	        System.err.println("Erro ao cadastrar produto: " + e.getMessage());
+	        return false;
+	    }
 	}
 
 	// ── ATUALIZAR ─────────────────────────────────────────────────────────────
 	public boolean atualizarProduto(Produto produto) {
-		// Ajustado para atualizar subqueries e corrigir a lógica nula
-		String sql = "UPDATE produto SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, "
-				+ "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
-				+ "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
-				+ "WHERE idproduto = ?";
+	    // SQL ajustado para atualizar a coluna 'preco'
+	    String sql = "UPDATE produto SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, preco = ?, "
+	            + "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
+	            + "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
+	            + "WHERE idproduto = ?";
 
-		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+	    try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
-			stmt.setString(1, produto.getNome());
-			stmt.setString(2, produto.getSKU());
+	        stmt.setString(1, produto.getNome());
+	        stmt.setString(2, produto.getSKU());
 
-			try {
-				stmt.setInt(3, Integer.parseInt(produto.getQtd()));
-			} catch (NumberFormatException e) {
-				stmt.setInt(3, 0);
-			}
+	        try {
+	            stmt.setInt(3, Integer.parseInt(produto.getQtd()));
+	        } catch (NumberFormatException e) {
+	            stmt.setInt(3, 0);
+	        }
 
-			stmt.setString(4, produto.getLocalização());
-			stmt.setString(5, produto.getFornecedor()); // Agora passa como String
-			stmt.setString(6, produto.getCategoria()); // Já estava como subquery, mas agora recebe String correto
-			stmt.setInt(7, Integer.parseInt(produto.getId_produto()));
+	        stmt.setString(4, produto.getLocalização());
+	        
+	        // Inserção do preço no PreparedStatement (5)
+	        stmt.setDouble(5, produto.getPreco());
+	        
+	        // Ajustando os índices seguintes (6, 7 e 8)
+	        stmt.setString(6, produto.getFornecedor()); 
+	        stmt.setString(7, produto.getCategoria()); 
+	        stmt.setInt(8, Integer.parseInt(produto.getId_produto()));
 
-			int linhasAfetadas = stmt.executeUpdate();
-			if (linhasAfetadas > 0) {
-				System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
-				return true;
-			} else {
-				System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
-				return false;
-			}
+	        int linhasAfetadas = stmt.executeUpdate();
+	        if (linhasAfetadas > 0) {
+	            System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
+	            return true;
+	        } else {
+	            System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
+	            return false;
+	        }
 
-		} catch (SQLException e) {
-			System.err.println("Erro ao atualizar produto: " + e.getMessage());
-			return false;
-		}
+	    } catch (SQLException e) {
+	        System.err.println("Erro ao atualizar produto: " + e.getMessage());
+	        return false;
+	    }
 	}
 
 	// ── BUSCAR POR ID ─────────────────────────────────────────────────────────

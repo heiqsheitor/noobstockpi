@@ -28,6 +28,10 @@ public class PerfilController {
 		view.setFornecedorAcao(() -> {
 			navegador.navegarPara(Principal.FORNECEDOR);
 		});
+		
+		view.setSaidaAcao(() -> {
+			navegador.navegarPara(Principal.SAIDA);
+		});
 
 		configurarEventos();
 	}

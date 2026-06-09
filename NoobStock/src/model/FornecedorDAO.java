@@ -12,7 +12,7 @@ public class FornecedorDAO {
 
     private static final String URL     = "jdbc:mysql://localhost:3306/db_noobstock";
     private static final String USUARIO = "root";
-    private static final String SENHA   = "admin";
+    private static final String SENHA   = "aluno";
 
     private Connection conectar() throws SQLException {
         // CORREÇÃO: Utilizando as constantes de usuário e senha
