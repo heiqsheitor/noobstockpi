@@ -10,6 +10,7 @@ import view.Principal;
 import view.TelaAdicionarProduto;
 import view.TelaControleEstoque;
 import view.TelaDetalhesProduto;
+import view.TelaMensagem;
 
 public class EstoqueController extends ComponentAdapter {
 
@@ -68,18 +69,14 @@ public class EstoqueController extends ComponentAdapter {
 		});
 
 		view.setExcluirAcao(produto -> {
-			int confirmar = JOptionPane.showConfirmDialog(view,
-					"Tem certeza que deseja excluir o produto \"" + produto.getNome() + "\"?\n"
-							+ "Esta ação não pode ser desfeita.",
-					"Confirmar exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			TelaMensagem confirmacao = new TelaMensagem("Confirmar exclusão", "Tem certeza que deseja excluir este item?");
+			confirmacao.setVisible(true);
 
-			if (confirmar == JOptionPane.YES_OPTION) {
+			if (confirmacao.isConfirmado()) {
 				try {
 					int id = Integer.parseInt(produto.getId_produto());
 					if (produtoDAO.deletarProduto(id)) {
-						JOptionPane.showMessageDialog(view,
-								"Produto \"" + produto.getNome() + "\" excluído com sucesso!", "Sucesso",
-								JOptionPane.INFORMATION_MESSAGE);
+						new TelaMensagem("Sucesso", "Produto excluído com sucesso!", "SUCESSO").setVisible(true);
 						view.recarregarTabela(); // Atualiza a tabela na mesma tela
 					} else {
 						JOptionPane.showMessageDialog(view, "Erro ao excluir o produto. Tente novamente.", "Erro",

@@ -1,0 +1,96 @@
+package view;
+
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import net.miginfocom.swing.MigLayout;
+
+public class TelaMensagem extends JDialog {
+    private boolean confirmado = false;
+
+    // Construtor 1: Para mensagens normais (Sucesso, Erro, Aviso)
+    public TelaMensagem(String titulo, String mensagem, String tipo) {
+        configurarTela(titulo, mensagem, tipo, false);
+    }
+
+    // Construtor 2: Para confirmações (Ex: Excluir algo? Sim/Não)
+    public TelaMensagem(String titulo, String mensagem) {
+        configurarTela(titulo, mensagem, "CONFIRMACAO", true);
+    }
+
+    private void configurarTela(String titulo, String mensagem, String tipo, boolean isConfirmacao) {
+        setTitle(titulo);
+        setModal(true); // OBRIGATÓRIO: Trava a tela de fundo até o usuário responder
+        setSize(400, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setUndecorated(true); // Remove a barra superior padrão do Windows para um visual limpo
+
+        JPanel painelPrincipal = new JPanel(new MigLayout("insets 20, fill", "[grow]", "[][grow][]"));
+        painelPrincipal.setBackground(Color.WHITE);
+        painelPrincipal.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2));
+
+        // Define a cor de destaque baseada no tipo da mensagem
+        Color corDestaque = new Color(30, 30, 30);
+        if (tipo.equals("SUCESSO")) corDestaque = new Color(40, 167, 69); // Verde
+        else if (tipo.equals("ERRO")) corDestaque = new Color(220, 53, 69); // Vermelho
+        else if (tipo.equals("AVISO")) corDestaque = new Color(255, 193, 7); // Amarelo
+
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblTitulo.setForeground(corDestaque);
+
+        JTextArea txtMensagem = new JTextArea(mensagem);
+        txtMensagem.setWrapStyleWord(true);
+        txtMensagem.setLineWrap(true);
+        txtMensagem.setEditable(false);
+        txtMensagem.setFocusable(false);
+        txtMensagem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        painelPrincipal.add(lblTitulo, "cell 0 0, alignx center");
+        painelPrincipal.add(txtMensagem, "cell 0 1, grow, gapy 10");
+
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        painelBotoes.setBackground(Color.WHITE);
+
+        if (isConfirmacao) {
+            JButton btnSim = criarBotao("Sim", new Color(220, 53, 69)); // Vermelho para alerta de exclusão
+            btnSim.addActionListener(e -> { confirmado = true; dispose(); });
+
+            JButton btnNao = criarBotao("Não", new Color(150, 150, 150)); // Cinza
+            btnNao.addActionListener(e -> { confirmado = false; dispose(); });
+
+            painelBotoes.add(btnSim);
+            painelBotoes.add(btnNao);
+        } else {
+            JButton btnOk = criarBotao("OK", corDestaque);
+            btnOk.addActionListener(e -> dispose());
+            painelBotoes.add(btnOk);
+        }
+
+        painelPrincipal.add(painelBotoes, "cell 0 2, alignx center");
+        add(painelPrincipal);
+    }
+
+    private JButton criarBotao(String texto, Color cor) {
+        JButton btn = new JButton(texto);
+        btn.setBackground(cor);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
+    // Método para os Controllers saberem se o usuário clicou em "Sim"
+    public boolean isConfirmado() {
+        return confirmado;
+    }
+}

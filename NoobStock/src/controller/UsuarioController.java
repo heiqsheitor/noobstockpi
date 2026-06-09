@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import model.Usuario;
 import model.UsuarioDAO;
 import view.TelaCadastro;
+import view.TelaMensagem;
 
 public class UsuarioController extends ComponentAdapter {
 
@@ -28,13 +29,13 @@ public class UsuarioController extends ComponentAdapter {
 				this.model.cadastrarUsuario(u);
 
 				this.view.limparFormulario();
-				JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+				new TelaMensagem("Sucesso", "Usuário cadastrado com sucesso!", "SUCESSO").setVisible(true);
 
 				if (this.navegador != null) {
 					this.navegador.navegarPara("LOGIN");
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Erro, Preencha todos os campos!");
+				new TelaMensagem("Erro", "Preencha todos os campos!", "ERRO").setVisible(true);
 			}
 		});
 	}
