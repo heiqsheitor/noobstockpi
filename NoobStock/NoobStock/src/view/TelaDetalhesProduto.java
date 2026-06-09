@@ -298,7 +298,7 @@ public class TelaDetalhesProduto extends JPanel {
         java.text.DecimalFormat dfPreco = new java.text.DecimalFormat("R$ #,##0.00", simbolos);
         lblValorPreco.setText(dfPreco.format(p.getPreco()));
 
-        String dataAtu = p.getDataAtualizacao();
+        String dataAtu = p.getDataCriacao();
         lblValorAtualizacao.setText(
             (dataAtu != null && !dataAtu.isEmpty()) ? dataAtu : "Não informado"
         );
