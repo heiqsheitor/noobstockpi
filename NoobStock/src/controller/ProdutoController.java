@@ -42,6 +42,12 @@ public class ProdutoController extends ComponentAdapter {
 	}
 
 	private void adicionarProduto() {
+		// 👉 PASSO 1: Chama a validação da tela. Se falhar, interrompe o processo.
+		if (!view.validarCampos()) {
+			return;
+		}
+
+		// 👉 PASSO 2: Coleta os dados (já garantidos como válidos pela tela)
 		String nomeProduto = view.getNomeProduto();
 		String sku = view.getSKU();
 		String qtd = view.getQuantidade();
@@ -50,11 +56,7 @@ public class ProdutoController extends ComponentAdapter {
 		String categoria = view.getCategoria();
 		String precoTexto = view.getPreco();
 
-		if (nomeProduto.trim().isEmpty() || sku.trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Por favor, preencha pelo menos o Nome e o SKU.");
-			return;
-		}
-
+		// Formatação segura do preço
 		double valorPreco = 0.0;
 		try {
 			if (precoTexto != null && !precoTexto.isEmpty()) {
@@ -68,17 +70,24 @@ public class ProdutoController extends ComponentAdapter {
 		Produto novo = new Produto(null, sku, nomeProduto, qtd, 0, localizacao, fornecedor, categoria, null,
 				valorPreco);
 
+		// 👉 PASSO 3: Salva no banco de dados
 		if (model.cadastrarProduto(novo)) {
 			JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
 			view.limparCampos();
 			telaEstoque.recarregarTabela();
 			navegador.navegarPara(Principal.ESTOQUE);
 		} else {
-			JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto. Verifique os dados.");
+			JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto. Verifique os dados no banco de dados.");
 		}
 	}
 
 	private void editarProduto() {
+		// 👉 PASSO 1: Chama a validação da tela. Se falhar, interrompe o processo.
+		if (!view.validarCampos()) {
+			return;
+		}
+
+		// 👉 PASSO 2: Coleta os dados (já garantidos como válidos pela tela)
 		String nomeProduto = view.getNomeProduto();
 		String sku = view.getSKU();
 		String qtd = view.getQuantidade();
@@ -88,11 +97,7 @@ public class ProdutoController extends ComponentAdapter {
 		String id = view.getProdutoIdEmEdicao();
 		String precoTexto = view.getPreco();
 
-		if (nomeProduto.trim().isEmpty() || sku.trim().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Por favor, preencha pelo menos o Nome e o SKU.");
-			return;
-		}
-
+		// Formatação segura do preço
 		double valorPreco = 0.0;
 		try {
 			if (precoTexto != null && !precoTexto.isEmpty()) {
@@ -102,9 +107,11 @@ public class ProdutoController extends ComponentAdapter {
 		} catch (NumberFormatException ex) {
 			valorPreco = 0.0;
 		}
+		
 		Produto produtoAtualizado = new Produto(id, sku, nomeProduto, qtd, 0, localizacao, fornecedor, categoria, null,
 				valorPreco);
 
+		// 👉 PASSO 3: Atualiza no banco de dados
 		if (model.atualizarProduto(produtoAtualizado)) {
 			JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!");
 			view.limparCampos();

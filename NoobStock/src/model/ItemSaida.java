@@ -25,5 +25,4 @@ public class ItemSaida {
 	public void setQuantidade(int quantidade) {
 		this.quantidade = quantidade;
 	}
-
 }

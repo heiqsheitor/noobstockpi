@@ -15,29 +15,23 @@ import model.ProdutoDAO;
 import model.Fornecedor;
 import model.FornecedorDAO;
 import model.CategoriaDAO;
-import java.awt.event.ActionEvent;
 
 public class TelaAdicionarProduto extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JTextField TFProduto, TFSKU, TFQtd, TFLocalizacao, TFPreco;
 	private JComboBox<String> cbFornecedor;
 	private JComboBox<String> cbCategoria;
-	private JButton btnCancelar, btnAdicionar;
+	private JButton btnAdicionar;
 	private JLabel Voltar;
 	private String produtoIdEmEdicao = null;
-	private JTextField textField;
-	private JTextField textField_1;
 
 	public TelaAdicionarProduto() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[][][][grow][grow 30]", "[][][grow 1][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][]"));
+		setLayout(new MigLayout("", "[][][][grow][grow 30]",
+				"[][][grow 1][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][][][grow 1][grow 10][]"));
 
 		Voltar = new JLabel("");
 		Voltar.setFont(new Font("Tahoma", Font.PLAIN, 29));
-		Voltar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
 		Voltar.setIcon(new ImageIcon(TelaAdicionarProduto.class.getResource("/img/button→svg.png")));
 		add(Voltar, "cell 0 0");
 
@@ -52,13 +46,6 @@ public class TelaAdicionarProduto extends JPanel {
 		JLabel lblNewLabel_3 = new JLabel("Adicionar Produto ao Estoque");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		add(lblNewLabel_3, "flowy,cell 3 1,alignx left");
-
-		btnCancelar = new JButton("Cancelar");
-		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 
 		JLabel lblNewLabel_5 = new JLabel("Nome do produto");
 		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -86,7 +73,6 @@ public class TelaAdicionarProduto extends JPanel {
 		add(lblPreco, "cell 3 15");
 
 		TFPreco = new JTextField();
-		TFPreco.setToolTipText("");
 		add(TFPreco, "cell 3 16 1 2,grow");
 		ComponentUtils.aplicarMascaraMoeda(TFPreco);
 
@@ -120,10 +106,8 @@ public class TelaAdicionarProduto extends JPanel {
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(lblNewLabel_10, "flowy,cell 3 27,alignx left,aligny bottom");
 
-		// 👉 INICIALIZAÇÃO DO COMBOBOX DE CATEGORIAS
 		cbCategoria = new JComboBox<>();
 		add(cbCategoria, "cell 3 28 1 2,grow");
-		add(btnCancelar, "flowx,cell 3 31,growx");
 
 		btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -138,13 +122,71 @@ public class TelaAdicionarProduto extends JPanel {
 		lblNewLabel_4.setForeground(new Color(192, 192, 192));
 		add(lblNewLabel_4, "cell 3 1");
 
-		// 👉 GATILHO QUE ATUALIZA AMBAS AS LISTAS AO EXIBIR A TELA
 		this.addComponentListener(new java.awt.event.ComponentAdapter() {
+			@Override
 			public void componentShown(java.awt.event.ComponentEvent e) {
 				carregarComboBoxFornecedores();
-				carregarComboBoxCategorias(); // Carrega as categorias do banco
+				carregarComboBoxCategorias();
 			}
 		});
+	}
+
+	// ── MÉTODO DE VALIDAÇÃO VISUAL ───────────────────────────────────────────
+	public boolean validarCampos() {
+		if (getNomeProduto().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "O nome do produto é obrigatório!", "Aviso",
+					JOptionPane.WARNING_MESSAGE);
+			TFProduto.requestFocus();
+			return false;
+		}
+		if (getSKU().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "O SKU é obrigatório!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			TFSKU.requestFocus();
+			return false;
+		}
+		if (getQuantidade().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "A quantidade é obrigatória!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			TFQtd.requestFocus();
+			return false;
+		}
+		try {
+			int qtd = Integer.parseInt(getQuantidade().trim());
+			if (qtd < 0) {
+				JOptionPane.showMessageDialog(this, "A quantidade não pode ser negativa!", "Aviso",
+						JOptionPane.WARNING_MESSAGE);
+				TFQtd.requestFocus();
+				return false;
+			}
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(this, "A quantidade deve ser um número inteiro válido!", "Aviso",
+					JOptionPane.WARNING_MESSAGE);
+			TFQtd.requestFocus();
+			return false;
+		}
+		if (getPreco().trim().equals("0,00") || getPreco().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "O preço unitário deve ser maior que zero!", "Aviso",
+					JOptionPane.WARNING_MESSAGE);
+			TFPreco.requestFocus();
+			return false;
+		}
+		if (getLocalizacao().trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Selecione uma localização válida no estoque!", "Aviso",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		if (cbFornecedor.getSelectedIndex() <= 0) {
+			JOptionPane.showMessageDialog(this, "Selecione um fornecedor válido!", "Aviso",
+					JOptionPane.WARNING_MESSAGE);
+			cbFornecedor.requestFocus();
+			return false;
+		}
+		if (cbCategoria.getSelectedIndex() <= 0) {
+			JOptionPane.showMessageDialog(this, "Selecione uma categoria válida!", "Aviso",
+					JOptionPane.WARNING_MESSAGE);
+			cbCategoria.requestFocus();
+			return false;
+		}
+		return true;
 	}
 
 	private void mostrarMenuLocalizacao(Component invoker, int x, int y) {
@@ -196,13 +238,10 @@ public class TelaAdicionarProduto extends JPanel {
 		}
 	}
 
-	// ── POPULA O COMBOBOX DE CATEGORIAS ──────────────────────────────────────
 	public void carregarComboBoxCategorias() {
 		cbCategoria.removeAllItems();
 		cbCategoria.addItem("0 - Selecione uma categoria...");
-
-		CategoriaDAO dao = new CategoriaDAO();
-		List<String> lista = dao.listarCategorias();
+		List<String> lista = new CategoriaDAO().listarCategorias();
 		for (String cat : lista) {
 			cbCategoria.addItem(cat);
 		}
@@ -217,7 +256,6 @@ public class TelaAdicionarProduto extends JPanel {
 		java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
 		TFPreco.setText(df.format(p.getPreco()));
 
-		// Fornecedor Seleção
 		cbFornecedor.setSelectedIndex(0);
 		if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
 			for (int i = 0; i < cbFornecedor.getItemCount(); i++) {
@@ -229,7 +267,6 @@ public class TelaAdicionarProduto extends JPanel {
 			}
 		}
 
-		// 👉 Categoria Seleção Automática na Edição
 		cbCategoria.setSelectedIndex(0);
 		if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
 			for (int i = 0; i < cbCategoria.getItemCount(); i++) {
@@ -271,12 +308,12 @@ public class TelaAdicionarProduto extends JPanel {
 	public String getQuantidade() {
 		return TFQtd.getText();
 	}
-	
-	public String getPreco() { 
+
+	public String getPreco() {
 		if (TFPreco == null || TFPreco.getText().trim().isEmpty()) {
 			return "0,00";
 		}
-		return TFPreco.getText(); 
+		return TFPreco.getText();
 	}
 
 	public String getLocalizacao() {
@@ -285,22 +322,28 @@ public class TelaAdicionarProduto extends JPanel {
 		return TFLocalizacao.getText();
 	}
 
+	// 👉 CORREÇÃO: Agora retorna o NOME do Fornecedor para a subquery do DAO
+	// funcionar
 	public String getFornecedor() {
 		if (cbFornecedor.getSelectedItem() == null)
 			return "";
 		String selecionado = cbFornecedor.getSelectedItem().toString();
 		if (selecionado.startsWith("0"))
 			return "";
-		return selecionado.split(" - ")[0];
+		int hifenIdx = selecionado.indexOf(" - ");
+		return hifenIdx != -1 ? selecionado.substring(hifenIdx + 3) : selecionado;
 	}
 
+	// 👉 CORREÇÃO: Agora retorna o NOME da Categoria para a subquery do DAO
+	// funcionar
 	public String getCategoria() {
 		if (cbCategoria.getSelectedItem() == null)
 			return "";
 		String selecionado = cbCategoria.getSelectedItem().toString();
 		if (selecionado.startsWith("0"))
 			return "";
-		return selecionado.split(" - ")[0];
+		int hifenIdx = selecionado.indexOf(" - ");
+		return hifenIdx != -1 ? selecionado.substring(hifenIdx + 3) : selecionado;
 	}
 
 	public void limparCampos() {
@@ -313,7 +356,7 @@ public class TelaAdicionarProduto extends JPanel {
 		if (cbFornecedor.getItemCount() > 0)
 			cbFornecedor.setSelectedIndex(0);
 		if (cbCategoria.getItemCount() > 0)
-			cbCategoria.setSelectedIndex(0); // 👉 RESETA CATEGORIA
+			cbCategoria.setSelectedIndex(0);
 
 		this.produtoIdEmEdicao = null;
 		btnAdicionar.setText("Adicionar");
