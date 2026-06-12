@@ -12,7 +12,7 @@ public class SaidaDAO {
 
     private static final String URL     = "jdbc:mysql://localhost:3306/db_noobstock";
     private static final String USUARIO = "root";
-    private static final String SENHA   = "aluno";
+    private static final String SENHA   = "admin";
 
     // BUG CORRIGIDO: conectar() agora passa as credenciais USUARIO e SENHA.
     // Antes: DriverManager.getConnection("jdbc:...") → ConnectException (sem auth).

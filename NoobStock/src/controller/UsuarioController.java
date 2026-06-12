@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import model.Usuario;
 import model.UsuarioDAO;
+import view.Principal;
 import view.TelaCadastro;
 import view.TelaMensagem;
 
@@ -37,6 +38,10 @@ public class UsuarioController extends ComponentAdapter {
 			} else {
 				new TelaMensagem("Erro", "Preencha todos os campos!", "ERRO").setVisible(true);
 			}
+		});
+		
+		this.view.cancelar(e ->{
+			navegador.navegarPara(Principal.LOGIN);
 		});
 	}
 }
