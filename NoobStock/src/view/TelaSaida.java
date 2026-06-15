@@ -36,8 +36,7 @@ public class TelaSaida extends JPanel {
 
 	public TelaSaida() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 7][grow 11][grow 1]",
-				"[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 7][grow 11][grow 1]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/image8.png")));
@@ -70,7 +69,7 @@ public class TelaSaida extends JPanel {
 
 		LFor = new JLabel("Fornecedores");
 		LFor.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		add(LFor, "cell 1 4,aligny center");
+		add(LFor, "cell 1 4,alignx left,aligny center");
 
 		JLabel lblIconSaida = new JLabel("");
 		lblIconSaida.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/entradaesaida(1)1.png")));
@@ -84,12 +83,9 @@ public class TelaSaida extends JPanel {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setForeground(new Color(0, 0, 0));
 		add(separator, "cell 2 0 1 10,gapx 2 2,growy");
-
-		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/logopng.png"));
-		Image imgRedimensionada = icon.getImage().getScaledInstance(70, 35, Image.SCALE_SMOOTH);
-		JLabel lblLogo = new JLabel("");
-		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
-		add(lblLogo, "cell 0 9 2 1,alignx center,aligny bottom");
+		
+		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
+        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 
 		JLabel lblVoltar = new JLabel("");
 		lblVoltar.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/button→svg.png")));
@@ -113,8 +109,8 @@ public class TelaSaida extends JPanel {
 
 		JPanel panelAdicionarProduto = new JPanel();
 		panelAdicionarProduto.setBackground(new Color(240, 240, 240));
-		panelAdicionarProduto.setLayout(new MigLayout("insets 10", "[grow][100px][160px]", "[pref!][pref!]"));
-		add(panelAdicionarProduto, "cell 4 2 3 2,growx,aligny center,gapy 10 10");
+		panelAdicionarProduto.setLayout(new MigLayout("", "[100px:n][100px][160px]", "[pref!][pref!]"));
+		add(panelAdicionarProduto, "cell 4 2 3 2,growx,aligny center");
 
 		JLabel lblProdutoHeader = new JLabel("Adicionar Produto à Saída");
 		lblProdutoHeader.setFont(new Font("Segoe UI Semibold", Font.BOLD, 15));
@@ -168,8 +164,8 @@ public class TelaSaida extends JPanel {
 
 		JPanel panelInfoSaida = new JPanel();
 		panelInfoSaida.setBackground(new Color(255, 255, 255));
-		panelInfoSaida.setLayout(new MigLayout("insets 0", "[grow][grow][grow]", "[pref!][pref!]"));
-		add(panelInfoSaida, "cell 4 8 2 1");
+		panelInfoSaida.setLayout(new MigLayout("", "[160px:n][120:n][grow]", "[pref!][pref!]"));
+		add(panelInfoSaida, "cell 4 8 3 1");
 
 		JLabel lblResponsavel = new JLabel("Responsável *");
 		lblResponsavel.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -184,22 +180,26 @@ public class TelaSaida extends JPanel {
 		panelInfoSaida.add(lblObservacao, "cell 2 0");
 
 		txtResponsavel = new JTextField();
-		txtResponsavel.setColumns(10);
+		txtResponsavel.setColumns(20);
 		panelInfoSaida.add(txtResponsavel, "cell 0 1,alignx left");
 		txtDataSaida = new JTextField(dtf.format(LocalDateTime.now()));
 		txtDataSaida.setEditable(false);
 		txtDataSaida.setBackground(new Color(230, 230, 230));
-		txtDataSaida.setColumns(10);
+		txtDataSaida.setColumns(13);
 		panelInfoSaida.add(txtDataSaida, "cell 1 1,alignx left");
 		JScrollPane scrollObs = new JScrollPane();
 		panelInfoSaida.add(scrollObs, "flowx,cell 2 1,grow");
 
 		txtAreaObservacao = new JTextArea();
 		scrollObs.setViewportView(txtAreaObservacao);
-		txtAreaObservacao.setRows(2);
+		txtAreaObservacao.setColumns(130);
+		txtAreaObservacao.setRows(5);
 		txtAreaObservacao.setLineWrap(true);
 		txtAreaObservacao.setWrapStyleWord(true);
 		txtAreaObservacao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
+		add(lblLogo, "cell 0 9 2 1,alignx center,aligny bottom");
 
 		JPanel panelBotoes = new JPanel();
 		panelBotoes.setBackground(new Color(255, 255, 255));

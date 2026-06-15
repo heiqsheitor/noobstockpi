@@ -37,8 +37,7 @@ public class TelaPerfil extends JPanel {
 
 	public TelaPerfil() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n,grow 0][135px:n,grow 0][][20px:n][grow 40][grow][grow][grow][grow 40]",
-				"[40px:n,grow 0][35px:n][35px:n][35px:n][35px:n][35px:n][35px:n][][][][grow]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][35px:n][][][][grow]"));
 
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
@@ -159,18 +158,17 @@ public class TelaPerfil extends JPanel {
 		add(btnCancelar, "flowx,cell 7 9,width 100!,alignx left");
 
 		// logo
-		JLabel lblLogo = new JLabel("");
-		ImageIcon icon = new ImageIcon(TelaPerfil.class.getResource("/img/logopng.png"));
-		Image img = icon.getImage();
-		Image imgRedimensionada = img.getScaledInstance(120, 50, Image.SCALE_SMOOTH);
-		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
-		add(lblLogo, "cell 0 10 2 1,alignx center,aligny bottom");
+		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
+        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 
 		btnDeslogar = new JButton("Deslogar");
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
 
 		btnExcluirConta = new JButton("Excluir Conta");
 		add(btnExcluirConta, "cell 7 9");
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
+		add(lblLogo, "cell 0 10 2 1,alignx center,aligny bottom");
 	}
 	
 	public void setInicioAcao(Runnable acao) {

@@ -52,7 +52,7 @@ public class TelaFornecedor extends JPanel {
 
 	public TelaFornecedor() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][135px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/image8.png")));
@@ -145,10 +145,11 @@ public class TelaFornecedor extends JPanel {
 		lblEntraSai.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
+		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
+        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 		JLabel lblLogo = new JLabel("");
-		lblLogo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblLogo.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/logopng.png")));
-		add(lblLogo, "cell 1 7,growx");
+		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
+		add(lblLogo, "cell 0 7 2 1,alignx center,aligny bottom");
 
 		LInicio = new JLabel("Inicio");
 		LInicio.addMouseListener(new MouseAdapter() {
