@@ -54,11 +54,15 @@ public class TelaAdicionarProduto extends JPanel {
 		TFProduto = new JTextField();
 		add(TFProduto, "cell 3 4 1 2,grow");
 
-		JLabel lblNewLabel_6 = new JLabel("SKU (Código do Produto)");
+		JLabel lblNewLabel_6 = new JLabel("SKU (Gerado automaticamente)");
 		lblNewLabel_6.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		add(lblNewLabel_6, "cell 3 7");
 
 		TFSKU = new JTextField();
+		TFSKU.setEditable(false);
+		TFSKU.setBackground(new Color(240, 240, 240));
+		TFSKU.setForeground(new Color(120, 120, 120));
+		TFSKU.setText("Será gerado automaticamente ao salvar...");
 		add(TFSKU, "cell 3 8 1 2,grow");
 
 		JLabel lblNewLabel_7 = new JLabel("Quantidade");
@@ -139,7 +143,9 @@ public class TelaAdicionarProduto extends JPanel {
 			TFProduto.requestFocus();
 			return false;
 		}
-		if (getSKU().trim().isEmpty()) {
+		// Em modo de adição o SKU é gerado automaticamente pelo controller;
+		// só valida em edição (onde o SKU já foi atribuído na criação original).
+		if (isEdicao() && getSKU().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "O SKU é obrigatório!", "Aviso", JOptionPane.WARNING_MESSAGE);
 			TFSKU.requestFocus();
 			return false;
@@ -250,6 +256,7 @@ public class TelaAdicionarProduto extends JPanel {
 	public void preencherParaEdicao(Produto p) {
 		this.produtoIdEmEdicao = p.getId_produto();
 		TFProduto.setText(p.getNome());
+		TFSKU.setForeground(new Color(30, 30, 30)); // texto escuro — SKU já atribuído
 		TFSKU.setText(p.getSKU());
 		TFQtd.setText(p.getQtd());
 		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "Clique para definir a prateleira...");
@@ -315,6 +322,14 @@ public class TelaAdicionarProduto extends JPanel {
 		return TFSKU.getText();
 	}
 
+	/**
+	 * Define o SKU no campo da tela (chamado pelo controller após a geração automática).
+	 */
+	public void setSKU(String sku) {
+		TFSKU.setForeground(new Color(30, 30, 30));
+		TFSKU.setText(sku);
+	}
+
 	public String getQuantidade() {
 		return TFQtd.getText();
 	}
@@ -358,7 +373,8 @@ public class TelaAdicionarProduto extends JPanel {
 
 	public void limparCampos() {
 		TFProduto.setText("");
-		TFSKU.setText("");
+		TFSKU.setForeground(new Color(120, 120, 120));
+		TFSKU.setText("Será gerado automaticamente ao salvar...");
 		TFQtd.setText("");
 		TFLocalizacao.setText("Clique para definir a prateleira...");
 		TFPreco.setText("0,00");
