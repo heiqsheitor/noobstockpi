@@ -40,6 +40,33 @@ public class ProdutoController extends ComponentAdapter {
 			navegador.navegarPara(Principal.ESTOQUE);
 		});
 	}
+	// ── GERAÇÃO AUTOMÁTICA DE SKU ─────────────────────────────────────────────
+	/**
+	 * Remove acentos e caracteres não-ASCII de uma string.
+	 * Exemplo: "Eletrônicos" → "Eletronicos"
+	 */
+	private static String removerAcentos(String s) {
+		if (s == null) return "";
+		return Normalizer.normalize(s, Normalizer.Form.NFD)
+				.replaceAll("[^\\p{ASCII}]", "");
+	}
+
+	/**
+	 * Gera um SKU no formato real de mercado:  CAT-FOR-NOME-NNNN
+	 *
+	 *  CAT  = 3 letras da Categoria   (ex.: "MON" para "Monitores")
+	 *  FOR  = 3 letras do Fornecedor  (ex.: "TEC" para "TechStore")
+	 *  NOME = 4 letras do Produto     (ex.: "MONI" para "Monitor LG")
+	 *  NNNN = sequencial 4 dígitos    (ex.: "0001", "0002", …)
+	 *
+	 * Exemplo final: MON-TEC-MONI-0001
+	 */
+	private static String gerarSKU(String nome, String categoria, String fornecedor, int sequencial) {
+		String n = (removerAcentos(nome).toUpperCase().replaceAll("[^A-Z0-9]", "") + "XXXX").substring(0, 4);
+		String c = (removerAcentos(categoria).toUpperCase().replaceAll("[^A-Z0-9]", "") + "XXX").substring(0, 3);
+		String f = (removerAcentos(fornecedor).toUpperCase().replaceAll("[^A-Z0-9]", "") + "XXX").substring(0, 3);
+		return c + "-" + f + "-" + n + "-" + String.format("%04d", sequencial);
+	}
 
 	private void adicionarProduto() {
 		// 👉 PASSO 1: Chama a validação da tela. Se falhar, interrompe o processo.
