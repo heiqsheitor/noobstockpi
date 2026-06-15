@@ -186,6 +186,23 @@ public class ProdutoDAO {
 
 	}
 
+	// ── CONTAR PRODUTOS ───────────────────────────────────────────────────────
+	/**
+	 * Retorna o total de produtos cadastrados no banco.
+	 * Usado pelo controller para calcular o número sequencial do SKU gerado automaticamente.
+	 */
+	public int contarProdutos() {
+		String sql = "SELECT COUNT(*) FROM produto";
+		try (Connection con = conectar();
+			 PreparedStatement stmt = con.prepareStatement(sql);
+			 ResultSet rs = stmt.executeQuery()) {
+			if (rs.next()) return rs.getInt(1);
+		} catch (SQLException e) {
+			System.err.println("Erro ao contar produtos: " + e.getMessage());
+		}
+		return 0;
+	}
+
 	// ── REGISTRAR ENTRADA ─────────────────────────────────────────────────────
 	public boolean registrarEntrada(int idProduto, int quantidade, int idUsuario) {
 		String sqlEstoque = "UPDATE produto SET qtdestoque = qtdestoque + ? WHERE idproduto = ?";
