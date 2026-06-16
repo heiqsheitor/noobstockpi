@@ -137,7 +137,7 @@ public class TelaFornecedor extends JPanel {
 		lblEstatis.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/grafico.png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
-		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
+		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
 		
 		
 

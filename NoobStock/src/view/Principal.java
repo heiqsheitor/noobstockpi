@@ -45,6 +45,7 @@ public class Principal extends JFrame {
 	public static final String SAIDA = "SAIDA";
 
 	public Principal() throws IOException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/img/noobstocklogo.png")));
 		setTitle("NoobStock");
 
 		URL iconUrl = Principal.class.getResource("/img/logopng.png");

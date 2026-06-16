@@ -34,7 +34,7 @@ public class TelaRedefinirSenha extends JPanel {
 		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 30][grow 0][grow 2][grow 30]", "[grow 40][][][][][][][][][grow 35]"));
 		
 		lblLogo = new JLabel("");
-		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
+		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
 		// PADRÃO: Logo de formulário em 120x120
 		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));

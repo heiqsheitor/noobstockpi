@@ -36,9 +36,9 @@ public class TelaLogin extends JPanel {
 		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 30][grow 0][grow][grow 30]", "[grow 60][][grow 10][][][][][][][grow][]"));
 
 		lblLogo = new JLabel("");
-		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
+		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
 		// PADRÃO: Logo cravada em 120x120 para formulários centrais
-		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+		Image scaled = imagemOriginal.getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));
 		add(lblLogo, "cell 2 0,alignx center,aligny top, gapy 20px 10px");
 

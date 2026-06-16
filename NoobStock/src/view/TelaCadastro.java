@@ -40,7 +40,7 @@ public class TelaCadastro extends JPanel {
 				"[grow 40][][][][][][][][][][grow 35][grow 1]"));
 
 		lblLogo = new JLabel("");
-		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
+		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
 		// PADRÃO: Logo de formulário em 120x120
 		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));

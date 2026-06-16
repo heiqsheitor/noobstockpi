@@ -164,7 +164,7 @@ public class TelaControleEstoque extends JPanel {
 		lblEstatis.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/grafico.png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
-		imagemOriginal = ImageIO.read(getClass().getResource("/img/logopng.png"));
+		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/entradaesaida(1)1.png")));
