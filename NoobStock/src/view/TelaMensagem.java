@@ -11,6 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JTextPane;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class TelaMensagem extends JDialog {
     private boolean confirmado = false;
@@ -47,12 +51,18 @@ public class TelaMensagem extends JDialog {
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblTitulo.setForeground(corDestaque);
 
-        JTextArea txtMensagem = new JTextArea(mensagem);
-        txtMensagem.setWrapStyleWord(true);
-        txtMensagem.setLineWrap(true);
+        JTextPane txtMensagem = new JTextPane();
+        txtMensagem.setText(mensagem);
         txtMensagem.setEditable(false);
         txtMensagem.setFocusable(false);
         txtMensagem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtMensagem.setOpaque(false); // Mantém o fundo transparente para condizer com o painel
+
+        // Esta é a lógica que força o texto a ficar centralizado
+        StyledDocument doc = txtMensagem.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
 
         painelPrincipal.add(lblTitulo, "cell 0 0, alignx center");
         painelPrincipal.add(txtMensagem, "cell 0 1, grow, gapy 10");

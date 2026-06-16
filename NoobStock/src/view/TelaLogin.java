@@ -33,7 +33,8 @@ public class TelaLogin extends JPanel {
 		setToolTipText("");
 		setBackground(new Color(255, 255, 255));
 		// PADRÃO: Adicionado insets (margem) e gap (espaçamento) uniformes
-		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 30][grow 0][grow][grow 30]", "[grow 60][][grow 10][][][][][][][grow][]"));
+		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 30][grow 0][grow][grow 30]",
+				"[grow 60][][grow 10][][][][][][][grow][]"));
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
@@ -62,7 +63,7 @@ public class TelaLogin extends JPanel {
 		JLabel lblSenha = new JLabel("Senha:");
 		lblSenha.setFont(new Font("Tahoma", Font.BOLD, 12));
 		add(lblSenha, "cell 1 6,alignx right");
-		
+
 		pFSenha = new JPasswordField();
 		// PADRÃO: Altura cravada em 35px (h 35!)
 		add(pFSenha, "cell 2 6,growx, h 35!");
@@ -92,13 +93,31 @@ public class TelaLogin extends JPanel {
 		panel.add(btnCadastrar, "cell 1 0, growx, h 35!");
 	}
 
-	public String getUsuario() { return tFUsuario.getText().trim(); }
-	public String getSenha() { return new String(pFSenha.getPassword()); }
-	public void mostrarMensagem(String msg) { JOptionPane.showMessageDialog(null, msg); }
-	public void adicionarListenerLogin(ActionListener listener) { btnEntrar.addActionListener(listener); }
-	public void adicionarListenerCadastro(ActionListener Cadastro) { btnCadastrar.addActionListener(Cadastro); }
-	public void adicionarListenerEsqueciSenha(ActionListener EsqueciSenha) { btnEsqueciASenha.addActionListener(EsqueciSenha); }
-	
+	public String getUsuario() {
+		return tFUsuario.getText().trim();
+	}
+
+	public String getSenha() {
+		return new String(pFSenha.getPassword());
+	}
+
+	public void mostrarMensagem(String titulo, String msg, String tipo) {
+		TelaMensagem tm = new TelaMensagem(titulo, msg, tipo);
+		tm.setVisible(true);
+	}
+
+	public void adicionarListenerLogin(ActionListener listener) {
+		btnEntrar.addActionListener(listener);
+	}
+
+	public void adicionarListenerCadastro(ActionListener Cadastro) {
+		btnCadastrar.addActionListener(Cadastro);
+	}
+
+	public void adicionarListenerEsqueciSenha(ActionListener EsqueciSenha) {
+		btnEsqueciASenha.addActionListener(EsqueciSenha);
+	}
+
 	public void ajustarFonte(int largura, int altura) {
 		// Mantido para compatibilidade com sua classe Principal
 	}

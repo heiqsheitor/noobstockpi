@@ -8,6 +8,7 @@ import model.FornecedorDAO;
 import view.Principal;
 import view.TelaAdicionarFornecedor;
 import view.TelaFornecedor;
+import view.TelaMensagem;
 
 public class FornecedorController {
 	private TelaFornecedor view;
@@ -32,7 +33,7 @@ public class FornecedorController {
 		view.setPerfilAcao(() -> {
 			navegador.navegarPara(Principal.PERFIL);
 		});
-		
+
 		view.setSaida(() -> {
 			navegador.navegarPara(Principal.SAIDA);
 		});
@@ -51,13 +52,13 @@ public class FornecedorController {
 
 		// ── LÓGICA DE SALVAR (CADASTRO OU EDIÇÃO) ─────────────────────────────
 		view2.setAdicionarAcao(e -> {
-			String nome    = view2.getNomeFornecedor();
-			String cnpj    = view2.getCnpj();
-			String email   = view2.getEmail();
+			String nome = view2.getNomeFornecedor();
+			String cnpj = view2.getCnpj();
+			String email = view2.getEmail();
 			String duracao = view2.getDuracao();
 
 			if (nome.isEmpty() || email.isEmpty()) {
-				JOptionPane.showMessageDialog(view2, "Preencha pelo menos o Nome e o Email!");
+				new TelaMensagem("Aviso", "Preencha pelo menos o Nome e o Email!", "AVISO").setVisible(true);
 				return;
 			}
 
@@ -67,12 +68,13 @@ public class FornecedorController {
 				fornecedor.setIdfornecedor(view2.getIdEmEdicao());
 
 				if (dao.atualizar(fornecedor)) {
-					JOptionPane.showMessageDialog(view2, "Fornecedor atualizado com sucesso!");
+					new TelaMensagem("Sucesso", "Fornecedor atualizado com sucesso!", "SUCESSO").setVisible(true);
 					view2.limparCampos();
 					view.carregarTabelaFornecedores();
 					navegador.navegarPara(Principal.FORNECEDOR);
 				} else {
-					JOptionPane.showMessageDialog(view2, "Erro ao atualizar o fornecedor. Verifique os dados.");
+					new TelaMensagem("Erro", "Erro ao atualizar o fornecedor. Verifique os dados.", "ERRO")
+							.setVisible(true);
 				}
 
 			} else {
@@ -80,12 +82,12 @@ public class FornecedorController {
 				Fornecedor fornecedor = new Fornecedor(nome, cnpj, email, duracao);
 
 				if (dao.adicionar(fornecedor)) {
-					JOptionPane.showMessageDialog(view2, "Fornecedor salvo com sucesso!");
+					new TelaMensagem("Sucesso", "Fornecedor salvo com sucesso!", "SUCESSO").setVisible(true);
 					view2.limparCampos();
 					view.carregarTabelaFornecedores();
 					navegador.navegarPara(Principal.FORNECEDOR);
 				} else {
-					JOptionPane.showMessageDialog(view2, "Erro ao salvar o fornecedor no banco.");
+					new TelaMensagem("Erro", "Erro ao salvar o fornecedor no banco.", "ERRO").setVisible(true);
 				}
 			}
 		});
@@ -102,32 +104,19 @@ public class FornecedorController {
 		// Ao clicar em "Excluir" no popup: pede confirmação, deleta do banco
 		// e recarrega a tabela sem precisar trocar de tela.
 		view.setExcluirAcao(fornecedor -> {
-			int confirmar = JOptionPane.showConfirmDialog(
-				view,
-				"Tem certeza que deseja excluir o fornecedor \"" + fornecedor.getNome() + "\"?\n"
-				+ "Esta ação não pode ser desfeita.",
-				"Confirmar exclusão",
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.WARNING_MESSAGE
+			TelaMensagem confirmacao = new TelaMensagem(
+				"Confirmar exclusão", 
+				"Tem certeza que deseja excluir o fornecedor \"" + fornecedor.getNome() + "\"?\nEsta ação não pode ser desfeita."
 			);
+			confirmacao.setVisible(true); // O ecrã vai bloquear aqui à espera da resposta do utilizador
 
-			if (confirmar == JOptionPane.YES_OPTION) {
+			// Quando a janela fechar, verificamos se ele clicou em "Sim"
+			if (confirmacao.isConfirmado()) {
 				if (dao.deletar(fornecedor.getIdfornecedor())) {
-					JOptionPane.showMessageDialog(
-						view,
-						"Fornecedor \"" + fornecedor.getNome() + "\" excluído com sucesso!",
-						"Sucesso",
-						JOptionPane.INFORMATION_MESSAGE
-					);
+					new TelaMensagem("Sucesso", "Fornecedor \"" + fornecedor.getNome() + "\" excluído com sucesso!", "SUCESSO").setVisible(true);
 					view.recarregarTabela();
 				} else {
-					JOptionPane.showMessageDialog(
-						view,
-						"Erro ao excluir o fornecedor. Tente novamente.\n"
-						+ "(Verifique se há produtos vinculados a ele.)",
-						"Erro",
-						JOptionPane.ERROR_MESSAGE
-					);
+					new TelaMensagem("Erro", "Erro ao excluir o fornecedor. Tente novamente.\n(Verifique se há produtos vinculados a ele.)", "ERRO").setVisible(true);
 				}
 			}
 		});

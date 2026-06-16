@@ -31,7 +31,7 @@ public class LoginController extends ComponentAdapter {
 		String senha = view.getSenha().trim();
 
 		if (nomeUsuario.isEmpty() || senha.isEmpty()) {
-			view.mostrarMensagem("Preencha todos os campos!");
+			view.mostrarMensagem("Aviso", "Preencha todos os campos!", "AVISO");
 			return;
 		}
 
@@ -41,7 +41,7 @@ public class LoginController extends ComponentAdapter {
 			Usuario usuario = model.autenticar(credenciais);
 
 			if (usuario != null) {
-				view.mostrarMensagem("Login realizado com sucesso!");
+				view.mostrarMensagem("Sucesso", "Login realizado com sucesso!", "SUCESSO");
 				
 				if (navegador != null) {
 					// 👉 ESTA É A LINHA QUE FALTAVA! Agora o sistema sabe quem está logado.
@@ -50,11 +50,11 @@ public class LoginController extends ComponentAdapter {
 					navegador.navegarPara("INICIO"); 
 				}
 			} else {
-				view.mostrarMensagem("Usuário ou senha inválidos!");
+				view.mostrarMensagem("Erro", "Usuário ou senha inválidos!", "ERRO");
 			}
 
 		} catch (Exception e) {
-			view.mostrarMensagem("Erro ao fazer login!");
+			view.mostrarMensagem("Erro", "Erro ao fazer login!", "ERRO");
 			e.printStackTrace();
 		}
 	}
