@@ -151,7 +151,7 @@ public class TelaFornecedor extends JPanel {
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		add(lblLogo, "cell 0 7 2 1,alignx center,aligny bottom");
 
-		LInicio = new JLabel("Inicio");
+		LInicio = new JLabel("Início");
 		LInicio.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {}
@@ -159,7 +159,7 @@ public class TelaFornecedor extends JPanel {
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 
-		LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq = new JLabel("Entrada");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 

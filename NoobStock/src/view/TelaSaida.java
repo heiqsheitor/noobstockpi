@@ -59,7 +59,7 @@ public class TelaSaida extends JPanel {
 		lblIconEstoque.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/caixa(1)1.png")));
 		add(lblIconEstoque, "cell 0 3,alignx left");
 
-		LEstoque = new JLabel("Controle de Estoque");
+		LEstoque = new JLabel("Entrada");
 		LEstoque.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEstoque, "cell 1 3,aligny center");
 

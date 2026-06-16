@@ -51,7 +51,7 @@ public class TelaDeInicio extends JPanel {
 		JLabel lblcontroleEstoq = new JLabel("");
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/caixa(1)1.png")));
 		add(lblcontroleEstoq, "cell 0 3,alignx center");
-		LControleEstoq = new JLabel("Controle de Estoque");
+		LControleEstoq = new JLabel("Entrada");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 

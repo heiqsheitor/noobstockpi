@@ -61,7 +61,7 @@ public class TelaPerfil extends JPanel {
 		separatorVer.setForeground(Color.BLACK);
 		add(separatorVer, "cell 2 0 1 11,gapx 2 2,growy");
 
-		LInicio = new JLabel("Inicio");
+		LInicio = new JLabel("Início");
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
 
@@ -73,7 +73,7 @@ public class TelaPerfil extends JPanel {
 		lblNewLabel_2.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/home.png")));
 		add(lblNewLabel_2, "flowx,cell 0 2,alignx center");
 
-		LControleEstoq = new JLabel("Controle de estoque");
+		LControleEstoq = new JLabel("Entrada");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
