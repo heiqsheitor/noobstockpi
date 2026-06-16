@@ -13,7 +13,6 @@ public class CategoriaDAO {
 	private static final String SENHA = "admin";
 
 	private Connection conectar() throws SQLException {
-		// CORREÇÃO: Utilizando as constantes de usuário e senha
 		return DriverManager.getConnection(URL, USUARIO, SENHA);
 	}
 
@@ -24,16 +23,13 @@ public class CategoriaDAO {
 		try (Connection con = conectar();
 				PreparedStatement stmtCheck = con.prepareStatement(sqlCheck);
 				ResultSet rs = stmtCheck.executeQuery()) {
-
-			// Se o COUNT for 0, significa que a tabela está completamente vazia
 			if (rs.next() && rs.getInt(1) == 0) {
 
 				String[] categoriasPadrao = { "Processadores (CPUs)", "Placas-Mãe (Motherboards)",
 						"Placas de Vídeo (GPUs)", "Memória RAM", "Armazenamento (SSDs e HDDs)",
 						"Fontes de Alimentação (PSU)", "Refrigeração (Coolers/Ventoinhas)", "Gabinetes (Cases)",
-						"Monitores", "Teclados", "Mouses e Mousepad", "Áudio", "Webcams",
-						"Cabos e Adaptadores", "Equipamento de Rede (Wi-Fi)",
-						"Energia (Filtros e UPS/Nobreaks)" };
+						"Monitores", "Teclados", "Mouses e Mousepad", "Áudio", "Webcams", "Cabos e Adaptadores",
+						"Equipamento de Rede (Wi-Fi)", "Energia (Filtros e UPS/Nobreaks)" };
 
 				try (PreparedStatement stmtInsert = con.prepareStatement(sqlInsert)) {
 					for (String nomeCategoria : categoriasPadrao) {
@@ -58,7 +54,6 @@ public class CategoriaDAO {
 				ResultSet rs = stmt.executeQuery()) {
 
 			while (rs.next()) {
-				// Formato idêntico ao do fornecedor: "ID - Nome"
 				lista.add(rs.getInt("idcategoria") + " - " + rs.getString("nome"));
 			}
 		} catch (SQLException e) {

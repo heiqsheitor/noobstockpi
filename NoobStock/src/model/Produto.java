@@ -9,10 +9,9 @@ public class Produto {
 	private String Localização;
 	private String Fornecedor;
 	private String Categoria;
-	private String dataCriacao; 
+	private String dataCriacao;
 	private double preco;
 
-	// Construtor completo para uso no DAO
 	public Produto(String id_produto, String sKU, String nome, String qtd, int estoqueMinimo, String localização,
 			String fornecedor, String categoria, String dataCriacao, double preco) {
 		this.id_produto = id_produto;
@@ -27,11 +26,9 @@ public class Produto {
 		this.preco = preco;
 	}
 
-	// Construtor vazio para inicialização flexível
 	public Produto() {
 	}
 
-	// Getters e Setters
 	public String getId_produto() {
 		return id_produto;
 	}
@@ -112,10 +109,6 @@ public class Produto {
 		this.dataCriacao = dataCriacao;
 	}
 
-	/**
-	 * Alias para getDataCriacao().
-	 * Utilizado por TelaDetalhesProduto para exibir a data de cadastro do produto.
-	 */
 	public String getDataAtualizacao() {
 		return dataCriacao;
 	}

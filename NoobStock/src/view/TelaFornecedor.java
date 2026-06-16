@@ -50,7 +50,6 @@ public class TelaFornecedor extends JPanel {
 	private JLabel LInicio, LControleEstoq, LFor, lblPerfil, LEntraSai;
 	private JButton Adicionar;
 
-	// Callbacks para o controller
 	private Consumer<Fornecedor> editarAcao;
 	private Consumer<Fornecedor> excluirAcao;
 
@@ -117,10 +116,6 @@ public class TelaFornecedor extends JPanel {
 		panel.setBackground(new Color(255, 255, 255));
 		add(panel, "cell 7 2,grow");
 
-		JLabel lblNewLabel_6 = new JLabel("");
-		lblNewLabel_6.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/calendar.png")));
-		panel.add(lblNewLabel_6);
-
 		JSeparator separator = new JSeparator();
 		add(separator, "cell 2 0 1 9,gapx 2 2,growy");
 		separator.setOrientation(SwingConstants.VERTICAL);
@@ -133,7 +128,6 @@ public class TelaFornecedor extends JPanel {
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
 
-		// ── TABELA ────────────────────────────────────────────────────────────
 		table = new JTable();
 		table.setModel(
 				new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "CNPJ", "Contato", "Duração" }) {
@@ -147,10 +141,11 @@ public class TelaFornecedor extends JPanel {
 		table.setRowHeight(28);
 		sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
 		table.setRowSorter(sorter);
+		
+		
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, "cell 4 4 5 3,grow");
 
-		// ── POPUP MENU (CLIQUE DIREITO NA TABELA) ─────────────────────────────
 		configurarPopupMenu();
 
 		JLabel lblEstatis = new JLabel("");
@@ -193,7 +188,6 @@ public class TelaFornecedor extends JPanel {
 		carregarTabelaFornecedores();
 	}
 
-	// ── CONFIGURA O POPUP DE EDITAR / EXCLUIR ─────────────────────────────────
 	private void configurarPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 
@@ -220,7 +214,6 @@ public class TelaFornecedor extends JPanel {
 		popupMenu.addSeparator();
 		popupMenu.add(itemExcluir);
 
-		// Ao clicar com botão DIREITO: seleciona a linha e abre o menu
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -235,7 +228,6 @@ public class TelaFornecedor extends JPanel {
 		});
 	}
 
-	// ── RETORNA O FORNECEDOR DA LINHA SELECIONADA NA TABELA ───────────────────
 	private Fornecedor getFornecedorSelecionado() {
 		int row = table.getSelectedRow();
 		if (row < 0)
@@ -252,12 +244,10 @@ public class TelaFornecedor extends JPanel {
 		return f;
 	}
 
-	// ── RECARREGA A TABELA DO BANCO ───────────────────────────────────────────
 	public void recarregarTabela() {
 		carregarTabelaFornecedores();
 	}
 
-	// ── SETTERS DE CALLBACKS ──────────────────────────────────────────────────
 	public void setEditarAcao(Consumer<Fornecedor> acao) {
 		this.editarAcao = acao;
 	}
@@ -321,10 +311,8 @@ public class TelaFornecedor extends JPanel {
 			sorter.setRowFilter(null);
 		} else {
 			try {
-				// Busca case-insensitive nas colunas: Nome (1), CNPJ (2), Contato (3)
 				sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
 			} catch (java.util.regex.PatternSyntaxException ex) {
-				// padrão inválido — ignora
 			}
 		}
 	}

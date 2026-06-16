@@ -32,13 +32,11 @@ public class TelaLogin extends JPanel {
 	public TelaLogin() throws IOException {
 		setToolTipText("");
 		setBackground(new Color(255, 255, 255));
-		// PADRÃO: Adicionado insets (margem) e gap (espaçamento) uniformes
 		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 30][grow 0][grow][grow 30]",
 				"[grow 60][][grow 10][][][][][][][grow][]"));
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
-		// PADRÃO: Logo cravada em 120x120 para formulários centrais
 		Image scaled = imagemOriginal.getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));
 		add(lblLogo, "cell 2 0,alignx center,aligny top, gapy 20px 10px");
@@ -56,7 +54,6 @@ public class TelaLogin extends JPanel {
 		add(lblUsuario, "cell 1 4,alignx right");
 
 		tFUsuario = new JTextField();
-		// PADRÃO: Altura cravada em 35px (h 35!)
 		add(tFUsuario, "cell 2 4,growx, h 35!");
 		tFUsuario.setColumns(10);
 
@@ -65,7 +62,6 @@ public class TelaLogin extends JPanel {
 		add(lblSenha, "cell 1 6,alignx right");
 
 		pFSenha = new JPasswordField();
-		// PADRÃO: Altura cravada em 35px (h 35!)
 		add(pFSenha, "cell 2 6,growx, h 35!");
 
 		btnEsqueciASenha = new JButton("Esqueci a senha");
@@ -119,6 +115,5 @@ public class TelaLogin extends JPanel {
 	}
 
 	public void ajustarFonte(int largura, int altura) {
-		// Mantido para compatibilidade com sua classe Principal
 	}
 }

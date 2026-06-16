@@ -29,7 +29,7 @@ public class PerfilController {
 		view.setFornecedorAcao(() -> {
 			navegador.navegarPara(Principal.FORNECEDOR);
 		});
-		
+
 		view.setSaidaAcao(() -> {
 			navegador.navegarPara(Principal.SAIDA);
 		});
@@ -80,11 +80,13 @@ public class PerfilController {
 		String emailDigitado = view.getEmail();
 
 		if (!emailDigitado.equals(logado.getEmail())) {
-			new TelaMensagem("Aviso", "Para excluir, digite seu e-mail atual corretamente no campo E-mail.", "AVISO").setVisible(true);
+			new TelaMensagem("Aviso", "Para excluir, digite seu e-mail atual corretamente no campo E-mail.", "AVISO")
+					.setVisible(true);
 			return;
 		}
 
-		TelaMensagem confirmacao = new TelaMensagem("Aviso", "Tem certeza? Esta ação excluirá sua conta permanentemente.");
+		TelaMensagem confirmacao = new TelaMensagem("Aviso",
+				"Tem certeza? Esta ação excluirá sua conta permanentemente.");
 		confirmacao.setVisible(true);
 
 		if (confirmacao.isConfirmado()) {

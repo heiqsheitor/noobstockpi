@@ -20,8 +20,9 @@ public class TelaDeInicio extends JPanel {
 
 	public TelaDeInicio() throws IOException {
 		setBackground(new Color(255, 255, 255));
-	
-		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][][grow]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
+
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][][grow]",
+				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/image8.png")));
@@ -29,13 +30,13 @@ public class TelaDeInicio extends JPanel {
 
 		JLabel lblNewLabel_11 = new JLabel("Início");
 		lblNewLabel_11.setFont(new Font("Tahoma", Font.BOLD, 22));
-		add(lblNewLabel_11, "cell 4 0 2 1"); // Movido para alinhar melhor o topo
+		add(lblNewLabel_11, "cell 4 0 2 1");
 
 		JSeparator separator = new JSeparator();
 		add(separator, "cell 2 0 1 8,gapx 2 2,growy");
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setForeground(Color.BLACK);
-		
+
 		JLabel lblDescubra = new JLabel("Descubra");
 		lblDescubra.setFont(new Font("Tahoma", Font.BOLD, 15));
 		add(lblDescubra, "cell 0 1 2 1");
@@ -68,25 +69,41 @@ public class TelaDeInicio extends JPanel {
 		LEntraSai = new JLabel("Saída de Estoque");
 		LEntraSai.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LEntraSai, "cell 1 5,alignx left,aligny center");
-
-		// CONTEÚDO PRINCIPAL
 		lblBemVindo = new JLabel("Bem vindo(a), (Nome de usuário)");
 		lblBemVindo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		add(lblBemVindo, "cell 4 1 2 1");
 
-		// LOGO INFERIOR
 		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
-        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		add(lblLogo, "cell 0 7 2 1,alignx center,aligny bottom");
 	}
 
-	public void setNomeUsuario(String nome) { lblBemVindo.setText("Bem vindo(a), " + nome); }
-	public void setPerfilAcao(Runnable acao) { ComponentUtils.transformarEmLink(this.lblPerfil, acao); }
-	public void setInicioAcao(Runnable acao) { ComponentUtils.transformarEmLink(this.LInicio, acao); }
-	public void setControleEstoqueAcao(Runnable acao) { ComponentUtils.transformarEmLink(this.LControleEstoq, acao); }
-	public void setFornecedorAcao(Runnable acao) { ComponentUtils.transformarEmLink(this.LFor, acao); }
-	public void setEntradaSaidaAcao(Runnable acao) { ComponentUtils.transformarEmLink(this.LEntraSai, acao); }
-	public void ajustarFonte(int largura, int altura) {}
+	public void setNomeUsuario(String nome) {
+		lblBemVindo.setText("Bem vindo(a), " + nome);
+	}
+
+	public void setPerfilAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.lblPerfil, acao);
+	}
+
+	public void setInicioAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LInicio, acao);
+	}
+
+	public void setControleEstoqueAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
+	}
+
+	public void setFornecedorAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LFor, acao);
+	}
+
+	public void setEntradaSaidaAcao(Runnable acao) {
+		ComponentUtils.transformarEmLink(this.LEntraSai, acao);
+	}
+
+	public void ajustarFonte(int largura, int altura) {
+	}
 }

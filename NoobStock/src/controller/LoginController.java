@@ -36,18 +36,16 @@ public class LoginController extends ComponentAdapter {
 		}
 
 		try {
-			// Criar um objeto Usuario com o NOME DE USUÁRIO para autenticar
 			Usuario credenciais = new Usuario(nomeUsuario, null, senha);
 			Usuario usuario = model.autenticar(credenciais);
 
 			if (usuario != null) {
 				view.mostrarMensagem("Sucesso", "Login realizado com sucesso!", "SUCESSO");
-				
+
 				if (navegador != null) {
-					// 👉 ESTA É A LINHA QUE FALTAVA! Agora o sistema sabe quem está logado.
-					navegador.setUsuarioLogado(usuario); 
-					
-					navegador.navegarPara("INICIO"); 
+					navegador.setUsuarioLogado(usuario);
+
+					navegador.navegarPara("INICIO");
 				}
 			} else {
 				view.mostrarMensagem("Erro", "Usuário ou senha inválidos!", "ERRO");
@@ -58,16 +56,17 @@ public class LoginController extends ComponentAdapter {
 			e.printStackTrace();
 		}
 	}
+
 	private void irParaCadastro() {
 		if (navegador != null) {
 			navegador.navegarPara("CADASTRO");
 		}
-    }
+	}
 
-    private void irParaRecuperacao() {
+	private void irParaRecuperacao() {
 		if (navegador != null) {
 			navegador.navegarPara("REDEFINIR");
 		}
-    }
+	}
 
 }

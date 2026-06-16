@@ -37,7 +37,8 @@ public class TelaPerfil extends JPanel {
 
 	public TelaPerfil() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 40][grow][grow][grow][grow 40]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][35px:n][][][][grow]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 40][grow][grow][grow][grow 40]",
+				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][35px:n][][][][grow]"));
 
 		JLabel lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
@@ -157,9 +158,8 @@ public class TelaPerfil extends JPanel {
 		btnCancelar.setBackground(new Color(255, 255, 255));
 		add(btnCancelar, "flowx,cell 7 9,width 100!,alignx left");
 
-		// logo
 		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
-        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 
 		btnDeslogar = new JButton("Deslogar");
 		add(btnDeslogar, "cell 7 9,alignx right,aligny bottom");
@@ -170,24 +170,23 @@ public class TelaPerfil extends JPanel {
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		add(lblLogo, "cell 0 10 2 1,alignx center,aligny bottom");
 	}
-	
+
 	public void setInicioAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LInicio, acao);
 	}
-	
+
 	public void setEstoqueAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LControleEstoq, acao);
 	}
-	
+
 	public void setFornecedorAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LFor, acao);
 	}
-	
+
 	public void setSaidaAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LEntraSai, acao);
 	}
 
-	// MÉTODOS PARA O CONTROLLER
 	public void adicionarAtualizarListener(ActionListener listener) {
 		btnAtualizar.addActionListener(listener);
 	}

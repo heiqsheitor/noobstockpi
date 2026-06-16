@@ -44,27 +44,12 @@ public class ProdutoController extends ComponentAdapter {
 		});
 	}
 
-	// ── GERAÇÃO AUTOMÁTICA DE SKU ─────────────────────────────────────────────
-	/**
-	 * Remove acentos e caracteres não-ASCII de uma string.
-	 * Exemplo: "Eletrônicos" → "Eletronicos"
-	 */
 	private static String removerAcentos(String s) {
-		if (s == null) return "";
-		return Normalizer.normalize(s, Normalizer.Form.NFD)
-				.replaceAll("[^\\p{ASCII}]", "");
+		if (s == null)
+			return "";
+		return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 	}
 
-	/**
-	 * Gera um SKU no formato real de mercado:  CAT-FOR-NOME-NNNN
-	 *
-	 *  CAT  = 3 letras da Categoria   (ex.: "MON" para "Monitores")
-	 *  FOR  = 3 letras do Fornecedor  (ex.: "TEC" para "TechStore")
-	 *  NOME = 4 letras do Produto     (ex.: "MONI" para "Monitor LG")
-	 *  NNNN = sequencial 4 dígitos    (ex.: "0001", "0002", …)
-	 *
-	 * Exemplo final: MON-TEC-MONI-0001
-	 */
 	private static String gerarSKU(String nome, String categoria, String fornecedor, int sequencial) {
 		String n = (removerAcentos(nome).toUpperCase().replaceAll("[^A-Z0-9]", "") + "XXXX").substring(0, 4);
 		String c = (removerAcentos(categoria).toUpperCase().replaceAll("[^A-Z0-9]", "") + "XXX").substring(0, 3);
@@ -73,25 +58,20 @@ public class ProdutoController extends ComponentAdapter {
 	}
 
 	private void adicionarProduto() {
-		// 👉 PASSO 1: Chama a validação da tela. Se falhar, interrompe o processo.
 		if (!view.validarCampos()) {
 			return;
 		}
 
-		// 👉 PASSO 2: Coleta os dados (já garantidos como válidos pela tela)
 		String nomeProduto = view.getNomeProduto();
-		String qtd        = view.getQuantidade();
+		String qtd = view.getQuantidade();
 		String localizacao = view.getLocalizacao();
-		String fornecedor  = view.getFornecedor();
-		String categoria   = view.getCategoria();
-		String precoTexto  = view.getPreco();
+		String fornecedor = view.getFornecedor();
+		String categoria = view.getCategoria();
+		String precoTexto = view.getPreco();
+		int proximoNum = model.contarProdutos() + 1;
+		String sku = gerarSKU(nomeProduto, categoria, fornecedor, proximoNum);
+		view.setSKU(sku);
 
-		// 👉 SKU gerado automaticamente — formato: CAT-FOR-NOME-NNNN
-		int    proximoNum = model.contarProdutos() + 1;
-		String sku        = gerarSKU(nomeProduto, categoria, fornecedor, proximoNum);
-		view.setSKU(sku); // exibe o código gerado no campo da tela
-
-		// Formatação segura do preço
 		double valorPreco = 0.0;
 		try {
 			if (precoTexto != null && !precoTexto.isEmpty()) {
@@ -104,25 +84,23 @@ public class ProdutoController extends ComponentAdapter {
 
 		Produto novo = new Produto(null, sku, nomeProduto, qtd, 0, localizacao, fornecedor, categoria, null,
 				valorPreco);
-
-		// 👉 PASSO 3: Salva no banco de dados
 		if (model.cadastrarProduto(novo)) {
-			new TelaMensagem("Sucesso", "Produto cadastrado com sucesso!\nSKU gerado: " + sku, "SUCESSO").setVisible(true);
+			new TelaMensagem("Sucesso", "Produto cadastrado com sucesso!\nSKU gerado: " + sku, "SUCESSO")
+					.setVisible(true);
 			view.limparCampos();
 			telaEstoque.recarregarTabela();
 			navegador.navegarPara(Principal.ESTOQUE);
 		} else {
-			new TelaMensagem("Erro", "Erro ao cadastrar o produto. Verifique os dados no banco de dados.", "ERRO").setVisible(true);
+			new TelaMensagem("Erro", "Erro ao cadastrar o produto. Verifique os dados no banco de dados.", "ERRO")
+					.setVisible(true);
 		}
 	}
 
 	private void editarProduto() {
-		// 👉 PASSO 1: Chama a validação da tela. Se falhar, interrompe o processo.
 		if (!view.validarCampos()) {
 			return;
 		}
 
-		// 👉 PASSO 2: Coleta os dados (já garantidos como válidos pela tela)
 		String nomeProduto = view.getNomeProduto();
 		String sku = view.getSKU();
 		String qtd = view.getQuantidade();
@@ -131,8 +109,6 @@ public class ProdutoController extends ComponentAdapter {
 		String categoria = view.getCategoria();
 		String id = view.getProdutoIdEmEdicao();
 		String precoTexto = view.getPreco();
-
-		// Formatação segura do preço
 		double valorPreco = 0.0;
 		try {
 			if (precoTexto != null && !precoTexto.isEmpty()) {
@@ -142,11 +118,10 @@ public class ProdutoController extends ComponentAdapter {
 		} catch (NumberFormatException ex) {
 			valorPreco = 0.0;
 		}
-		
+
 		Produto produtoAtualizado = new Produto(id, sku, nomeProduto, qtd, 0, localizacao, fornecedor, categoria, null,
 				valorPreco);
 
-		// 👉 PASSO 3: Atualiza no banco de dados
 		if (model.atualizarProduto(produtoAtualizado)) {
 			new TelaMensagem("Sucesso", "Produto atualizado com sucesso!", "SUCESSO").setVisible(true);
 			view.limparCampos();

@@ -20,15 +20,12 @@ public class EstoqueController extends ComponentAdapter {
 	private TelaControleEstoque view;
 	private Navegador navegador;
 	private ProdutoDAO produtoDAO;
-	private SaidaDAO saidaDAO; // ← novo: carrega histórico
+	private SaidaDAO saidaDAO;
 	private TelaAdicionarProduto telaAdicionar;
 	private TelaDetalhesProduto telaDetalhesProduto;
 
 	public EstoqueController(TelaControleEstoque view, Navegador navegador, ProdutoDAO produtoDAO,
-			TelaAdicionarProduto telaAdicionar, TelaDetalhesProduto telaDetalhesProduto, SaidaDAO saidaDAO) { // ←
-																												// parâmetro
-																												// adicionado
-
+			TelaAdicionarProduto telaAdicionar, TelaDetalhesProduto telaDetalhesProduto, SaidaDAO saidaDAO) {
 		this.view = view;
 		this.navegador = navegador;
 		this.produtoDAO = produtoDAO;
@@ -36,16 +33,12 @@ public class EstoqueController extends ComponentAdapter {
 		this.telaAdicionar = telaAdicionar;
 		this.telaDetalhesProduto = telaDetalhesProduto;
 
-		// ── VER DETALHES ──────────────────────────────────────────────────────
 		view.setDetalhesAcao(e -> {
 			Produto produtoSelecionado = view.getProdutoSelecionado();
 			if (produtoSelecionado == null)
 				return;
 
-			// 1. Preenche dados gerais do produto
 			telaDetalhesProduto.preencherDados(produtoSelecionado);
-
-			// 2. Carrega histórico real de saídas do banco
 			try {
 				int idProduto = Integer.parseInt(produtoSelecionado.getId_produto());
 				List<HistoricoMovimentacao> historico = saidaDAO.buscarHistoricoPorProduto(idProduto);
@@ -53,51 +46,46 @@ public class EstoqueController extends ComponentAdapter {
 			} catch (NumberFormatException ex) {
 				telaDetalhesProduto.carregarHistorico(null);
 			}
-
-			// 3. Navega para a tela de detalhes
 			navegador.navegarPara(Principal.DETALHES);
 		});
 
-		// ── NAVEGAÇÃO ─────────────────────────────────────────────────────────
 		view.setInicioAcao(() -> navegador.navegarPara(Principal.INICIO));
 		view.setControleEstoqueAcao(() -> navegador.navegarPara(Principal.ESTOQUE));
 		view.setFornecedorAcao(() -> navegador.navegarPara(Principal.FORNECEDOR));
 		view.setPerfilAcao(() -> navegador.navegarPara(Principal.PERFIL));
 		view.setSaida(() -> navegador.navegarPara(Principal.SAIDA));
-
 		view.setAdicionar(() -> {
-			telaAdicionar.limparCampos(); // garante modo cadastro
+			telaAdicionar.limparCampos();
 			navegador.navegarPara(Principal.ADICIONAR);
 		});
 
-		// ── EDITAR ────────────────────────────────────────────────────────────
 		view.setEditarAcao(produto -> {
 			telaAdicionar.preencherParaEdicao(produto);
 			navegador.navegarPara(Principal.ADICIONAR);
 		});
 
-		// ── EXCLUIR ───────────────────────────────────────────────────────────
 		view.setExcluirAcao(produto -> {
-            TelaMensagem confirmacao = new TelaMensagem(
-                "Confirmar exclusão",
-                "Tem certeza que deseja excluir o produto \"" + produto.getNome() + "\"?\n"
-                + "Esta ação não pode ser desfeita."
-            );
-            confirmacao.setVisible(true); // Trava a tela e espera a resposta
+			TelaMensagem confirmacao = new TelaMensagem("Confirmar exclusão",
+					"Tem certeza que deseja excluir o produto \"" + produto.getNome() + "\"?\n"
+							+ "Esta ação não pode ser desfeita.");
+			confirmacao.setVisible(true);
 
-            if (confirmacao.isConfirmado()) {
-                try {
-                    int id = Integer.parseInt(produto.getId_produto());
-                    if (produtoDAO.deletarProduto(id)) {
-                        new TelaMensagem("Sucesso", "Produto \"" + produto.getNome() + "\" excluído com sucesso!", "SUCESSO").setVisible(true);
-                        view.recarregarTabela();
-                    } else {
-                        new TelaMensagem("Erro", "Erro ao excluir o produto.\nVerifique se ele possui histórico de saídas vinculado.", "ERRO").setVisible(true);
-                    }
-                } catch (NumberFormatException e) {
-                    new TelaMensagem("Erro", "ID de produto inválido.", "ERRO").setVisible(true);
-                }
-            }
-        });
+			if (confirmacao.isConfirmado()) {
+				try {
+					int id = Integer.parseInt(produto.getId_produto());
+					if (produtoDAO.deletarProduto(id)) {
+						new TelaMensagem("Sucesso", "Produto \"" + produto.getNome() + "\" excluído com sucesso!",
+								"SUCESSO").setVisible(true);
+						view.recarregarTabela();
+					} else {
+						new TelaMensagem("Erro",
+								"Erro ao excluir o produto.\nVerifique se ele possui histórico de saídas vinculado.",
+								"ERRO").setVisible(true);
+					}
+				} catch (NumberFormatException e) {
+					new TelaMensagem("Erro", "ID de produto inválido.", "ERRO").setVisible(true);
+				}
+			}
+		});
 	}
 }

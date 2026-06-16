@@ -35,13 +35,11 @@ public class TelaCadastro extends JPanel {
 
 	public TelaCadastro() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		// PADRÃO: insets e gaps iguais aos do Login
 		setLayout(new MigLayout("insets 20, gap 10px 15px", "[grow 29][grow 0][grow 2][grow 3][grow 2][grow 29]",
 				"[grow 40][][][][][][][][][][grow 35][grow 1]"));
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
-		// PADRÃO: Logo de formulário em 120x120
 		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));
 		add(lblLogo, "cell 1 0 4 1,alignx center,aligny top, gapy 20px 10px");
@@ -96,7 +94,7 @@ public class TelaCadastro extends JPanel {
 	}
 
 	public void ajustarFonte(int largura, int altura) {
-	} // Mantido para compatibilidade
+	}
 
 	public String getNome() {
 		return this.tfUsuario.getText();

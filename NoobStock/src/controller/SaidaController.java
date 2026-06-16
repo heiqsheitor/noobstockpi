@@ -42,7 +42,7 @@ public class SaidaController {
 		view.setCancelarAcao(e -> cancelar());
 
 		carregarProdutos();
-		
+
 		view.setAoExibir(() -> carregarProdutos());
 	}
 
@@ -55,8 +55,9 @@ public class SaidaController {
 				mapa.put(label, p);
 			}
 			view.popularComboBoxProdutos(mapa);
-		 } catch (Exception ex) {
-			new TelaMensagem("Erro", "Erro ao carregar produtos do banco:\n" + ex.getMessage(), "ERRO").setVisible(true);
+		} catch (Exception ex) {
+			new TelaMensagem("Erro", "Erro ao carregar produtos do banco:\n" + ex.getMessage(), "ERRO")
+					.setVisible(true);
 		}
 	}
 
@@ -81,9 +82,11 @@ public class SaidaController {
 
 				int novaQtd = itemExistente.getQuantidade() + quantidade;
 				if (novaQtd > estoqueAtual) {
-		            new TelaMensagem("Estoque insuficiente", "A quantidade total (" + novaQtd + ") excede o estoque disponível (" + estoqueAtual + " unidades).", "AVISO").setVisible(true);
-		            return;
-		        }
+					new TelaMensagem("Estoque insuficiente", "A quantidade total (" + novaQtd
+							+ ") excede o estoque disponível (" + estoqueAtual + " unidades).", "AVISO")
+							.setVisible(true);
+					return;
+				}
 
 				itemExistente.setQuantidade(novaQtd);
 				view.atualizarQuantidadeNaTabela(i, novaQtd);
@@ -93,9 +96,11 @@ public class SaidaController {
 		}
 
 		if (quantidade > estoqueAtual) {
-            new TelaMensagem("Estoque insuficiente", "Quantidade (" + quantidade + ") excede o estoque disponível (" + estoqueAtual + " unidades).", "AVISO").setVisible(true);
-            return;
-        }
+			new TelaMensagem("Estoque insuficiente",
+					"Quantidade (" + quantidade + ") excede o estoque disponível (" + estoqueAtual + " unidades).",
+					"AVISO").setVisible(true);
+			return;
+		}
 
 		ItemSaida novoItem = new ItemSaida(produto, quantidade);
 		itensAdicionados.add(novoItem);
@@ -115,7 +120,8 @@ public class SaidaController {
 
 	private void confirmarSaida() {
 		if (itensAdicionados.isEmpty()) {
-			new TelaMensagem("Atenção", "Adicione ao menos um produto ao caminhão antes de confirmar.", "AVISO").setVisible(true);
+			new TelaMensagem("Atenção", "Adicione ao menos um produto ao caminhão antes de confirmar.", "AVISO")
+					.setVisible(true);
 			return;
 		}
 
@@ -143,15 +149,19 @@ public class SaidaController {
 			view.limparCampos();
 			carregarProdutos();
 		} else {
-			new TelaMensagem("Erro", "Erro ao registrar a saída no banco de dados.\nVerifique a conexão e tente novamente.", "ERRO").setVisible(true);
+			new TelaMensagem("Erro",
+					"Erro ao registrar a saída no banco de dados.\nVerifique a conexão e tente novamente.", "ERRO")
+					.setVisible(true);
 		}
 	}
 
 	private void cancelar() {
 		if (!itensAdicionados.isEmpty()) {
-			TelaMensagem confirmacao = new TelaMensagem("Cancelar operação", "Deseja cancelar? Os itens adicionados serão removidos.");
+			TelaMensagem confirmacao = new TelaMensagem("Cancelar operação",
+					"Deseja cancelar? Os itens adicionados serão removidos.");
 			confirmacao.setVisible(true);
-			if (!confirmacao.isConfirmado()) return;
+			if (!confirmacao.isConfirmado())
+				return;
 		}
 		itensAdicionados.clear();
 		view.limparTabela();

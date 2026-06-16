@@ -19,8 +19,6 @@ public class TelaAdicionarFornecedor extends JPanel {
 	private JButton btnCancelar, btnAdicionar;
 	private JLabel Voltar;
 	private Runnable acaoVoltar;
-
-	// Armazena o ID do fornecedor em edição (-1 = modo cadastro)
 	private int fornecedorIdEmEdicao = -1;
 
 	public TelaAdicionarFornecedor() {
@@ -31,7 +29,8 @@ public class TelaAdicionarFornecedor extends JPanel {
 		Voltar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (acaoVoltar != null) acaoVoltar.run();
+				if (acaoVoltar != null)
+					acaoVoltar.run();
 			}
 		});
 		Voltar.setIcon(new ImageIcon(TelaAdicionarFornecedor.class.getResource("/img/button→svg.png")));
@@ -74,7 +73,8 @@ public class TelaAdicionarFornecedor extends JPanel {
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limparCampos();
-				if (acaoVoltar != null) acaoVoltar.run();
+				if (acaoVoltar != null)
+					acaoVoltar.run();
 			}
 		});
 		add(btnCancelar, "flowx,cell 3 7,growx");
@@ -104,28 +104,23 @@ public class TelaAdicionarFornecedor extends JPanel {
 		TFAtivo.setColumns(10);
 	}
 
-	// ── PRÉ-PREENCHE OS CAMPOS PARA EDIÇÃO ────────────────────────────────────
 	public void preencherParaEdicao(Fornecedor f) {
 		this.fornecedorIdEmEdicao = f.getIdfornecedor();
 		TFornecedor.setText(f.getNome() != null ? f.getNome() : "");
 		TFCNPJ.setText(f.getCnpj() != null ? f.getCnpj() : "");
 		TFEmail.setText(f.getContato() != null ? f.getContato() : "");
 		TFAtivo.setText(f.getDuracaoContrato() != null ? f.getDuracaoContrato() : "");
-		// Muda o botão para indicar que é uma edição
 		btnAdicionar.setText("Salvar alterações");
 	}
 
-	// ── INDICA SE ESTÁ EM MODO EDIÇÃO ─────────────────────────────────────────
 	public boolean isEdicao() {
 		return fornecedorIdEmEdicao != -1;
 	}
 
-	// ── RETORNA O ID DO FORNECEDOR EM EDIÇÃO ──────────────────────────────────
 	public int getIdEmEdicao() {
 		return fornecedorIdEmEdicao;
 	}
 
-	// ── AÇÕES ─────────────────────────────────────────────────────────────────
 	public void setAdicionarAcao(ActionListener actionListener) {
 		this.btnAdicionar.addActionListener(actionListener);
 	}
@@ -135,19 +130,27 @@ public class TelaAdicionarFornecedor extends JPanel {
 		ComponentUtils.transformarEmLink(Voltar, acao);
 	}
 
-	// ── GETTERS DOS CAMPOS ────────────────────────────────────────────────────
-	public String getNomeFornecedor() { return TFornecedor.getText(); }
-	public String getCnpj()          { return TFCNPJ.getText(); }
-	public String getEmail()         { return TFEmail.getText(); }
-	public String getDuracao()       { return TFAtivo.getText(); }
+	public String getNomeFornecedor() {
+		return TFornecedor.getText();
+	}
 
-	// ── LIMPA OS CAMPOS E RESETA O MODO EDIÇÃO ────────────────────────────────
+	public String getCnpj() {
+		return TFCNPJ.getText();
+	}
+
+	public String getEmail() {
+		return TFEmail.getText();
+	}
+
+	public String getDuracao() {
+		return TFAtivo.getText();
+	}
+
 	public void limparCampos() {
 		TFornecedor.setText("");
 		TFCNPJ.setText("");
 		TFEmail.setText("");
 		TFAtivo.setText("");
-		// Reseta o modo edição
 		this.fornecedorIdEmEdicao = -1;
 		btnAdicionar.setText("Adicionar");
 	}

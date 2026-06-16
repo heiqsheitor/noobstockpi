@@ -24,7 +24,7 @@ public class Principal extends JFrame {
 	private TelaPerfil perfil;
 	private TelaRedefinirSenha redefinirSenha;
 	private TelaControleEstoque controle;
-	private TelaDeInicio inicio; // Adicionada Tela de Início
+	private TelaDeInicio inicio;
 	private TelaAdicionarProduto adicionar;
 	private TelaFornecedor fornecedor;
 	private TelaAdicionarFornecedor adicionarfor;
@@ -37,7 +37,7 @@ public class Principal extends JFrame {
 	public static final String PERFIL = "PERFIL";
 	public static final String ESTOQUE = "ESTOQUE";
 	public static final String REDEFINIR = "REDEFINIR";
-	public static final String INICIO = "INICIO"; // Adicionada constante INICIO
+	public static final String INICIO = "INICIO";
 	public static final String ADICIONAR = "ADICIONAR";
 	public static final String FORNECEDOR = "FORNECEDOR";
 	public static final String ADICIONARFOR = "ADICIONARFOR";
@@ -96,7 +96,7 @@ public class Principal extends JFrame {
 			e.printStackTrace();
 		}
 		try {
-			inicio = new TelaDeInicio(); // Inicializa Tela de Início
+			inicio = new TelaDeInicio();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -119,7 +119,7 @@ public class Principal extends JFrame {
 		if (controle != null)
 			contentPane.add(controle, ESTOQUE);
 		if (inicio != null)
-			contentPane.add(inicio, INICIO);// Adiciona ao layout
+			contentPane.add(inicio, INICIO);
 		if (adicionar != null)
 			contentPane.add(adicionar, ADICIONAR);
 		if (fornecedor != null)
@@ -131,17 +131,17 @@ public class Principal extends JFrame {
 		if (telaSaida != null)
 			contentPane.add(telaSaida, SAIDA);
 
-		// Configuração das ações das telas (Adicione isto no construtor da classe Principal)
+		// Configuração das ações das telas
 		if (redefinirSenha != null) {
-		    redefinirSenha.adicionarListenerCancelar(new java.awt.event.ActionListener() {
-		        @Override
-		        public void actionPerformed(java.awt.event.ActionEvent e) {
-		            redefinirSenha.limparCampos(); // Opcional: Limpa o e-mail/senha digitados ao cancelar
-		            mostrarTela(Principal.LOGIN);
-		        }
-		    });
+			redefinirSenha.adicionarListenerCancelar(new java.awt.event.ActionListener() {
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					redefinirSenha.limparCampos();
+					mostrarTela(Principal.LOGIN);
+				}
+			});
 		}
-		
+
 		// Responsividade
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -212,6 +212,7 @@ public class Principal extends JFrame {
 	public TelaDetalhesProduto getTelaDetalhesProduto() {
 		return telaDetalhes;
 	}
+
 	public TelaSaida getTelaSaida() {
 		return telaSaida;
 	}

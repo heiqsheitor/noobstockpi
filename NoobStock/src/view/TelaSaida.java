@@ -36,7 +36,8 @@ public class TelaSaida extends JPanel {
 
 	public TelaSaida() {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 7][grow 11][grow 1]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 7][grow 11][grow 1]",
+				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow 11][grow 11][grow 11][grow 11]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/image8.png")));
@@ -83,9 +84,9 @@ public class TelaSaida extends JPanel {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setForeground(new Color(0, 0, 0));
 		add(separator, "cell 2 0 1 10,gapx 2 2,growy");
-		
+
 		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
-        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 
 		JLabel lblTitulo = new JLabel("Saída de Estoque");
 		lblTitulo.setFont(new Font("Segoe UI Semibold", Font.BOLD, 26));
@@ -327,13 +328,13 @@ public class TelaSaida extends JPanel {
 	public void setPerfil(Runnable acao) {
 		ComponentUtils.transformarEmLink(lblPerfil, acao);
 	}
-	
-		public void setAoExibir(Runnable acao) {
-			this.addComponentListener(new java.awt.event.ComponentAdapter() {
-				@Override
-				public void componentShown(java.awt.event.ComponentEvent e) {
-					acao.run();
-				}
-			});
-		}
+
+	public void setAoExibir(Runnable acao) {
+		this.addComponentListener(new java.awt.event.ComponentAdapter() {
+			@Override
+			public void componentShown(java.awt.event.ComponentEvent e) {
+				acao.run();
+			}
+		});
+	}
 }

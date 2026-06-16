@@ -18,88 +18,73 @@ public class ProdutoDAO {
 		return DriverManager.getConnection(URL, USUARIO, SENHA);
 	}
 
-	// ── CADASTRAR ─────────────────────────────────────────────────────────────
-	// ── CADASTRAR ─────────────────────────────────────────────────────────────
 	public boolean cadastrarProduto(Produto produto) {
-	    // SQL ajustado para incluir a coluna 'preco'
-	    String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, preco, fornecedor_id, categoria_id) "
-	            + "VALUES (?, ?, ?, ?, ?, ?, ?, " + "(SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
-	            + "(SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1))";
+		String sql = "INSERT INTO produto (nome, SKU, numeroserie, qtdestoque, estoque_minimo, localizacao, preco, fornecedor_id, categoria_id) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, " + "(SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
+				+ "(SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1))";
 
-	    try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
-	        stmt.setString(1, produto.getNome());
-	        stmt.setString(2, produto.getSKU());
-	        stmt.setString(3, produto.getSKU()); 
-	        stmt.setInt(4, Integer.parseInt(produto.getQtd()));
-	        stmt.setInt(5, produto.getEstoqueMinimo());
-	        stmt.setString(6, produto.getLocalização());
-	        
-	        // Novo parâmetro de preço (7)
-	        stmt.setDouble(7, produto.getPreco()); 
-	        
-	        // Fornecedor e Categoria agora são os parâmetros 8 e 9
-	        stmt.setString(8, produto.getFornecedor()); 
-	        stmt.setString(9, produto.getCategoria()); 
+			stmt.setString(1, produto.getNome());
+			stmt.setString(2, produto.getSKU());
+			stmt.setString(3, produto.getSKU());
+			stmt.setInt(4, Integer.parseInt(produto.getQtd()));
+			stmt.setInt(5, produto.getEstoqueMinimo());
+			stmt.setString(6, produto.getLocalização());
+			stmt.setDouble(7, produto.getPreco());
+			stmt.setString(8, produto.getFornecedor());
+			stmt.setString(9, produto.getCategoria());
 
-	        stmt.executeUpdate();
-	        System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
-	        return true;
+			stmt.executeUpdate();
+			System.out.println("Produto '" + produto.getNome() + "' cadastrado com sucesso!");
+			return true;
 
-	    } catch (NumberFormatException e) {
-	        System.err.println("Quantidade inválida: " + e.getMessage());
-	        return false;
-	    } catch (SQLException e) {
-	        System.err.println("Erro ao cadastrar produto: " + e.getMessage());
-	        return false;
-	    }
+		} catch (NumberFormatException e) {
+			System.err.println("Quantidade inválida: " + e.getMessage());
+			return false;
+		} catch (SQLException e) {
+			System.err.println("Erro ao cadastrar produto: " + e.getMessage());
+			return false;
+		}
 	}
 
-	// ── ATUALIZAR ─────────────────────────────────────────────────────────────
 	public boolean atualizarProduto(Produto produto) {
-	    // SQL ajustado para atualizar a coluna 'preco'
-	    String sql = "UPDATE produto SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, preco = ?, "
-	            + "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
-	            + "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
-	            + "WHERE idproduto = ?";
+		String sql = "UPDATE produto SET nome = ?, SKU = ?, qtdestoque = ?, localizacao = ?, preco = ?, "
+				+ "    fornecedor_id = (SELECT idfornecedor FROM fornecedor WHERE nome = ? LIMIT 1), "
+				+ "    categoria_id  = (SELECT idcategoria FROM categoria WHERE nome = ? LIMIT 1) "
+				+ "WHERE idproduto = ?";
 
-	    try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
+		try (Connection con = conectar(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
-	        stmt.setString(1, produto.getNome());
-	        stmt.setString(2, produto.getSKU());
+			stmt.setString(1, produto.getNome());
+			stmt.setString(2, produto.getSKU());
 
-	        try {
-	            stmt.setInt(3, Integer.parseInt(produto.getQtd()));
-	        } catch (NumberFormatException e) {
-	            stmt.setInt(3, 0);
-	        }
+			try {
+				stmt.setInt(3, Integer.parseInt(produto.getQtd()));
+			} catch (NumberFormatException e) {
+				stmt.setInt(3, 0);
+			}
+			stmt.setString(4, produto.getLocalização());
+			stmt.setDouble(5, produto.getPreco());
+			stmt.setString(6, produto.getFornecedor());
+			stmt.setString(7, produto.getCategoria());
+			stmt.setInt(8, Integer.parseInt(produto.getId_produto()));
 
-	        stmt.setString(4, produto.getLocalização());
-	        
-	        // Inserção do preço no PreparedStatement (5)
-	        stmt.setDouble(5, produto.getPreco());
-	        
-	        // Ajustando os índices seguintes (6, 7 e 8)
-	        stmt.setString(6, produto.getFornecedor()); 
-	        stmt.setString(7, produto.getCategoria()); 
-	        stmt.setInt(8, Integer.parseInt(produto.getId_produto()));
+			int linhasAfetadas = stmt.executeUpdate();
+			if (linhasAfetadas > 0) {
+				System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
+				return true;
+			} else {
+				System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
+				return false;
+			}
 
-	        int linhasAfetadas = stmt.executeUpdate();
-	        if (linhasAfetadas > 0) {
-	            System.out.println("Produto '" + produto.getNome() + "' atualizado com sucesso!");
-	            return true;
-	        } else {
-	            System.err.println("Nenhum produto encontrado com ID: " + produto.getId_produto());
-	            return false;
-	        }
-
-	    } catch (SQLException e) {
-	        System.err.println("Erro ao atualizar produto: " + e.getMessage());
-	        return false;
-	    }
+		} catch (SQLException e) {
+			System.err.println("Erro ao atualizar produto: " + e.getMessage());
+			return false;
+		}
 	}
 
-	// ── BUSCAR POR ID ─────────────────────────────────────────────────────────
 	public Produto buscarPorId(int id) {
 		String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
 				+ "       p.localizacao, p.preco, "
@@ -129,8 +114,6 @@ public class ProdutoDAO {
 	public List<Produto> listarProdutos() {
 
 		List<Produto> lista = new ArrayList<>();
-
-		// SQL atualizado para buscar a data formatada
 
 		String sql = "SELECT p.*, f.nome AS fornecedor, c.nome AS categoria, "
 
@@ -186,24 +169,19 @@ public class ProdutoDAO {
 
 	}
 
-	// ── CONTAR PRODUTOS ───────────────────────────────────────────────────────
-	/**
-	 * Retorna o total de produtos cadastrados no banco.
-	 * Usado pelo controller para calcular o número sequencial do SKU gerado automaticamente.
-	 */
 	public int contarProdutos() {
 		String sql = "SELECT COUNT(*) FROM produto";
 		try (Connection con = conectar();
-			 PreparedStatement stmt = con.prepareStatement(sql);
-			 ResultSet rs = stmt.executeQuery()) {
-			if (rs.next()) return rs.getInt(1);
+				PreparedStatement stmt = con.prepareStatement(sql);
+				ResultSet rs = stmt.executeQuery()) {
+			if (rs.next())
+				return rs.getInt(1);
 		} catch (SQLException e) {
 			System.err.println("Erro ao contar produtos: " + e.getMessage());
 		}
 		return 0;
 	}
 
-	// ── REGISTRAR ENTRADA ─────────────────────────────────────────────────────
 	public boolean registrarEntrada(int idProduto, int quantidade, int idUsuario) {
 		String sqlEstoque = "UPDATE produto SET qtdestoque = qtdestoque + ? WHERE idproduto = ?";
 		String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade) "
@@ -237,7 +215,6 @@ public class ProdutoDAO {
 		}
 	}
 
-	// ── REGISTRAR SAÍDA ───────────────────────────────────────────────────────
 	public boolean registrarSaida(int idProduto, int quantidade, int idUsuario) {
 		String sqlVerifica = "SELECT qtdestoque FROM produto WHERE idproduto = ?";
 		String sqlEstoque = "UPDATE produto SET qtdestoque = qtdestoque - ? WHERE idproduto = ?";
@@ -282,7 +259,6 @@ public class ProdutoDAO {
 		}
 	}
 
-	// ── AJUSTE DE INVENTÁRIO ──────────────────────────────────────────────────
 	public boolean ajustarEstoque(int idProduto, int novaQtd, String motivo, int idUsuario) {
 		String sqlEstoque = "UPDATE produto SET qtdestoque = ? WHERE idproduto = ?";
 		String sqlMovimentacao = "INSERT INTO movimentacao (produto_id, usuario_id, tipo, quantidade, motivo) "
@@ -317,7 +293,6 @@ public class ProdutoDAO {
 		}
 	}
 
-	// ── VERIFICAR ALERTAS DE ESTOQUE BAIXO ───────────────────────────────────
 	public List<Produto> listarEstoqueBaixo() {
 		List<Produto> lista = new ArrayList<>();
 		String sql = "SELECT p.idproduto, p.nome, p.SKU, p.qtdestoque, p.estoque_minimo, "
@@ -344,28 +319,17 @@ public class ProdutoDAO {
 		return lista;
 	}
 
-	// ── DELETAR ───────────────────────────────────────────────────────────────
-	/**
-	 * BUG CORRIGIDO: antes executava um DELETE simples e falhava silenciosamente
-	 * quando o produto possuía registros em item_saida (FK constraint).
-	 * Agora exclui os itens de saída relacionados primeiro (dentro de transação)
-	 * e só então remove o produto.
-	 */
 	public boolean deletarProduto(int id) {
-		String sqlItens   = "DELETE FROM item_saida WHERE produto_id = ?";
+		String sqlItens = "DELETE FROM item_saida WHERE produto_id = ?";
 		String sqlProduto = "DELETE FROM produto WHERE idproduto = ?";
 
 		try (Connection con = conectar()) {
 			con.setAutoCommit(false);
 
-			try (PreparedStatement stmtItens   = con.prepareStatement(sqlItens);
-			     PreparedStatement stmtProduto = con.prepareStatement(sqlProduto)) {
-
-				// 1. Remove itens de saída vinculados
+			try (PreparedStatement stmtItens = con.prepareStatement(sqlItens);
+					PreparedStatement stmtProduto = con.prepareStatement(sqlProduto)) {
 				stmtItens.setInt(1, id);
 				stmtItens.executeUpdate();
-
-				// 2. Remove o produto
 				stmtProduto.setInt(1, id);
 				stmtProduto.executeUpdate();
 

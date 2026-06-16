@@ -135,7 +135,6 @@ public class TelaAdicionarProduto extends JPanel {
 		});
 	}
 
-	// ── MÉTODO DE VALIDAÇÃO VISUAL ───────────────────────────────────────────
 	public boolean validarCampos() {
 		if (getNomeProduto().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "O nome do produto é obrigatório!", "Aviso",
@@ -143,8 +142,6 @@ public class TelaAdicionarProduto extends JPanel {
 			TFProduto.requestFocus();
 			return false;
 		}
-		// Em modo de adição o SKU é gerado automaticamente pelo controller;
-		// só valida em edição (onde o SKU já foi atribuído na criação original).
 		if (isEdicao() && getSKU().trim().isEmpty()) {
 			JOptionPane.showMessageDialog(this, "O SKU é obrigatório!", "Aviso", JOptionPane.WARNING_MESSAGE);
 			TFSKU.requestFocus();
@@ -256,16 +253,14 @@ public class TelaAdicionarProduto extends JPanel {
 	public void preencherParaEdicao(Produto p) {
 		this.produtoIdEmEdicao = p.getId_produto();
 		TFProduto.setText(p.getNome());
-		TFSKU.setForeground(new Color(30, 30, 30)); // texto escuro — SKU já atribuído
+		TFSKU.setForeground(new Color(30, 30, 30));
 		TFSKU.setText(p.getSKU());
 		TFQtd.setText(p.getQtd());
 		TFLocalizacao.setText(p.getLocalização() != null ? p.getLocalização() : "Clique para definir a prateleira...");
 		java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
 		TFPreco.setText(df.format(p.getPreco()));
-
-		// Carrega os fornecedores antes de tentar selecionar o índice
 		carregarComboBoxFornecedores();
-		
+
 		if (cbFornecedor.getItemCount() > 0) {
 			cbFornecedor.setSelectedIndex(0);
 			if (p.getFornecedor() != null && !p.getFornecedor().isEmpty()) {
@@ -279,9 +274,8 @@ public class TelaAdicionarProduto extends JPanel {
 			}
 		}
 
-		// Carrega as categorias antes de tentar selecionar o índice
 		carregarComboBoxCategorias();
-		
+
 		if (cbCategoria.getItemCount() > 0) {
 			cbCategoria.setSelectedIndex(0);
 			if (p.getCategoria() != null && !p.getCategoria().isEmpty()) {
@@ -322,9 +316,6 @@ public class TelaAdicionarProduto extends JPanel {
 		return TFSKU.getText();
 	}
 
-	/**
-	 * Define o SKU no campo da tela (chamado pelo controller após a geração automática).
-	 */
 	public void setSKU(String sku) {
 		TFSKU.setForeground(new Color(30, 30, 30));
 		TFSKU.setText(sku);
@@ -347,8 +338,6 @@ public class TelaAdicionarProduto extends JPanel {
 		return TFLocalizacao.getText();
 	}
 
-	// 👉 CORREÇÃO: Agora retorna o NOME do Fornecedor para a subquery do DAO
-	// funcionar
 	public String getFornecedor() {
 		if (cbFornecedor.getSelectedItem() == null)
 			return "";
@@ -359,8 +348,6 @@ public class TelaAdicionarProduto extends JPanel {
 		return hifenIdx != -1 ? selecionado.substring(hifenIdx + 3) : selecionado;
 	}
 
-	// 👉 CORREÇÃO: Agora retorna o NOME da Categoria para a subquery do DAO
-	// funcionar
 	public String getCategoria() {
 		if (cbCategoria.getSelectedItem() == null)
 			return "";

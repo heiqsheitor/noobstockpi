@@ -32,6 +32,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.Cursor;
+import java.util.ArrayList;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 
 import controller.ComponentUtils;
 
@@ -58,7 +62,8 @@ public class TelaControleEstoque extends JPanel {
 
 	public TelaControleEstoque() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]",
+				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/image8.png")));
@@ -95,21 +100,29 @@ public class TelaControleEstoque extends JPanel {
 		add(txtPesquisar, "cell 4 2 3 1,grow");
 		txtPesquisar.setColumns(10);
 		txtPesquisar.getDocument().addDocumentListener(new DocumentListener() {
-			public void insertUpdate(DocumentEvent e)  { filtrarTabela(); }
-			public void removeUpdate(DocumentEvent e)  { filtrarTabela(); }
-			public void changedUpdate(DocumentEvent e) { filtrarTabela(); }
+			public void insertUpdate(DocumentEvent e) {
+				filtrarTabela();
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				filtrarTabela();
+			}
+
+			public void changedUpdate(DocumentEvent e) {
+				filtrarTabela();
+			}
 		});
 
 		Adicionar = new JButton("Adicionar");
+		Adicionar.setBackground(Color.BLACK);
+		Adicionar.setForeground(new Color(255, 255, 255));
 		add(Adicionar, "cell 8 2,grow");
+		Adicionar.setOpaque(true);
+		Adicionar.setBorderPainted(false);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
 		add(panel, "cell 7 2,grow");
-
-		JLabel lblNewLabel_6 = new JLabel("");
-		lblNewLabel_6.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/calendar.png")));
-		panel.add(lblNewLabel_6);
 
 		JSeparator separator = new JSeparator();
 		add(separator, "cell 2 0 1 9,gapx 2 2,growy");
@@ -122,13 +135,12 @@ public class TelaControleEstoque extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("");
 		add(lblNewLabel, "flowx,cell 4 3");
-		
+
 		table = new JTable();
 
 		table.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "ID", "Nome do Produto", "SKU", "Fornecedor", "Quantidade", "Preço", "Data Cadastro" }) {
-			
-			// Adicionado um Object.class no final para fechar 7 elementos
+
 			Class[] columnTypes = new Class[] { String.class, Object.class, Object.class, Object.class, Object.class,
 					Object.class, Object.class };
 
@@ -148,15 +160,27 @@ public class TelaControleEstoque extends JPanel {
 		table.getColumnModel().getColumn(0).setMaxWidth(0);
 		table.getColumnModel().getColumn(0).setWidth(0);
 		table.getColumnModel().getColumn(0).setPreferredWidth(0);
-		
+
 		sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
 		table.setRowSorter(sorter);
 
+		sorter.setComparator(6, new java.util.Comparator<String>() {
+			java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("dd/MM/yyyy");
+
+			@Override
+			public int compare(String s1, String s2) {
+				try {
+					java.util.Date d1 = format.parse(s1);
+					java.util.Date d2 = format.parse(s2);
+					return d1.compareTo(d2);
+				} catch (Exception e) {
+					return s1.compareTo(s2);
+				}
+			}
+		});
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, "cell 4 4 4 3,grow");
-
-//				add(table, "cell 4 4 5 3,grow");
-//		add(table, "cell 4 4 5 3,grow");
 
 		configurarPopupMenu();
 
@@ -171,7 +195,7 @@ public class TelaControleEstoque extends JPanel {
 		add(lblEntraSai, "cell 0 5,alignx center");
 
 		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
-        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		add(lblLogo, "cell 0 7 2 1,alignx center,aligny bottom");
@@ -319,18 +343,16 @@ public class TelaControleEstoque extends JPanel {
 	public void ajustarFonte(int largura, int altura) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	private void filtrarTabela() {
 		String texto = txtPesquisar.getText().trim();
 		if (texto.isEmpty()) {
 			sorter.setRowFilter(null);
 		} else {
 			try {
-				// Busca case-insensitive nas colunas: Nome (1), SKU (2), Fornecedor (3)
-				sorter.setRowFilter(RowFilter.regexFilter(
-						"(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
+				sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
 			} catch (java.util.regex.PatternSyntaxException ex) {
-				// padrão inválido — ignora
+
 			}
 		}
 	}
