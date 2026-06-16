@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import model.UsuarioDAO;
+import view.TelaMensagem;
 import view.TelaRedefinirSenha;
 
 public class RedefinirSenhaController {
@@ -31,19 +32,19 @@ public class RedefinirSenhaController {
 
         // Validação de campos vazios
         if (email.isEmpty() || novaSenha.isEmpty() || confirmarSenha.isEmpty()) {
-            view.mostrarMensagem("Favor digitar nos campos!");
+            new TelaMensagem("Aviso", "Favor digitar nos campos!", "AVISO").setVisible(true);
             return;
         }
 
         // Validação de coincidência de senhas
         if (!novaSenha.equals(confirmarSenha)) {
-            view.mostrarMensagem("As senhas não coincidem!");
+            new TelaMensagem("Aviso", "As senhas não coincidem!", "AVISO").setVisible(true);
             return;
         }
 
         // Atualização no banco de dados
         if (dao.atualizarSenha(email, novaSenha)) {
-            view.mostrarMensagem("Senha alterada com sucesso!");
+            new TelaMensagem("Sucesso", "Senha alterada com sucesso!", "SUCESSO").setVisible(true);
             view.limparCampos();
             
             // Volta para a tela de login após sucesso
@@ -51,7 +52,7 @@ public class RedefinirSenhaController {
                 navegador.navegarPara("LOGIN");
             }
         } else {
-            view.mostrarMensagem("Erro: E-mail não encontrado ou falha no banco de dados.");
+            new TelaMensagem("Erro", "Erro: E-mail não encontrado ou falha no banco de dados.", "ERRO").setVisible(true);
         }
     }
 }

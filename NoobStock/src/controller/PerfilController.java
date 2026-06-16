@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import model.Usuario;
 import model.UsuarioDAO;
 import view.Principal;
+import view.TelaMensagem;
 import view.TelaPerfil;
 
 public class PerfilController {
@@ -46,7 +47,7 @@ public class PerfilController {
 	private void atualizar() {
 		Usuario logado = navegador.getUsuarioLogado();
 		if (logado == null) {
-			JOptionPane.showMessageDialog(view, "Erro: Faça login primeiro para testar esta tela!");
+			new TelaMensagem("Aviso", "Erro: Faça login primeiro para testar esta tela!", "AVISO").setVisible(true);
 			return;
 		}
 
@@ -55,7 +56,7 @@ public class PerfilController {
 		String novaSenha = view.getSenha();
 
 		if (novoNome.isEmpty() || novoEmail.isEmpty() || novaSenha.isEmpty()) {
-			JOptionPane.showMessageDialog(view, "Preencha todos os campos.");
+			new TelaMensagem("Aviso", "Preencha todos os campos.", "AVISO").setVisible(true);
 			return;
 		}
 
@@ -63,32 +64,32 @@ public class PerfilController {
 			logado.setNome(novoNome);
 			logado.setEmail(novoEmail);
 			logado.setSenha(novaSenha);
-			JOptionPane.showMessageDialog(view, "Dados atualizados com sucesso!");
+			new TelaMensagem("Sucesso", "Dados atualizados com sucesso!", "SUCESSO").setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(view, "Erro ao atualizar no banco de dados.");
+			new TelaMensagem("Erro", "Erro ao atualizar no banco de dados.", "ERRO").setVisible(true);
 		}
 	}
 
 	private void excluir() {
 		Usuario logado = navegador.getUsuarioLogado();
 		if (logado == null) {
-			JOptionPane.showMessageDialog(view, "Erro: Faça login primeiro para testar esta tela!");
+			new TelaMensagem("Aviso", "Erro: Faça login primeiro para testar esta tela!", "AVISO").setVisible(true);
 			return;
 		}
 
 		String emailDigitado = view.getEmail();
 
 		if (!emailDigitado.equals(logado.getEmail())) {
-			JOptionPane.showMessageDialog(view, "Para excluir, digite seu e-mail atual corretamente no campo E-mail.");
+			new TelaMensagem("Aviso", "Para excluir, digite seu e-mail atual corretamente no campo E-mail.", "AVISO").setVisible(true);
 			return;
 		}
 
-		int confirm = JOptionPane.showConfirmDialog(view, "Tem certeza? Esta ação excluirá sua conta permanentemente.",
-				"Aviso", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		TelaMensagem confirmacao = new TelaMensagem("Aviso", "Tem certeza? Esta ação excluirá sua conta permanentemente.");
+		confirmacao.setVisible(true);
 
-		if (confirm == JOptionPane.YES_OPTION) {
+		if (confirmacao.isConfirmado()) {
 			if (model.excluirUsuario(logado.getEmail())) {
-				JOptionPane.showMessageDialog(view, "Conta excluída.");
+				new TelaMensagem("Sucesso", "Conta excluída.", "SUCESSO").setVisible(true);
 				deslogar();
 			}
 		}

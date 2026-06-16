@@ -8,6 +8,7 @@ import model.SaidaEstoque;
 import view.Principal;
 import view.TelaSaida;
 import view.TelaComprovante;
+import view.TelaMensagem;
 
 import javax.swing.*;
 import java.awt.Window;
@@ -54,24 +55,21 @@ public class SaidaController {
 				mapa.put(label, p);
 			}
 			view.popularComboBoxProdutos(mapa);
-		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(view, "Erro ao carregar produtos do banco:\n" + ex.getMessage(), "Erro",
-					JOptionPane.ERROR_MESSAGE);
+		 } catch (Exception ex) {
+			new TelaMensagem("Erro", "Erro ao carregar produtos do banco:\n" + ex.getMessage(), "ERRO").setVisible(true);
 		}
 	}
 
 	private void adicionarProduto() {
 		Produto produto = view.getProdutoSelecionado();
 		if (produto == null) {
-			JOptionPane.showMessageDialog(view, "Selecione um produto antes de adicionar.", "Atenção",
-					JOptionPane.WARNING_MESSAGE);
+			new TelaMensagem("Atenção", "Selecione um produto antes de adicionar.", "AVISO").setVisible(true);
 			return;
 		}
 
 		int quantidade = view.getQuantidadeInserida();
 		if (quantidade <= 0) {
-			JOptionPane.showMessageDialog(view, "Informe uma quantidade válida (maior que zero).", "Atenção",
-					JOptionPane.WARNING_MESSAGE);
+			new TelaMensagem("Atenção", "Informe uma quantidade válida (maior que zero).", "AVISO").setVisible(true);
 			return;
 		}
 
@@ -83,12 +81,9 @@ public class SaidaController {
 
 				int novaQtd = itemExistente.getQuantidade() + quantidade;
 				if (novaQtd > estoqueAtual) {
-					JOptionPane.showMessageDialog(
-							view, "A quantidade total (" + novaQtd + ") excede o estoque disponível" + " ("
-									+ estoqueAtual + " unidades).",
-							"Estoque insuficiente", JOptionPane.WARNING_MESSAGE);
-					return;
-				}
+		            new TelaMensagem("Estoque insuficiente", "A quantidade total (" + novaQtd + ") excede o estoque disponível (" + estoqueAtual + " unidades).", "AVISO").setVisible(true);
+		            return;
+		        }
 
 				itemExistente.setQuantidade(novaQtd);
 				view.atualizarQuantidadeNaTabela(i, novaQtd);
@@ -98,11 +93,9 @@ public class SaidaController {
 		}
 
 		if (quantidade > estoqueAtual) {
-			JOptionPane.showMessageDialog(view,
-					"Quantidade (" + quantidade + ") excede o estoque disponível" + " (" + estoqueAtual + " unidades).",
-					"Estoque insuficiente", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
+            new TelaMensagem("Estoque insuficiente", "Quantidade (" + quantidade + ") excede o estoque disponível (" + estoqueAtual + " unidades).", "AVISO").setVisible(true);
+            return;
+        }
 
 		ItemSaida novoItem = new ItemSaida(produto, quantidade);
 		itensAdicionados.add(novoItem);
@@ -113,8 +106,7 @@ public class SaidaController {
 	private void removerProduto() {
 		int linha = view.getLinhaSelecionada();
 		if (linha < 0) {
-			JOptionPane.showMessageDialog(view, "Selecione um item na tabela para remover.", "Atenção",
-					JOptionPane.WARNING_MESSAGE);
+			new TelaMensagem("Atenção", "Selecione um item na tabela para remover.", "AVISO").setVisible(true);
 			return;
 		}
 		itensAdicionados.remove(linha);
@@ -123,15 +115,13 @@ public class SaidaController {
 
 	private void confirmarSaida() {
 		if (itensAdicionados.isEmpty()) {
-			JOptionPane.showMessageDialog(view, "Adicione ao menos um produto ao caminhão antes de confirmar.",
-					"Atenção", JOptionPane.WARNING_MESSAGE);
+			new TelaMensagem("Atenção", "Adicione ao menos um produto ao caminhão antes de confirmar.", "AVISO").setVisible(true);
 			return;
 		}
 
 		String responsavel = view.getResponsavel();
 		if (responsavel.isEmpty()) {
-			JOptionPane.showMessageDialog(view, "Informe o nome do responsável pela saída.", "Atenção",
-					JOptionPane.WARNING_MESSAGE);
+			new TelaMensagem("Atenção", "Informe o nome do responsável pela saída.", "AVISO").setVisible(true);
 			return;
 		}
 
@@ -153,18 +143,15 @@ public class SaidaController {
 			view.limparCampos();
 			carregarProdutos();
 		} else {
-			JOptionPane.showMessageDialog(view,
-					"Erro ao registrar a saída no banco de dados.\n" + "Verifique a conexão e tente novamente.", "Erro",
-					JOptionPane.ERROR_MESSAGE);
+			new TelaMensagem("Erro", "Erro ao registrar a saída no banco de dados.\nVerifique a conexão e tente novamente.", "ERRO").setVisible(true);
 		}
 	}
 
 	private void cancelar() {
 		if (!itensAdicionados.isEmpty()) {
-			int resp = JOptionPane.showConfirmDialog(view, "Deseja cancelar? Os itens adicionados serão removidos.",
-					"Cancelar operação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if (resp != JOptionPane.YES_OPTION)
-				return;
+			TelaMensagem confirmacao = new TelaMensagem("Cancelar operação", "Deseja cancelar? Os itens adicionados serão removidos.");
+			confirmacao.setVisible(true);
+			if (!confirmacao.isConfirmado()) return;
 		}
 		itensAdicionados.clear();
 		view.limparTabela();

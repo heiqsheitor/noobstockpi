@@ -6,6 +6,8 @@ import model.ProdutoDAO;
 import view.Principal;
 import view.TelaAdicionarProduto;
 import view.TelaControleEstoque;
+import view.TelaMensagem;
+
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -105,13 +107,12 @@ public class ProdutoController extends ComponentAdapter {
 
 		// 👉 PASSO 3: Salva no banco de dados
 		if (model.cadastrarProduto(novo)) {
-			JOptionPane.showMessageDialog(null,
-					"Produto cadastrado com sucesso!\nSKU gerado: " + sku);
+			new TelaMensagem("Sucesso", "Produto cadastrado com sucesso!\nSKU gerado: " + sku, "SUCESSO").setVisible(true);
 			view.limparCampos();
 			telaEstoque.recarregarTabela();
 			navegador.navegarPara(Principal.ESTOQUE);
 		} else {
-			JOptionPane.showMessageDialog(null, "Erro ao cadastrar o produto. Verifique os dados no banco de dados.");
+			new TelaMensagem("Erro", "Erro ao cadastrar o produto. Verifique os dados no banco de dados.", "ERRO").setVisible(true);
 		}
 	}
 
@@ -147,12 +148,12 @@ public class ProdutoController extends ComponentAdapter {
 
 		// 👉 PASSO 3: Atualiza no banco de dados
 		if (model.atualizarProduto(produtoAtualizado)) {
-			JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!");
+			new TelaMensagem("Sucesso", "Produto atualizado com sucesso!", "SUCESSO").setVisible(true);
 			view.limparCampos();
 			telaEstoque.recarregarTabela();
 			navegador.navegarPara(Principal.ESTOQUE);
 		} else {
-			JOptionPane.showMessageDialog(null, "Erro ao atualizar o produto.");
+			new TelaMensagem("Erro", "Erro ao atualizar o produto.", "ERRO").setVisible(true);
 		}
 	}
 }
