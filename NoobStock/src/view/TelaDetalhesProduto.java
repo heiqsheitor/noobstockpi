@@ -146,27 +146,27 @@ public class TelaDetalhesProduto extends JPanel {
         cardLocalizacao.add(lblTitLocal, "cell 0 0, span 2, gapbottom 10");
 
         JLabel lblArmazemTxt = new JLabel("Armazém:");
-        lblArmazemTxt.setFont(fonteMuted);
+        lblArmazemTxt.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         lblArmazemTxt.setForeground(COR_MUTED);
         cardLocalizacao.add(lblArmazemTxt, "cell 0 1, gapy 6 6");
         JLabel lblArmazemVal = new JLabel("Armazém A");
-        lblArmazemVal.setFont(fonteValoresGerais);
+        lblArmazemVal.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         cardLocalizacao.add(lblArmazemVal, "cell 1 1, gapy 6 6");
 
         JLabel lblCorredorTxt = new JLabel("Corredor:");
-        lblCorredorTxt.setFont(fonteMuted);
+        lblCorredorTxt.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         lblCorredorTxt.setForeground(COR_MUTED);
         cardLocalizacao.add(lblCorredorTxt, "cell 0 2, gapy 6 6");
         JLabel lblCorredorVal = new JLabel("Corredor 3");
-        lblCorredorVal.setFont(fonteValoresGerais);
+        lblCorredorVal.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         cardLocalizacao.add(lblCorredorVal, "cell 1 2, gapy 6 6");
 
         JLabel lblPrateleiraTxt = new JLabel("Prateleira:");
-        lblPrateleiraTxt.setFont(fonteMuted);
+        lblPrateleiraTxt.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         lblPrateleiraTxt.setForeground(COR_MUTED);
         cardLocalizacao.add(lblPrateleiraTxt, "cell 0 3, gapy 6 6");
         lblValorLocal = new JLabel("-");
-        lblValorLocal.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblValorLocal.setFont(new Font("Segoe UI", Font.BOLD, 15));
         cardLocalizacao.add(lblValorLocal, "cell 1 3, gapy 6 6");
 
         add(cardLocalizacao, "cell 0 2, grow");

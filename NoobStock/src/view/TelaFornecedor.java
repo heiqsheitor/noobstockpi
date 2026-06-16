@@ -12,6 +12,10 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.function.Consumer;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -50,9 +54,12 @@ public class TelaFornecedor extends JPanel {
 	private Consumer<Fornecedor> editarAcao;
 	private Consumer<Fornecedor> excluirAcao;
 
+	private TableRowSorter<DefaultTableModel> sorter;
+
 	public TelaFornecedor() throws IOException {
 		setBackground(new Color(255, 255, 255));
-		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]", "[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
+		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow][grow 10][grow 4][grow 4][grow 4][grow 2]",
+				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][grow][]"));
 
 		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/image8.png")));
@@ -63,7 +70,7 @@ public class TelaFornecedor extends JPanel {
 		add(lblNewLabel_1, "cell 0 1 2 1");
 
 		LControleEstoq = new JLabel("Fornecedores");
-		LControleEstoq.setFont(new Font("Tahoma", Font.BOLD, 16));
+		LControleEstoq.setFont(new Font("Tahoma", Font.BOLD, 17));
 		add(LControleEstoq, "cell 4 1 2 1");
 
 		JLabel lblInicio = new JLabel("");
@@ -88,6 +95,20 @@ public class TelaFornecedor extends JPanel {
 		};
 		add(txtPesquisar, "cell 4 2 3 1,grow");
 		txtPesquisar.setColumns(10);
+
+		txtPesquisar.getDocument().addDocumentListener(new DocumentListener() {
+			public void insertUpdate(DocumentEvent e) {
+				filtrarTabela();
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				filtrarTabela();
+			}
+
+			public void changedUpdate(DocumentEvent e) {
+				filtrarTabela();
+			}
+		});
 
 		Adicionar = new JButton("Adicionar");
 		add(Adicionar, "cell 8 2,grow");
@@ -115,18 +136,17 @@ public class TelaFornecedor extends JPanel {
 		// ── TABELA ────────────────────────────────────────────────────────────
 		table = new JTable();
 		table.setModel(
-			new DefaultTableModel(
-				new Object[][] {},
-				new String[] { "ID", "Nome", "CNPJ", "Contato", "Duração" }
-			) {
-				boolean[] columnEditables = new boolean[] { false, false, false, false, false };
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-			}
-		);
+				new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "CNPJ", "Contato", "Duração" }) {
+					boolean[] columnEditables = new boolean[] { false, false, false, false, false };
+
+					public boolean isCellEditable(int row, int column) {
+						return columnEditables[column];
+					}
+				});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setRowHeight(28);
+		sorter = new TableRowSorter<>((DefaultTableModel) table.getModel());
+		table.setRowSorter(sorter);
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane, "cell 4 4 5 3,grow");
 
@@ -138,15 +158,13 @@ public class TelaFornecedor extends JPanel {
 		add(lblEstatis, "cell 0 4,alignx center");
 
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
-		
-		
 
 		JLabel lblEntraSai = new JLabel("");
 		lblEntraSai.setIcon(new ImageIcon(TelaFornecedor.class.getResource("/img/entradaesaida(1)1.png")));
 		add(lblEntraSai, "cell 0 5,alignx center");
 
 		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
-        Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
+		Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(imgRedimensionada));
 		add(lblLogo, "cell 0 7 2 1,alignx center,aligny bottom");
@@ -154,7 +172,8 @@ public class TelaFornecedor extends JPanel {
 		LInicio = new JLabel("Início");
 		LInicio.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+			}
 		});
 		LInicio.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LInicio, "cell 1 2,alignx left,aligny center");
@@ -219,7 +238,8 @@ public class TelaFornecedor extends JPanel {
 	// ── RETORNA O FORNECEDOR DA LINHA SELECIONADA NA TABELA ───────────────────
 	private Fornecedor getFornecedorSelecionado() {
 		int row = table.getSelectedRow();
-		if (row < 0) return null;
+		if (row < 0)
+			return null;
 
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 
@@ -261,7 +281,7 @@ public class TelaFornecedor extends JPanel {
 	public void setFornecedorAcao(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LFor, acao);
 	}
-	
+
 	public void setSaida(Runnable acao) {
 		ComponentUtils.transformarEmLink(this.LEntraSai, acao);
 	}
@@ -273,7 +293,8 @@ public class TelaFornecedor extends JPanel {
 	private void redimensionarImagem(int largura, int altura) {
 		largura /= 4;
 		altura /= 4;
-		if (largura <= 0 || altura <= 0) return;
+		if (largura <= 0 || altura <= 0)
+			return;
 		imagemOriginal.getScaledInstance(largura, altura, Image.SCALE_SMOOTH);
 	}
 
@@ -289,13 +310,22 @@ public class TelaFornecedor extends JPanel {
 		List<Fornecedor> listaFornecedores = dao.listar();
 
 		for (Fornecedor f : listaFornecedores) {
-			modelo.addRow(new Object[]{
-				f.getIdfornecedor(),
-				f.getNome(),
-				f.getCnpj(),
-				f.getContato(),
-				f.getDuracaoContrato()
-			});
+			modelo.addRow(new Object[] { f.getIdfornecedor(), f.getNome(), f.getCnpj(), f.getContato(),
+					f.getDuracaoContrato() });
+		}
+	}
+
+	private void filtrarTabela() {
+		String texto = txtPesquisar.getText().trim();
+		if (texto.isEmpty()) {
+			sorter.setRowFilter(null);
+		} else {
+			try {
+				// Busca case-insensitive nas colunas: Nome (1), CNPJ (2), Contato (3)
+				sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(texto), 1, 2, 3));
+			} catch (java.util.regex.PatternSyntaxException ex) {
+				// padrão inválido — ignora
+			}
 		}
 	}
 }

@@ -87,10 +87,6 @@ public class TelaSaida extends JPanel {
 		ImageIcon icon = new ImageIcon(TelaSaida.class.getResource("/img/noobstocklogo.png"));
         Image imgRedimensionada = icon.getImage().getScaledInstance(90, 47, Image.SCALE_SMOOTH);
 
-		JLabel lblVoltar = new JLabel("");
-		lblVoltar.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/button→svg.png")));
-		add(lblVoltar, "cell 4 0,aligny center");
-
 		JLabel lblTitulo = new JLabel("Saída de Estoque");
 		lblTitulo.setFont(new Font("Segoe UI Semibold", Font.BOLD, 26));
 		add(lblTitulo, "cell 4 0,aligny center,gapleft 30");
