@@ -33,14 +33,14 @@ public class TelaPerfil extends JPanel {
 	private JButton btnCancelar;
 	private JButton btnImportarAvatar;
 	private JButton btnExcluirConta;
-	private JLabel LInicio, LControleEstoq, LFor, LEntraSai;
+	private JLabel LInicio, LControleEstoq, LFor, LEntraSai, lblPerfil;
 
 	public TelaPerfil() {
 		setBackground(new Color(255, 255, 255));
 		setLayout(new MigLayout("", "[40px:n][150px:n][][20px:n][grow 40][grow][grow][grow][grow 40]",
 				"[40px:n][35px:n][35px:n][35px:n][35px:n][35px:n][35px:n][][][][grow]"));
 
-		JLabel lblPerfil = new JLabel("");
+		lblPerfil = new JLabel("");
 		lblPerfil.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/image8.png")));
 		add(lblPerfil, "cell 0 0 2 1,alignx center,aligny center");
 
@@ -142,6 +142,8 @@ public class TelaPerfil extends JPanel {
 					Image img = novaImagem.getImage();
 					Image imgRedimensionada = img.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 					lblIconAvatar.setIcon(new ImageIcon(imgRedimensionada));
+					Image imgMiniatura = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+					lblPerfil.setIcon(new ImageIcon(imgMiniatura));
 				}
 			}
 		});
