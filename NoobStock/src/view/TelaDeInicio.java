@@ -51,14 +51,14 @@ public class TelaDeInicio extends JPanel {
 
 		JLabel lblcontroleEstoq = new JLabel("");
 		lblcontroleEstoq.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/caixa(1)1.png")));
-		add(lblcontroleEstoq, "cell 0 3,alignx center");
+		add(lblcontroleEstoq, "cell 0 3,alignx left");
 		LControleEstoq = new JLabel("Entrada");
 		LControleEstoq.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LControleEstoq, "cell 1 3,alignx left,aligny center");
 
 		JLabel lblEstatis = new JLabel("");
-		lblEstatis.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/grafico.png")));
-		add(lblEstatis, "cell 0 4,alignx center");
+		lblEstatis.setIcon(new ImageIcon(TelaDeInicio.class.getResource("/img/Fornecedores_resized (2).png")));
+		add(lblEstatis, "cell 0 4,alignx right");
 		LFor = new JLabel("Fornecedores");
 		LFor.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		add(LFor, "cell 1 4,alignx left,aligny center");

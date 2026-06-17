@@ -65,7 +65,7 @@ public class TelaSaida extends JPanel {
 		add(LEstoque, "cell 1 3,aligny center");
 
 		JLabel lblIconFor = new JLabel("");
-		lblIconFor.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/grafico.png")));
+		lblIconFor.setIcon(new ImageIcon(TelaSaida.class.getResource("/img/Fornecedores_resized (2).png")));
 		add(lblIconFor, "cell 0 4,alignx center");
 
 		LFor = new JLabel("Fornecedores");

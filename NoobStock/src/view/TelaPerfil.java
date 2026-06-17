@@ -111,7 +111,7 @@ public class TelaPerfil extends JPanel {
 		add(LEntraSai, "cell 1 5");
 
 		JLabel lblNewLabel_6 = new JLabel("");
-		lblNewLabel_6.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/grafico.png")));
+		lblNewLabel_6.setIcon(new ImageIcon(TelaPerfil.class.getResource("/img/Fornecedores_resized (2).png")));
 		add(lblNewLabel_6, "flowx,cell 0 4,alignx center");
 
 		JLabel lblSenha = new JLabel("Senha:");

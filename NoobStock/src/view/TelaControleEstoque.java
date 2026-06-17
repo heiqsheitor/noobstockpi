@@ -185,7 +185,7 @@ public class TelaControleEstoque extends JPanel {
 		configurarPopupMenu();
 
 		JLabel lblEstatis = new JLabel("");
-		lblEstatis.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/grafico.png")));
+		lblEstatis.setIcon(new ImageIcon(TelaControleEstoque.class.getResource("/img/Fornecedores_resized (2).png")));
 		add(lblEstatis, "cell 0 4,alignx center");
 
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
