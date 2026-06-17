@@ -9,6 +9,9 @@ import java.awt.Image;
 import java.awt.Color;
 import java.awt.Container;
 import javax.swing.JTextField;
+
+import controller.ComponentUtils;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -87,6 +90,8 @@ public class TelaLogin extends JPanel {
 		btnCadastrar.setForeground(new Color(0, 0, 0));
 		btnCadastrar.setFont(new Font("Tahoma", Font.BOLD, 12));
 		panel.add(btnCadastrar, "cell 1 0, growx, h 35!");
+		
+		ComponentUtils.associarTeclaEnter(this, btnEntrar);
 	}
 
 	public String getUsuario() {

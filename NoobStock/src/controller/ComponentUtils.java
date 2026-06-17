@@ -8,6 +8,11 @@ import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
 
 public class ComponentUtils {
 
@@ -118,4 +123,24 @@ public class ComponentUtils {
 			}
 		});
 	}
+	
+	public static void associarTeclaEnter(JPanel painel, JButton botao) {
+        // Pega o mapa de inputs do painel quando ele está focado na janela
+        InputMap inputMap = painel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = painel.getActionMap();
+
+        // Mapeia a tecla "ENTER" para uma ação chamada "pressionarEnter"
+        inputMap.put(KeyStroke.getKeyStroke("ENTER"), "pressionarEnter");
+        
+        // Define o que a ação "pressionarEnter" faz (clica no botão)
+        actionMap.put("pressionarEnter", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Se o botão estiver visível e habilitado, ele realiza o clique
+                if (botao.isEnabled() && botao.isVisible()) {
+                    botao.doClick();
+                }
+            }
+        });
+    }
 }

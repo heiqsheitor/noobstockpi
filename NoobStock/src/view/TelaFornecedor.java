@@ -110,7 +110,11 @@ public class TelaFornecedor extends JPanel {
 		});
 
 		Adicionar = new JButton("Adicionar");
+		Adicionar.setBackground(Color.BLACK);
+		Adicionar.setForeground(new Color(255, 255, 255));
 		add(Adicionar, "cell 8 2,grow");
+		Adicionar.setOpaque(true);
+		Adicionar.setBorderPainted(false);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));

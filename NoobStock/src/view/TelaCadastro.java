@@ -40,7 +40,7 @@ public class TelaCadastro extends JPanel {
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
-		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+		Image scaled = imagemOriginal.getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));
 		add(lblLogo, "cell 1 0 4 1,alignx center,aligny top, gapy 20px 10px");
 
@@ -91,6 +91,8 @@ public class TelaCadastro extends JPanel {
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblNewLabel.setForeground(new Color(150, 150, 150));
 		add(lblNewLabel, "cell 1 11 4 1,alignx center,aligny bottom");
+		
+		ComponentUtils.associarTeclaEnter(this, btnCadastrar);
 	}
 
 	public void ajustarFonte(int largura, int altura) {

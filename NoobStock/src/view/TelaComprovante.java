@@ -5,6 +5,9 @@ import model.SaidaEstoque;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import controller.ComponentUtils;
+
 import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,12 +39,12 @@ public class TelaComprovante extends JDialog {
 		setMinimumSize(new Dimension(520, 500));
 		setLocationRelativeTo(getOwner());
 		setResizable(true);
-		setLayout(new BorderLayout());
+		getContentPane().setLayout(new BorderLayout());
 		JPanel panelHeader = new JPanel(new BorderLayout());
 		panelHeader.setBackground(new Color(20, 20, 20));
 		panelHeader.setBorder(new EmptyBorder(12, 18, 12, 18));
 
-		JLabel lblTitulo = new JLabel("✓  Saída Registrada com Sucesso!");
+		JLabel lblTitulo = new JLabel("Saída Registrada com Sucesso!");
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		lblTitulo.setForeground(Color.WHITE);
 		panelHeader.add(lblTitulo, BorderLayout.WEST);
@@ -51,7 +54,7 @@ public class TelaComprovante extends JDialog {
 		lblNum.setForeground(new Color(180, 180, 180));
 		panelHeader.add(lblNum, BorderLayout.EAST);
 
-		add(panelHeader, BorderLayout.NORTH);
+		getContentPane().add(panelHeader, BorderLayout.NORTH);
 
 		JEditorPane editorPane = new JEditorPane("text/html", htmlContent);
 		editorPane.setEditable(false);
@@ -60,14 +63,14 @@ public class TelaComprovante extends JDialog {
 
 		JScrollPane scroll = new JScrollPane(editorPane);
 		scroll.setBorder(null);
-		add(scroll, BorderLayout.CENTER);
+		getContentPane().add(scroll, BorderLayout.CENTER);
 		SwingUtilities.invokeLater(() -> editorPane.setCaretPosition(0));
 
 		JPanel panelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 10));
 		panelBotoes.setBackground(new Color(245, 245, 245));
 		panelBotoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(220, 220, 220)));
 
-		JButton btnBaixar = new JButton("⬇  Baixar Comprovante (.html)");
+		JButton btnBaixar = new JButton("Baixar Comprovante");
 		btnBaixar.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		btnBaixar.setBackground(new Color(20, 130, 60));
 		btnBaixar.setForeground(Color.WHITE);
@@ -85,7 +88,10 @@ public class TelaComprovante extends JDialog {
 		btnFechar.addActionListener(e -> dispose());
 		panelBotoes.add(btnFechar);
 
-		add(panelBotoes, BorderLayout.SOUTH);
+		getContentPane().add(panelBotoes, BorderLayout.SOUTH);
+		
+	
+
 	}
 
 	private String gerarHtml() {

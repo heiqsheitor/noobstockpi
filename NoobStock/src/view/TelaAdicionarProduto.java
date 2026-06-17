@@ -114,7 +114,7 @@ public class TelaAdicionarProduto extends JPanel {
 		add(cbCategoria, "cell 3 28 1 2,grow");
 
 		btnAdicionar = new JButton("Adicionar");
-		btnAdicionar.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		btnAdicionar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		btnAdicionar.setBackground(Color.BLACK);
 		btnAdicionar.setForeground(new Color(255, 255, 255));
 		add(btnAdicionar, "cell 3 31,growx");
@@ -133,6 +133,8 @@ public class TelaAdicionarProduto extends JPanel {
 				carregarComboBoxCategorias();
 			}
 		});
+		
+		ComponentUtils.associarTeclaEnter(this, btnAdicionar);
 	}
 
 	public boolean validarCampos() {

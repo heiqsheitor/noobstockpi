@@ -35,7 +35,7 @@ public class TelaRedefinirSenha extends JPanel {
 
 		lblLogo = new JLabel("");
 		imagemOriginal = ImageIO.read(getClass().getResource("/img/noobstocklogo.png"));
-		Image scaled = imagemOriginal.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+		Image scaled = imagemOriginal.getScaledInstance(500, 250, Image.SCALE_SMOOTH);
 		lblLogo.setIcon(new ImageIcon(scaled));
 		add(lblLogo, "cell 1 0 2 1,alignx center,aligny top, gapy 20px 10px");
 

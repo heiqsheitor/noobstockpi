@@ -16,6 +16,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import controller.ComponentUtils;
+
 public class TelaMensagem extends JDialog {
 	private boolean confirmado = false;
 
@@ -75,12 +77,15 @@ public class TelaMensagem extends JDialog {
 				confirmado = true;
 				dispose();
 			});
+			ComponentUtils.associarTeclaEnter(painelBotoes, btnSim);
+
 
 			JButton btnNao = criarBotao("Não", new Color(150, 150, 150));
 			btnNao.addActionListener(e -> {
 				confirmado = false;
 				dispose();
 			});
+			ComponentUtils.associarTeclaEnter(painelBotoes, btnNao);
 
 			painelBotoes.add(btnSim);
 			painelBotoes.add(btnNao);
@@ -88,6 +93,8 @@ public class TelaMensagem extends JDialog {
 			JButton btnOk = criarBotao("OK", corDestaque);
 			btnOk.addActionListener(e -> dispose());
 			painelBotoes.add(btnOk);
+			ComponentUtils.associarTeclaEnter(painelBotoes, btnOk);
+
 		}
 
 		painelPrincipal.add(painelBotoes, "cell 0 2, alignx center");
@@ -102,6 +109,7 @@ public class TelaMensagem extends JDialog {
 		btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		return btn;
+		
 	}
 
 	public boolean isConfirmado() {
