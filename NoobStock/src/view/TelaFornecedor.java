@@ -320,4 +320,10 @@ public class TelaFornecedor extends JPanel {
 			}
 		}
 	}
+
+	public void setIconePerfil(ImageIcon miniatura) {
+    if (lblPerfil != null) {
+        lblPerfil.setIcon(miniatura);
+    }
+}
 }

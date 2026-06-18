@@ -8,6 +8,7 @@ import java.awt.event.ComponentEvent;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -52,6 +53,8 @@ public class Principal extends JFrame {
 		if (iconUrl != null) {
 			setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
 		}
+		
+		
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -215,5 +218,20 @@ public class Principal extends JFrame {
 
 	public TelaSaida getTelaSaida() {
 		return telaSaida;
+	}
+	
+	public void atualizarAvatares(ImageIcon miniatura) {
+	    if (inicio != null) {
+	        inicio.setIconePerfil(miniatura);
+	    }
+	    if (controle != null) {
+	        controle.setIconePerfil(miniatura);
+	    }
+	    if (fornecedor != null) {
+	        fornecedor.setIconePerfil(miniatura);
+	    }
+	    if (telaSaida != null) {
+	        telaSaida.setIconePerfil(miniatura);
+	    }
 	}
 }

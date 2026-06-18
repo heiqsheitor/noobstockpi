@@ -337,4 +337,10 @@ public class TelaSaida extends JPanel {
 			}
 		});
 	}
+
+	public void setIconePerfil(ImageIcon miniatura) {
+    if (lblPerfil != null) {
+        lblPerfil.setIcon(miniatura);
+    }
+}
 }

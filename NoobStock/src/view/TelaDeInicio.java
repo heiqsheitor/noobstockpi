@@ -106,4 +106,10 @@ public class TelaDeInicio extends JPanel {
 
 	public void ajustarFonte(int largura, int altura) {
 	}
+
+	public void setIconePerfil(ImageIcon miniatura) {
+		if (lblPerfil != null) {
+			lblPerfil.setIcon(miniatura);
+		}
+	}
 }

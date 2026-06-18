@@ -370,4 +370,12 @@ public class TelaControleEstoque extends JPanel {
 					df.format(p.getPreco()), p.getDataCriacao() });
 		}
 	}
+	
+	public void setIconePerfil(ImageIcon miniatura) {
+	    if (lblPerfil != null) {
+	        lblPerfil.setIcon(miniatura);
+	    }
+	}
+	
+	
 }

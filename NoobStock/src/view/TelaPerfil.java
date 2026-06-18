@@ -144,6 +144,11 @@ public class TelaPerfil extends JPanel {
 					lblIconAvatar.setIcon(new ImageIcon(imgRedimensionada));
 					Image imgMiniatura = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 					lblPerfil.setIcon(new ImageIcon(imgMiniatura));
+					java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(TelaPerfil.this);
+					if (window instanceof Principal) {
+					    Principal principal = (Principal) window;
+					    principal.atualizarAvatares(new ImageIcon(imgMiniatura));
+					}
 				}
 			}
 		});
