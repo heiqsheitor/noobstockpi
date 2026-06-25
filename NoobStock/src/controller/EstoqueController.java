@@ -1,6 +1,7 @@
 package controller;
 
 import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -87,5 +88,10 @@ public class EstoqueController extends ComponentAdapter {
 				}
 			}
 		});
+		view.addComponentListener(this);
+	}
+	@Override
+	public void componentShown(ComponentEvent e) {
+	    view.recarregarTabela();
 	}
 }
