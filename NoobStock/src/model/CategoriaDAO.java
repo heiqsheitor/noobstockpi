@@ -47,7 +47,7 @@ public class CategoriaDAO {
 
 	public java.util.List<String> listarCategorias() {
 		java.util.List<String> lista = new java.util.ArrayList<>();
-		String sql = "SELECT idcategoria, nome FROM categoria ORDER BY nome";
+		String sql = "SELECT idcategoria, nome FROM categoria ORDER BY idcategoria";
 
 		try (Connection con = conectar();
 				PreparedStatement stmt = con.prepareStatement(sql);
